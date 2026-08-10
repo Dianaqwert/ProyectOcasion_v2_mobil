@@ -1,10 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!--  Fondo general  -->
+    <color name="bg_general">#F7F6DC</color>
+    <!--  Footer, Header, Marcos  -->
+    <color name="header_footer_light">#FFE9A0</color>
+    <color name="header_footer_dark">#FFD65A</color>
+    <!--  Botones, elementos extras  -->
+    <color name="verde_primario">#367E18</color>
+    <color name="naranja_primario">#F57328</color>
+    <color name="rojo_error">#CC3636</color>
+    <!--  Utilidades  -->
+    <color name="texto_principal">#2E2A1F</color>
+    <color name="texto_secundario">#6E6A5A</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="negro">#000000</color>
+    <color name="borde_input">#E0DCB8</color>
 </resources>
