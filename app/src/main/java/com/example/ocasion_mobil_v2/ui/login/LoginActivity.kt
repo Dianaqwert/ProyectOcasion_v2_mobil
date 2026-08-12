@@ -1,10 +1,9 @@
 package com.example.ocasion_mobil_v2.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.util.Patterns
-import android.view.MotionEvent
-import com.example.ocasion_mobil_v2.R
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,21 +11,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.ocasion_mobil_v2.MainActivity
+import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.data.remote.RetrofitClient
+import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
+import com.example.ocasion_mobil_v2.data.remote.model.LoginRequest
+import com.example.ocasion_mobil_v2.data.session.SessionManager
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import java.io.IOException
 
-
-/**
- * Pantalla de inicio de sesión — SOLO PARTE VISUAL / FRONTEND.
- *
- * Aquí únicamente se maneja:
- *  - Validaciones básicas de formato en el cliente (campos vacíos, formato de correo).
- *  - Mostrar/ocultar contraseña.
- *  - Estados visuales de carga y error.
- *  - Navegación hacia otras pantallas (registro, recuperar contraseña).
- *
- * La conexión real con el servicio REST de autenticación (POST /login, manejo de
- * token, cabecera Authorization: Bearer, etc.) NO está implementada aquí.
- * Debes conectarla tú (o el equipo de backend) donde se indica con el TODO.
- */
 class LoginActivity : ComponentActivity() {
 
     private lateinit var etEmail: EditText
@@ -38,11 +33,14 @@ class LoginActivity : ComponentActivity() {
     private lateinit var btnLogin: Button
     private lateinit var progressLogin: ProgressBar
 
+    private lateinit var sessionManager: SessionManager
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        sessionManager = SessionManager(this)
 
         bindViews()
         setupPasswordToggle()
@@ -61,7 +59,6 @@ class LoginActivity : ComponentActivity() {
         progressLogin = findViewById(R.id.progressLogin)
     }
 
-    /** Alterna mostrar/ocultar la contraseña al tocar el ícono del ojo. */
     private fun setupPasswordToggle() {
         ivTogglePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
@@ -91,32 +88,7 @@ class LoginActivity : ComponentActivity() {
 
             if (!validarFormulario(email, password)) return@setOnClickListener
 
-            mostrarCargando(true)
-
-            // ==========================================================
-            // TODO (BACKEND): Aquí va la llamada real al servicio REST.
-            //
-            // Ejemplo de lo que se conectaría después (NO implementado):
-            //   POST /api/auth/login
-            //   body: { "email": email, "password": password }
-            //
-            //   - 200 OK  -> guardar token de sesión (rol de cliente) y
-            //                navegar a la pantalla principal.
-            //   - 403     -> token/credenciales inválidas -> mostrarError(...)
-            //   - error de validación -> leer JSON estandarizado del backend
-            //                y mostrar el mensaje correspondiente en tvError.
-            // ==========================================================
-
-            // Simulación puramente visual para que el flujo se pueda probar
-            // sin backend. Bórralo cuando conectes el servicio real.
-            btnLogin.postDelayed({
-                mostrarCargando(false)
-                Toast.makeText(
-                    this,
-                    "UI lista. Conecta aquí tu servicio de autenticación.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }, 1200)
+            realizarLogin(email, password)
         }
     }
 
@@ -132,7 +104,72 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
-    /** Validaciones únicamente de formato/campos vacíos, del lado del cliente. */
+    /**
+     * Llama al endpoint real: POST /api/v1/auth/login
+     * Body: { "gmail": "...", "password": "..." }
+     * Respuesta 200: { "token": "..." }
+     */
+    private fun realizarLogin(email: String, password: String) {
+        mostrarCargando(true)
+
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.apiService.login(
+                    LoginRequest(gmail = email, password = password)
+                )
+
+                mostrarCargando(false)
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        sessionManager.guardarToken(body.token)
+                        irAPantallaPrincipal()
+                    } else {
+                        mostrarError("Respuesta vacía del servidor")
+                    }
+                } else {
+                    manejarError(response.code(), response.errorBody()?.string())
+                }
+
+            } catch (e: IOException) {
+                // Sin conexión / VPN desconectada / servidor no alcanzable
+                mostrarCargando(false)
+                mostrarError("No se pudo conectar al servidor. Verifica tu conexión VPN.")
+            } catch (e: Exception) {
+                mostrarCargando(false)
+                mostrarError("Ocurrió un error inesperado: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    /** Interpreta el código de error HTTP y el JSON de error del backend. */
+    private fun manejarError(codigoHttp: Int, errorBodyJson: String?) {
+        val mensajeBackend = try {
+            errorBodyJson?.let {
+                val error = Gson().fromJson(it, ApiErrorResponse::class.java)
+                error.detalle ?: error.message
+            }
+        } catch (e: Exception) {
+            null
+        }
+
+        val mensaje = when (codigoHttp) {
+            403 -> mensajeBackend ?: "Credenciales inválidas o sesión no autorizada"
+            401 -> mensajeBackend ?: "Correo o contraseña incorrectos"
+            400 -> mensajeBackend ?: "Datos inválidos, revisa el formulario"
+            else -> mensajeBackend ?: "Error del servidor ($codigoHttp)"
+        }
+
+        mostrarError(mensaje)
+    }
+
+    private fun irAPantallaPrincipal() {
+        Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
     private fun validarFormulario(email: String, password: String): Boolean {
         if (email.isEmpty()) {
             mostrarError("Ingresa tu correo electrónico")
