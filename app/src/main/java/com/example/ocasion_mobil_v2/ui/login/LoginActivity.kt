@@ -21,6 +21,7 @@ import com.example.ocasion_mobil_v2.data.session.SessionManager
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.IOException
+import com.example.ocasion_mobil_v2.ui.login.RegisterActivity
 
 class LoginActivity : ComponentActivity() {
 
@@ -94,13 +95,13 @@ class LoginActivity : ComponentActivity() {
 
     private fun setupSecondaryActions() {
         tvForgotPassword.setOnClickListener {
-            // TODO: navegar a la pantalla de recuperación de contraseña
-            Toast.makeText(this, "Ir a recuperar contraseña", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
         }
 
         tvGoToRegister.setOnClickListener {
-            // TODO: navegar a la pantalla de registro
-            Toast.makeText(this, "Ir a pantalla de registro", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -208,4 +209,5 @@ class LoginActivity : ComponentActivity() {
         btnLogin.isEnabled = !cargando
         btnLogin.text = if (cargando) "" else getString(R.string.login_button_text)
     }
+
 }

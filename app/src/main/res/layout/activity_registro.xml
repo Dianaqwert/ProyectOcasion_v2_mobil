@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg_general">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- ===================================================== -->
+        <!-- HEADER AMARILLO -->
+        <!-- ===================================================== -->
+
+        <View
+            android:id="@+id/viewHeaderBg"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:background="@drawable/bg_header_curve"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- ===================================================== -->
+        <!-- LOGO -->
+        <!-- ===================================================== -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="35dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="6dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_logo_circle"
+                android:padding="13dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/logo"
+                android:contentDescription="Logo de Salones y Eventos" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- NOMBRE APP -->
+
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Haz de cada celebración una ocasión especial"
+            android:textColor="@color/texto_principal"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintTop_toBottomOf="@id/cardLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- TARJETA REGISTRO -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="30dp"
+            app:cardBackgroundColor="@color/blanco"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            app:layout_constraintTop_toBottomOf="@id/tvAppName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="22dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="22dp"
+                android:paddingBottom="22dp">
+
+                <!-- ================================================= -->
+                <!-- TITULO -->
+                <!-- ================================================= -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Crear cuenta"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Crea tu cuenta para comenzar"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="13sp" />
+
+                <!-- NOMBRES -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre(s)"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="6dp" />
+
+                <EditText
+                    android:id="@+id/etNombres"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Nombre(s)"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+
+                <!-- APELLIDO PATERNO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Apellido paterno"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etApellidoPaterno"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Apellido paterno"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+
+                <!-- APELLIDO MATERNO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Apellido materno"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etApellidoMaterno"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Apellido materno"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+
+                <!-- NOMBRE DE USUARIO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Nombre de usuario"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etNombreUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Nombre de usuario"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:importantForAutofill="no" />
+
+                <!-- CURP -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="CURP"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etCurp"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="CURP"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="textCapCharacters"
+                    android:maxLength="18"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:importantForAutofill="no" />
+
+                <!-- CORREO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Correo electrónico"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:drawableStart="@android:drawable/ic_dialog_email"
+                    android:drawablePadding="9dp"
+                    android:drawableTint="@color/naranja_primario"
+                    android:hint="ejemplo@correo.com"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="14dp"
+                    android:importantForAutofill="yes"
+                    android:autofillHints="emailAddress" />
+
+                <!-- TELEFONO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Teléfono"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <EditText
+                    android:id="@+id/etTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="10 dígitos"
+                    android:textColor="@color/texto_principal"
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="14sp"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:importantForAutofill="yes"
+                    android:autofillHints="phone" />
+
+                <!-- CONTRASEÑA -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Contraseña"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_edittext"
+                        android:hint="Contraseña"
+                        android:textColor="@color/texto_principal"
+                        android:textColorHint="@color/texto_secundario"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="50dp"
+                        android:importantForAutofill="yes"
+                        android:autofillHints="newPassword" />
+
+                    <ImageView
+                        android:id="@+id/ivTogglePassword"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="14dp"
+                        android:src="@android:drawable/ic_menu_view"
+                        android:contentDescription="Mostrar u ocultar contraseña"
+                        app:tint="@color/texto_secundario" />
+
+                </RelativeLayout>
+
+                <!-- ERROR -->
+
+                <TextView
+                    android:id="@+id/tvError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Verifica los datos ingresados"
+                    android:textColor="@color/rojo_error"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <!-- BOTON REGISTRARSE -->
+
+                <Button
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@drawable/bg_button_primary"
+                    android:elevation="0dp"
+                    android:stateListAnimator="@null"
+                    android:text="Registrarse"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blanco"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <!-- PROGRESS -->
+
+                <ProgressBar
+                    android:id="@+id/progressRegister"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:indeterminateTint="@color/naranja_primario"
+                    android:visibility="gone" />
+
+                <!-- SEPARADOR -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/borde_input" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="o"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/borde_input" />
+
+                </LinearLayout>
+
+                <!-- VOLVER AL LOGIN -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Ya tienes una cuenta? "
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvGoToLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="Iniciar sesión"
+                        android:textColor="@color/rojo_error"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

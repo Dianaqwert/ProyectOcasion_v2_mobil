@@ -45,21 +45,21 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- ===== TARJETA DEL FORMULARIO ===== -->
         <TextView
             android:id="@+id/tvAppName"
+            android:fontFamily="sans-serif-medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Salones y Eventos"
+            android:layout_marginTop="8dp"
+            android:text="Haz de cada celebración una ocasión especial"
             android:textColor="@color/texto_principal"
-            android:textSize="20sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            app:layout_constraintTop_toBottomOf="@id/cardLogo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/cardLogo" />
 
-        <!-- ===== TARJETA DEL FORMULARIO ===== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardForm"
             android:layout_width="0dp"
