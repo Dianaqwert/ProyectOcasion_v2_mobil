@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_general">
+
+    <!-- ENCABEZADO -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:background="@color/header_footer_dark">
+
+        <!-- Menú -->
+
+        <!-- Logo / nombre -->
+
+        <TextView
+            android:id="@+id/btnMenu"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:gravity="center"
+            android:text="☰"
+            android:textSize="25sp"
+            android:textColor="@color/texto_principal"
+            android:background="@drawable/bg_circle_yellow"
+            android:contentDescription="Menú" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="OCASIÓN"
+            android:textColor="@color/texto_principal"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Notificaciones -->
+
+        <TextView
+            android:id="@+id/btnNotifications"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="🔔"
+            android:textSize="22sp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Notificaciones" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- SALUDO -->
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¡Hola, Propietario!"
+                android:textColor="@color/texto_principal"
+                android:textSize="27sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Administra tus salones y reservas"
+                android:textColor="@color/texto_secundario"
+                android:textSize="14sp" />
+
+
+            <!-- TARJETA MIS SALONES -->
+
+            <LinearLayout
+                android:id="@+id/cardMySalons"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_marginTop="22dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/bg_owner_card"
+                android:elevation="5dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:gravity="center"
+                        android:text="🏠"
+                        android:textSize="27sp"
+                        android:background="@drawable/bg_circle_yellow" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mis salones"
+                            android:textColor="@color/texto_principal"
+                            android:textSize="19sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSalonCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="0 salones registrados"
+                            android:textColor="@color/texto_secundario"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Consulta y administra los espacios que tienes registrados."
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="13sp" />
+
+
+                <Button
+                    android:id="@+id/btnViewSalons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="12dp"
+                    android:text="VER SALONES"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blanco"
+                    android:background="@drawable/bg_button_owner" />
+
+            </LinearLayout>
+
+
+            <!-- ACCIONES -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
+
+                <!-- NUEVO SALÓN -->
+
+                <LinearLayout
+                    android:id="@+id/cardNewSalon"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:background="@drawable/bg_owner_card"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_circle_yellow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Nuevo salón"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Registrar"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+
+                <!-- RESERVAS -->
+
+                <LinearLayout
+                    android:id="@+id/cardDisponibilidad"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:background="@drawable/bg_owner_card"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:gravity="center"
+                        android:text="📅"
+                        android:textSize="26sp"
+                        android:background="@drawable/bg_circle_yellow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Disponibilidad"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDispoCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="0 pendientes"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!-- ACTIVIDAD -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="145dp"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/bg_owner_card"
+                android:elevation="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tu actividad"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:text="Aquí aparecerán tus próximas reservas y actividades."
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!-- MENÚ INFERIOR -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/bg_bottom_menu"
+        android:elevation="10dp">
+
+        <include
+            layout="@layout/bottom_nav_owner"
+            android:layout_width="match_parent"
+            android:layout_height="72dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

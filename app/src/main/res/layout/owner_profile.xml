@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_general">
+
+    <!-- HEADER -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:background="@color/header_footer_dark">
+
+        <TextView
+            android:id="@+id/btnMenu"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:gravity="center"
+            android:text="☰"
+            android:textSize="25sp"
+            android:textColor="@color/texto_principal"
+            android:background="@drawable/bg_circle_yellow"
+            android:contentDescription="Menú" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="MI PERFIL"
+            android:textColor="@color/texto_principal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnSettings"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="⚙️"
+            android:textSize="21sp"
+            android:contentDescription="Configuración" />
+
+    </LinearLayout>
+
+
+    <!-- CONTENIDO -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- PERFIL PRINCIPAL -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="15dp"
+                android:background="@drawable/bg_profile_header"
+                android:elevation="4dp">
+
+                <TextView
+                    android:id="@+id/tvProfileAvatar"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:gravity="center"
+                    android:text="👤"
+                    android:textSize="38sp"
+                    android:background="@drawable/bg_profile_avatar" />
+
+                <TextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Nombre del propietario"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvProfileRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Propietario"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+
+            <!-- INFORMACIÓN PERSONAL -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Información personal"
+                android:textColor="@color/texto_principal"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/bg_owner_card"
+                android:elevation="3dp">
+
+                <!-- NOMBRES -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombres"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvNames"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+
+                <!-- APELLIDO PATERNO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:text="Apellido paterno"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+
+                <!-- APELLIDO MATERNO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:text="Apellido materno"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvMotherLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+
+                <!-- USUARIO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:text="Nombre de usuario"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <!-- CONTACTO -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Datos de contacto"
+                android:textColor="@color/texto_principal"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/bg_owner_card"
+                android:elevation="3dp">
+
+                <!-- CORREO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Correo electrónico"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+
+                <!-- TELÉFONO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:text="Teléfono"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+
+                <!-- CURP -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:text="CURP"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvCurp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="—"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
+            <!-- BOTÓN EDITAR -->
+
+            <TextView
+                android:id="@+id/btnEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="25dp"
+                android:gravity="center"
+                android:text="Editar información"
+                android:textColor="@color/blanco"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_owner"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!-- MENÚ INFERIOR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/bg_bottom_menu"
+        android:elevation="10dp">
+
+        <include
+            layout="@layout/bottom_nav_owner"
+            android:layout_width="match_parent"
+            android:layout_height="72dp" />
+    </LinearLayout>
+
+</LinearLayout>

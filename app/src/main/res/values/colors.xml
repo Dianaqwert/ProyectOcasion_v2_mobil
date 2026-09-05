@@ -14,4 +14,6 @@
     <color name="blanco">#FFFFFF</color>
     <color name="negro">#000000</color>
     <color name="borde_input">#E0DCB8</color>
+    <color name="gris_borde">#D6D6D6</color>
+    <color name="gris_claro">#F2F2F2</color>
 </resources>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+
+    app:cardBackgroundColor="@color/blanco"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- IMAGEN DEL SALÓN -->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="175dp">
+
+            <ImageView
+                android:id="@+id/imgSalon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/header_footer_light"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                android:contentDescription="Imagen del salón" />
+
+            <!-- ETIQUETA DE PRECIO -->
+
+            <TextView
+                android:id="@+id/tvPriceBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="12dp"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="$850 / hora"
+                android:textColor="@color/blanco"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_button_primary" />
+
+        </FrameLayout>
+
+
+        <!-- ================================= -->
+        <!-- INFORMACIÓN -->
+        <!-- ================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="17dp">
+
+
+            <!-- NOMBRE -->
+
+            <TextView
+                android:id="@+id/tvSalonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Salón Jardín"
+                android:textColor="@color/texto_principal"
+                android:textSize="19sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold" />
+
+
+            <!-- UBICACIÓN -->
+
+            <TextView
+                android:id="@+id/tvSalonLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="📍 Guadalajara, Jalisco"
+                android:textColor="@color/texto_secundario"
+                android:textSize="13sp" />
+
+
+            <!-- ================================= -->
+            <!-- DATOS DEL SALÓN -->
+            <!-- ================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+
+                <!-- CAPACIDAD -->
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CAPACIDAD"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCapacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="👥 150 personas"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+
+                <!-- PRECIO -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PRECIO"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="$850 / hora"
+                        android:textColor="@color/verde_primario"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/header_footer_light" />
+
+
+            <!-- DESCRIPCIÓN -->
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:text="Espacio ideal para celebraciones..."
+                android:textColor="@color/texto_secundario"
+                android:textSize="13sp"
+                android:lineSpacingExtra="2dp" />
+
+
+            <!-- BOTONES -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <!-- EDITAR -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditSalon"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="Editar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/verde_primario"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/header_footer_light"
+                    app:cornerRadius="22dp"
+                    app:strokeWidth="0dp" />
+
+                <!-- ELIMINAR -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDeleteSalon"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_weight="1"
+                    android:text="Dar de baja"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blanco"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/rojo_error"
+                    app:cornerRadius="22dp"
+                    app:strokeWidth="0dp" />
+
+            </LinearLayout>
+
+
+            <!-- DISPONIBILIDAD -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDisponibilidadSalon"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:text="📅 Administrar disponibilidad"
+                android:textAllCaps="false"
+                android:textColor="@color/texto_principal"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/header_footer_light"
+                app:cornerRadius="22dp"
+                app:strokeWidth="0dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

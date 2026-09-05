@@ -38,6 +38,39 @@
             android:name=".ui.login.ForgotPasswordActivity"
             android:exported="false" />
 
+        <!-- PROPIETARIO -->
+        <activity
+            android:name=".ui.propietario.OwnerHomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.SalonFormActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.MisSalonesActivity"
+            android:exported="false" />
+        <!--
+        <activity
+            android:name=".ui.propietarios.ReservasActivity"
+            android:exported="false" /> -->
+
+        <activity
+            android:name=".ui.propietario.PerfilPropietarioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.SalonUbicacionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.SalonDisponibilidadActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.SalonPublicacionActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
