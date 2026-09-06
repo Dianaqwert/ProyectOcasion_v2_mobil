@@ -20,6 +20,7 @@ import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
 import com.example.ocasion_mobil_v2.data.remote.model.GoogleLoginRequest
 import com.example.ocasion_mobil_v2.data.remote.model.LoginRequest
 import com.example.ocasion_mobil_v2.data.session.SessionManager
+import com.example.ocasion_mobil_v2.ui.cliente.ClientPrincipalMenu
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -28,6 +29,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.IOException
 import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
+import com.example.ocasion_mobil_v2.util.JwtUtils
 
 class LoginActivity : ComponentActivity() {
 
@@ -176,8 +178,11 @@ class LoginActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        sessionManager.guardarToken(body.token)
-                        irAPantallaPrincipal()
+                        //sessionManager.guardarToken(body.token)
+                        //irAPantallaPrincipal()
+                        val tipoUsuario = JwtUtils.obtenerTipoUser(body.token)
+                        sessionManager.guardarSesion(body.token, tipoUsuario)
+                        navegarPorPerfil(tipoUsuario)
                     } else {
                         mostrarError("Respuesta vacía del servidor")
                     }
@@ -218,8 +223,12 @@ class LoginActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        sessionManager.guardarToken(body.token)
-                        irAPantallaPrincipal()
+                        //sessionManager.guardarToken(body.token)
+                        //irAPantallaPrincipal()
+                        val tipoUsuario = JwtUtils.obtenerTipoUser(body.token)
+                        sessionManager.guardarSesion(body.token, tipoUsuario)
+                        navegarPorPerfil(tipoUsuario)
+
                     } else {
                         mostrarError("Respuesta vacía del servidor")
                     }
@@ -277,6 +286,7 @@ class LoginActivity : ComponentActivity() {
         mostrarError(mensaje)
     }
 
+    //dependiendo del tipo de usuario se abre una pantalla diferente
     private fun irAPantallaPrincipal() {
         Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
         // Cambiamos MainActivity por OwnerHomeActivity
@@ -322,5 +332,31 @@ class LoginActivity : ComponentActivity() {
         btnLogin.isEnabled = !cargando
         btnGoogleSignIn.isEnabled = !cargando
         btnLogin.text = if (cargando) "" else getString(R.string.login_button_text)
+    }
+
+    private fun navegarPorPerfil(tipoUsuario: String?) {
+        //conversion a mayusculas
+        val rolFormato=tipoUsuario?.uppercase()
+        val destino:Class<*>
+
+        if( rolFormato == "CLIENTE"){
+            destino = ClientPrincipalMenu::class.java
+        }else if(rolFormato=="VENDEDOR"){
+            destino= OwnerHomeActivity::class.java
+            startActivity(Intent(this, OwnerHomeActivity::class.java))
+            finish()
+        }else {
+            mostrarError("Tipo de cuenta no reconocido: $tipoUsuario")
+            return
+        }
+
+        //Demostracion de exito:
+        Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, destino).apply {
+            // Limpia el historial para que no regrese al Login al presionar Atrás
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
     }
 }

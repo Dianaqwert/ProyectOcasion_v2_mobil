@@ -27,7 +27,20 @@ class SessionManager(context: Context) {
 
     fun haySesionActiva(): Boolean = obtenerToken() != null
 
+    //------ EXTRACCION DE ROLES - D
+    fun guardarRol(rol:String?){
+        prefs.edit().putString(KEY_ROL,rol).apply()
+    }
+    //------ GUARDAR EL TOCKEN Y EL ROL
+    fun guardarSesion(token: String, rol: String?) {
+        prefs.edit()
+            .putString(KEY_TOKEN, token)
+            .putString(KEY_ROL, rol)
+            .apply()
+    }
+
     companion object {
         private const val KEY_TOKEN = "auth_token"
+        private const val KEY_ROL = "auth_user_role"
     }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA">
+
+    <!-- Barra de búsqueda y botón de filtros -->
+    <LinearLayout
+        android:id="@+id/headerSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            app:queryHint="Buscar salones..."
+            app:iconifiedByDefault="false" />
+
+        <ImageButton
+            android:id="@+id/btnFiltros"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/white"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:contentDescription="Filtros" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTituloSalones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Recintos destacados"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerSearch" />
+
+    <!-- RecyclerView Horizontal -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSalonesHorizontales"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:clipToPadding="false"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloSalones" />
+
+    <!--  barra de navegación previa anclada al fondo -->
+    <include
+        android:id="@+id/bottomNavigation"
+        layout="@layout/layout_bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

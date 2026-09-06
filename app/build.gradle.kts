@@ -72,13 +72,16 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
-// Logging para ver las peticiones/respuestas en Logcat (muy útil para depurar)
+    // Logging para ver las peticiones/respuestas en Logcat (muy útil para depurar)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-// Coroutines (probablemente ya la tengas por Compose, pero por si acaso)
+    // Coroutines (probablemente ya la tengas por Compose, pero por si acaso)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
-// lifecycleScope
+    // lifecycleScope
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    //cargar, procesar y mostrar imágenes desde internet
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

@@ -4,6 +4,6 @@
          El resto de la app sigue exigiendo HTTPS normalmente.
          Si la IP del servidor cambia, actualízala aquí también. -->
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">172.30.120.90</domain>
+        <domain includeSubdomains="false">172.30.209.58</domain>
     </domain-config>
 </network-security-config>

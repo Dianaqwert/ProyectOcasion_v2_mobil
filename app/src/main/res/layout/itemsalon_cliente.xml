@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Imagen principal redondeada -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <ImageView
+                android:id="@+id/ivSalon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <!-- Badge de capacidad superior -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp"
+                android:background="@drawable/bg_badge"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👥 "
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvCapacidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="150" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Información -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Nombre -->
+            <TextView
+                android:id="@+id/tvNombreRecinto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Hacienda Los Laureles" />
+
+            <!-- Ciudad -->
+            <TextView
+                android:id="@+id/tvCiudad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="#757575"
+                android:textSize="13sp"
+                tools:text="📍 Aguascalientes" />
+
+            <!-- Precio formateado -->
+            <TextView
+                android:id="@+id/tvPrecioHora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#2E7D32"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="$1,850.00 / hr" />
+
+            <!-- 2 Servicios incluidos -->
+            <LinearLayout
+                android:id="@+id/containerServicios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvServicio1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#EFEFEF"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    tools:text="Estacionamiento"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvServicio2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#EFEFEF"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    tools:text="Audio y Luz"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

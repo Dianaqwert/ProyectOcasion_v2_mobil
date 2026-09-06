@@ -67,23 +67,26 @@
 
             <!-- PERFIL PRINCIPAL -->
 
+
+            <!-- INFORMACIÓN PERSONAL -->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="190dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="15dp"
                 android:background="@drawable/bg_profile_header"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="15dp">
 
                 <TextView
                     android:id="@+id/tvProfileAvatar"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
+                    android:background="@drawable/bg_profile_avatar"
                     android:gravity="center"
                     android:text="👤"
-                    android:textSize="38sp"
-                    android:background="@drawable/bg_profile_avatar" />
+                    android:textSize="38sp" />
 
                 <TextView
                     android:id="@+id/tvProfileName"
@@ -105,9 +108,6 @@
                     android:textSize="13sp" />
 
             </LinearLayout>
-
-
-            <!-- INFORMACIÓN PERSONAL -->
 
             <TextView
                 android:layout_width="match_parent"

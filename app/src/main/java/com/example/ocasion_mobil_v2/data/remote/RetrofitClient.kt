@@ -10,7 +10,7 @@ object RetrofitClient {
 
     // IMPORTANTE: esta IP solo es alcanzable mientras estés conectado a la VPN
     // del servidor. Si la IP cambia, solo tienes que actualizarla aquí.
-    private const val BASE_URL = "http://172.30.120.90:8080/"
+    private const val BASE_URL = "http://172.30.209.58/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
