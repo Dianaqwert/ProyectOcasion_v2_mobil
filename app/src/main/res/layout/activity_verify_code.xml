@@ -59,8 +59,7 @@
             android:text="Salones y Eventos"
             android:textColor="@color/texto_principal"
             android:textSize="19sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintTop_toBottomOf="@id/cardLogo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -68,7 +67,7 @@
         <!-- TARJETA -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardNewPassword"
+            android:id="@+id/cardVerifyCode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -94,111 +93,52 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nueva contraseña"
+                    android:text="Verifica tu correo"
                     android:textColor="@color/texto_principal"
                     android:textSize="22sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"/>
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvEmailInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="22dp"
-                    android:text="Crea una nueva contraseña para tu cuenta."
+                    android:text="Ingresa el código de 6 dígitos que enviamos a tu correo."
                     android:textColor="@color/texto_secundario"
                     android:textSize="13sp"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-medium"
                     android:lineSpacingExtra="2dp" />
 
-                <!-- NUEVA CONTRASEÑA -->
+                <!-- CODIGO -->
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="Nueva contraseña"
+                    android:text="Código de verificación"
                     android:textColor="@color/texto_principal"
                     android:textSize="13sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"/>
+                    android:fontFamily="sans-serif-medium" />
 
-                <RelativeLayout
+                <EditText
+                    android:id="@+id/etCodigo"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp">
-
-                    <EditText
-                        android:id="@+id/etNewPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_edittext"
-                        android:hint="Nueva contraseña"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="50dp"
-                        android:textColor="@color/texto_principal"
-                        android:textColorHint="@color/texto_secundario"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif" />
-
-                    <ImageView
-                        android:id="@+id/ivToggleNewPassword"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="14dp"
-                        android:src="@android:drawable/ic_menu_view"
-                        android:contentDescription="Mostrar u ocultar contraseña"
-                        app:tint="@color/texto_secundario" />
-
-                </RelativeLayout>
-
-                <!-- CONFIRMAR CONTRASEÑA -->
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="6dp"
-                    android:text="Confirmar contraseña"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Ej. 329141"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:letterSpacing="0.3"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:textColor="@color/texto_principal"
-                    android:textSize="13sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp">
-
-                    <EditText
-                        android:id="@+id/etConfirmPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_edittext"
-                        android:hint="Repite tu contraseña"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="50dp"
-                        android:textColor="@color/texto_principal"
-                        android:textColorHint="@color/texto_secundario"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif" />
-
-                    <ImageView
-                        android:id="@+id/ivToggleConfirmPassword"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="14dp"
-                        android:src="@android:drawable/ic_menu_view"
-                        android:contentDescription="Mostrar u ocultar contraseña"
-                        app:tint="@color/texto_secundario" />
-
-                </RelativeLayout>
+                    android:textColorHint="@color/texto_secundario"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <!-- ERROR -->
 
@@ -209,28 +149,28 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/rojo_error"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-medium"
                     android:visibility="gone" />
 
                 <!-- BOTON -->
 
                 <Button
-                    android:id="@+id/btnChangePassword"
+                    android:id="@+id/btnVerificar"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="18dp"
                     android:background="@drawable/bg_button_primary"
                     android:elevation="0dp"
                     android:stateListAnimator="@null"
-                    android:text="Cambiar contraseña"
+                    android:text="Verificar código"
                     android:textAllCaps="false"
                     android:textColor="@color/blanco"
                     android:textSize="15sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"/>
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="bold" />
 
                 <ProgressBar
-                    android:id="@+id/progressChangePassword"
+                    android:id="@+id/progressVerificar"
                     style="?android:attr/progressBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -242,17 +182,17 @@
                 <!-- VOLVER -->
 
                 <TextView
-                    android:id="@+id/tvBackToLogin"
+                    android:id="@+id/tvBackToRegister"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="18dp"
                     android:padding="5dp"
-                    android:text="← Volver a iniciar sesión"
+                    android:text="← Volver al registro"
                     android:textColor="@color/verde_primario"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

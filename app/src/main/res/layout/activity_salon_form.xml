@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_general"
@@ -375,7 +376,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
                 android:backgroundTint="@color/rojo_error"
-                android:cornerRadius="27dp"
+                app:cornerRadius="27dp"
                 android:text="Continuar con ubicación"
                 android:textAllCaps="false"
                 android:textColor="@color/blanco"

@@ -11,17 +11,23 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.ocasion_mobil_v2.MainActivity
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClient
 import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
+import com.example.ocasion_mobil_v2.data.remote.model.GoogleLoginRequest
 import com.example.ocasion_mobil_v2.data.remote.model.LoginRequest
 import com.example.ocasion_mobil_v2.data.session.SessionManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.IOException
-import com.example.ocasion_mobil_v2.ui.login.RegisterActivity
+import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
 
 class LoginActivity : ComponentActivity() {
 
@@ -32,10 +38,31 @@ class LoginActivity : ComponentActivity() {
     private lateinit var tvForgotPassword: TextView
     private lateinit var tvGoToRegister: TextView
     private lateinit var btnLogin: Button
+    private lateinit var btnGoogleSignIn: Button
     private lateinit var progressLogin: ProgressBar
 
     private lateinit var sessionManager: SessionManager
+    private lateinit var googleSignInClient: GoogleSignInClient
     private var isPasswordVisible = false
+
+    /** Maneja el resultado del intent de selección de cuenta de Google. */
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val idToken = account.idToken
+
+            if (idToken != null) {
+                realizarLoginGoogle(idToken)
+            } else {
+                mostrarError("No se pudo obtener el token de Google")
+            }
+        } catch (e: ApiException) {
+            mostrarError("Falló el inicio de sesión con Google (código ${e.statusCode})")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +71,10 @@ class LoginActivity : ComponentActivity() {
         sessionManager = SessionManager(this)
 
         bindViews()
+        setupGoogleSignInClient()
         setupPasswordToggle()
         setupLoginButton()
+        setupGoogleButton()
         setupSecondaryActions()
     }
 
@@ -57,7 +86,23 @@ class LoginActivity : ComponentActivity() {
         tvForgotPassword = findViewById(R.id.tvForgotPassword)
         tvGoToRegister = findViewById(R.id.tvGoToRegister)
         btnLogin = findViewById(R.id.btnLogin)
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn)
         progressLogin = findViewById(R.id.progressLogin)
+    }
+
+    /**
+     * IMPORTANTE: reemplaza R.string.google_server_client_id por tu propio
+     * "Web client ID" generado en Google Cloud Console (ver instrucciones
+     * que te pasé aparte). Sin ese ID configurado, el botón de Google
+     * truena o nunca regresa un idToken válido.
+     */
+    private fun setupGoogleSignInClient() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_server_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
     private fun setupPasswordToggle() {
@@ -93,22 +138,29 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
+    private fun setupGoogleButton() {
+        btnGoogleSignIn.setOnClickListener {
+            hideError()
+            // Cierra cualquier sesión previa de Google para forzar que
+            // siempre aparezca el selector de cuenta.
+            googleSignInClient.signOut().addOnCompleteListener {
+                googleSignInLauncher.launch(googleSignInClient.signInIntent)
+            }
+        }
+    }
+
     private fun setupSecondaryActions() {
         tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
 
         tvGoToRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
     /**
      * Llama al endpoint real: POST /api/v1/auth/login
-     * Body: { "gmail": "...", "password": "..." }
-     * Respuesta 200: { "token": "..." }
      */
     private fun realizarLogin(email: String, password: String) {
         mostrarCargando(true)
@@ -116,7 +168,7 @@ class LoginActivity : ComponentActivity() {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.apiService.login(
-                    LoginRequest(gmail = email, password = password)
+                    LoginRequest(email = email, password = password)
                 )
 
                 mostrarCargando(false)
@@ -134,7 +186,6 @@ class LoginActivity : ComponentActivity() {
                 }
 
             } catch (e: IOException) {
-                // Sin conexión / VPN desconectada / servidor no alcanzable
                 mostrarCargando(false)
                 mostrarError("No se pudo conectar al servidor. Verifica tu conexión VPN.")
             } catch (e: Exception) {
@@ -144,7 +195,68 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
-    /** Interpreta el código de error HTTP y el JSON de error del backend. */
+    /**
+     * Llama al endpoint real: POST /api/v1/auth/login-google
+     * Body: { "token": "<idToken de Google>" }
+     *
+     * NOTA/SUPUESTO: asumo que un 404 significa "cuenta nueva, no existe
+     * todavía" y por eso mando al usuario a completar su registro. Si tu
+     * backend usa otro código para ese caso (ej. 401 o un campo específico
+     * en el JSON de error), ajusta la condición de abajo.
+     */
+    private fun realizarLoginGoogle(idToken: String) {
+        mostrarCargando(true)
+
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.apiService.loginGoogle(
+                    GoogleLoginRequest(token = idToken)
+                )
+
+                mostrarCargando(false)
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        sessionManager.guardarToken(body.token)
+                        irAPantallaPrincipal()
+                    } else {
+                        mostrarError("Respuesta vacía del servidor")
+                    }
+                } else {
+                    val errorBodyString = response.errorBody()?.string()
+                    val mensajeBackend = try {
+                        errorBodyString?.let {
+                            val error = Gson().fromJson(it, ApiErrorResponse::class.java)
+                            error.detalle ?: error.message
+                        }
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    val esUsuarioNuevo = mensajeBackend?.contains("NO REGISTRADO", ignoreCase = true) == true
+                            || errorBodyString?.contains("NO REGISTRADO", ignoreCase = true) == true
+
+                    if (esUsuarioNuevo) {
+                        // Cuenta nueva: falta completar datos antes de registrar
+                        val intent = Intent(this@LoginActivity, CompleteGoogleRegisterActivity::class.java)
+                        intent.putExtra(CompleteGoogleRegisterActivity.EXTRA_GOOGLE_TOKEN, idToken)
+                        startActivity(intent)
+                    } else {
+                        mostrarError(mensajeBackend ?: "Error del servidor (${response.code()})")
+                    }
+                }
+
+            } catch (e: IOException) {
+                mostrarCargando(false)
+                mostrarError("No se pudo conectar al servidor. Verifica tu conexión VPN.")
+            } catch (e: Exception) {
+                mostrarCargando(false)
+                mostrarError("Ocurrió un error inesperado: ${e.localizedMessage}")
+            }
+        }
+    }
+
     private fun manejarError(codigoHttp: Int, errorBodyJson: String?) {
         val mensajeBackend = try {
             errorBodyJson?.let {
@@ -167,7 +279,8 @@ class LoginActivity : ComponentActivity() {
 
     private fun irAPantallaPrincipal() {
         Toast.makeText(this, "Login exitoso ✅", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, MainActivity::class.java))
+        // Cambiamos MainActivity por OwnerHomeActivity
+        startActivity(Intent(this, OwnerHomeActivity::class.java))
         finish()
     }
 
@@ -207,7 +320,7 @@ class LoginActivity : ComponentActivity() {
     private fun mostrarCargando(cargando: Boolean) {
         progressLogin.visibility = if (cargando) ProgressBar.VISIBLE else ProgressBar.GONE
         btnLogin.isEnabled = !cargando
+        btnGoogleSignIn.isEnabled = !cargando
         btnLogin.text = if (cargando) "" else getString(R.string.login_button_text)
     }
-
 }

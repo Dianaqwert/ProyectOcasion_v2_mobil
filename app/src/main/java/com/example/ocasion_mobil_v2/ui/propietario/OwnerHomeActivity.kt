@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.ocasion_mobil_v2.R
-import com.google.android.material.card.MaterialCardView
+import android.widget.LinearLayout
 
 class OwnerHomeActivity : ComponentActivity() {
 
-    private lateinit var cardNuevoSalon: MaterialCardView
-    private lateinit var cardMisSalones: MaterialCardView
-    private lateinit var cardDisponibilidad: MaterialCardView
+    private lateinit var cardNuevoSalon: LinearLayout
+    private lateinit var cardMisSalones: LinearLayout
+    private lateinit var cardDisponibilidad: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
