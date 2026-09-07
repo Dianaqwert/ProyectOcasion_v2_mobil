@@ -2,11 +2,10 @@ package com.example.ocasion_mobil_v2.util
 
 import android.util.Base64
 import org.json.JSONObject
-
+import android.util.Log // Asegúrate de importar Log
 object JwtUtils {
-
-    fun obtenerTipoUser(token:String): String? {
-        return try{
+    fun obtenerTipoUser(token: String): String? {
+        return try {
             val partes = token.split(".")
             if (partes.size < 2) return null
 
@@ -14,9 +13,14 @@ object JwtUtils {
             val decodedBytes = Base64.decode(payloadBase64, Base64.URL_SAFE or Base64.NO_WRAP)
             val json = JSONObject(String(decodedBytes, Charsets.UTF_8))
 
-            // Cambia "rol" o "tipo_usuario" por el nombre exacto del claim que envía tu backend
-            json.optString("rol", json.optString("tipo_usuario", null))
-        }catch (e:Exception){
+            // Extraemos el arreglo "roles"
+            val rolesArray = json.optJSONArray("roles")
+            if (rolesArray != null && rolesArray.length() > 0) {
+                val rolCompleto = rolesArray.getString(0) // Obtiene "ROLE_Cliente"
+                return rolCompleto.replace("ROLE_", "").uppercase() // Retorna "CLIENTE"
+            }
+            null
+        } catch (e: Exception) {
             null
         }
     }

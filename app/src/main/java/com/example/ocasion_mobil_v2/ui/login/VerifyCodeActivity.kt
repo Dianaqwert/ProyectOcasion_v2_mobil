@@ -59,7 +59,7 @@ class VerifyCodeActivity : ComponentActivity() {
         btnVerificar.setOnClickListener {
             hideError()
 
-            val codigo = etCodigo.text.toString().trim()
+            val codigo = etCodigo.text.toString().replace(" ", "")
 
             if (codigo.isEmpty()) {
                 mostrarError("Ingresa el código de verificación")

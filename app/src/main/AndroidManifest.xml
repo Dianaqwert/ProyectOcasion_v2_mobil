@@ -25,9 +25,14 @@
             </intent-filter>
 
         </activity>
-
+        <activity
+            android:name=".ui.login.VerifyCodeActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.login.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.cliente.ClientPrincipalMenu"
             android:exported="false" />
 
         <activity
@@ -70,6 +75,24 @@
         <activity
             android:name=".ui.propietario.SalonPublicacionActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.login.NewPasswordActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Cambiamos el pathPrefix por el correcto -->
+                <data
+                    android:scheme="http"
+                    android:host="localhost"
+                    android:port="4200"
+                    android:pathPrefix="/cambiar-password" />
+            </intent-filter>
+        </activity>
 
     </application>
 

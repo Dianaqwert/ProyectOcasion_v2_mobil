@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
 import com.example.ocasion_mobil_v2.util.JwtUtils
-
+import android.util.Log
 class LoginActivity : ComponentActivity() {
 
     private lateinit var etEmail: EditText
@@ -178,6 +178,7 @@ class LoginActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
+                        Log.d("TOKEN_JWT", "El token es: ${body.token}")
                         //sessionManager.guardarToken(body.token)
                         //irAPantallaPrincipal()
                         val tipoUsuario = JwtUtils.obtenerTipoUser(body.token)
