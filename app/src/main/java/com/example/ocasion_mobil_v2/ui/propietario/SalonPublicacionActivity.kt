@@ -7,6 +7,11 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.ocasion_mobil_v2.R
 import com.google.android.material.button.MaterialButton
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
+import com.example.ocasion_mobil_v2.data.remote.model.SalonCreateFase1Request
+import com.example.ocasion_mobil_v2.data.remote.model.UbicacionRequest
 
 class SalonPublicacionActivity : ComponentActivity() {
 
@@ -233,26 +238,64 @@ class SalonPublicacionActivity : ComponentActivity() {
         }
 
 
-        // PUBLICAR
+        // ==========================================
+        // PUBLICAR (Fase 1: Guardar Borrador)
+        // ==========================================
 
-        findViewById<MaterialButton>(
-            R.id.btnPublicarSalon
-        ).setOnClickListener {
+        findViewById<MaterialButton>(R.id.btnPublicarSalon).setOnClickListener {
+            val btn = it as MaterialButton
 
-            Toast.makeText(
-                this,
-                "El salón está listo para publicar",
-                Toast.LENGTH_SHORT
-            ).show()
+            // Bloqueamos el botón para evitar doble clic
+            btn.isEnabled = false
+            btn.text = "Guardando borrador..."
 
-            /*
-             * IMPORTANTE:
-             * Aquí NO hacemos ningún POST.
+            lifecycleScope.launch {
+                try {
+                    // Preparamos el objeto con la ubicación
+                    val ubicacionRequest = UbicacionRequest(
+                        latitud = latitud.toDoubleOrNull() ?: 0.0,
+                        longitud = longitud.toDoubleOrNull() ?: 0.0,
+                        calle = calle,
+                        numero = numero,
+                        fraccionamiento = fraccionamiento,
+                        ciudad = ciudad,
+                        codigoPostal = codigoPostal
+                    )
 
-             * Conectar esta acción con:
-             *
-             * POST /api/v1/salones
-             */
+                    // Preparamos el objeto principal
+                    val request = SalonCreateFase1Request(
+                        nombreSalon = nombreSalon,
+                        capacidadPersonas = capacidadPersonas.toIntOrNull() ?: 0,
+                        precioHora = precioHora.toDoubleOrNull() ?: 0.0,
+                        descripcion = descripcion,
+                        ubicacion = ubicacionRequest
+                    )
+
+                    // Enviamos la petición al servidor
+                    val response = RetrofitClientSalones.getService(this@SalonPublicacionActivity).crearSalonFase1(request)
+
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@SalonPublicacionActivity, "¡Borrador guardado con éxito!", Toast.LENGTH_LONG).show()
+
+                        // Regresamos a la pantalla de Mis Salones limpiando el historial intermedio
+                        val intent = Intent(this@SalonPublicacionActivity, MisSalonesActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                        finish()
+
+                    } else {
+                        Toast.makeText(this@SalonPublicacionActivity, "Error al guardar el salón: ${response.code()}", Toast.LENGTH_LONG).show()
+                        // Restauramos el botón si hubo error
+                        btn.isEnabled = true
+                        btn.text = "Publicar salón"
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this@SalonPublicacionActivity, "Fallo de red: ${e.message}", Toast.LENGTH_LONG).show()
+                    // Restauramos el botón si hubo error de conexión
+                    btn.isEnabled = true
+                    btn.text = "Publicar salón"
+                }
+            }
         }
     }
 
@@ -263,13 +306,9 @@ class SalonPublicacionActivity : ComponentActivity() {
             SalonFormActivity::class.java)
 
         intent.putExtra("modoEdicion", true)
-
         intent.putExtra("nombreSalon", nombreSalon)
-
         intent.putExtra("capacidadPersonas", capacidadPersonas)
-
         intent.putExtra("descripcion", descripcion)
-
         intent.putExtra("precioHora", precioHora)
 
         startActivity(intent)

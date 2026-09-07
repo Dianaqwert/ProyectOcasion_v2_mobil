@@ -10,508 +10,244 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.model.Salon
+import com.example.ocasion_mobil_v2.data.remote.model.SalonPropietarioDTO
+import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 class MisSalonesActivity : ComponentActivity() {
 
     private lateinit var containerSalones: LinearLayout
     private lateinit var layoutEmptySalones: LinearLayout
-
     private lateinit var tvSalonNumber: TextView
 
-    private val salones =
-        mutableListOf<Salon>()
+    private val salones = mutableListOf<Salon>()
 
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(
-            R.layout.activity_salones
-        )
+        setContentView(R.layout.activity_salones)
 
         inicializarVistas()
-
         configurarNavegacion()
 
-        cargarSalonesPrueba()
-
-        mostrarSalones()
+        // Llamada a la API real al entrar a la pantalla
+        cargarSalonesReales()
 
         BottomNav.configurar(this)
     }
-
 
     // =====================================================
     // VISTAS
     // =====================================================
 
     private fun inicializarVistas() {
-
-        containerSalones =
-            findViewById(
-                R.id.containerSalones
-            )
-
-        layoutEmptySalones =
-            findViewById(
-                R.id.layoutEmptySalones
-            )
-
-        tvSalonNumber =
-            findViewById(
-                R.id.tvSalonNumber
-            )
+        containerSalones = findViewById(R.id.containerSalones)
+        layoutEmptySalones = findViewById(R.id.layoutEmptySalones)
+        tvSalonNumber = findViewById(R.id.tvSalonNumber)
     }
-
 
     // =====================================================
     // NAVEGACIÓN
     // =====================================================
 
     private fun configurarNavegacion() {
-
         val abrirFormulario = {
-
-            val intent = Intent(
-                this,
-                SalonFormActivity::class.java
-            )
-
+            val intent = Intent(this, SalonFormActivity::class.java)
             startActivity(intent)
         }
 
-
-        findViewById<LinearLayout>(
-            R.id.btnNuevoSalon
-        ).setOnClickListener {
-
+        findViewById<LinearLayout>(R.id.btnNuevoSalon).setOnClickListener {
             abrirFormulario()
         }
 
-
-        findViewById<FloatingActionButton>(
-            R.id.fabAddSalon
-        ).setOnClickListener {
-
+        findViewById<FloatingActionButton>(R.id.fabAddSalon).setOnClickListener {
             abrirFormulario()
         }
     }
 
-
     // =====================================================
-    // DATOS DE PRUEBA
+    // LLAMADA A LA API (GET)
     // =====================================================
 
-    private fun cargarSalonesPrueba() {
-
-        /*
-         * TEMPORAL
-         *
-         * Esto solamente sirve para comprobar el front.
-         *
-         * Después será reemplazado por:
-         *
-         * GET /api/v1/salones
-         *
-         * usando Retrofit.
-         */
-
+    private fun cargarSalonesReales() {
         salones.clear()
 
-        salones.add(
-            Salon(
-                id = "1",
-                nombreSalon = "Salón Jardín",
-                capacidadPersonas = 150,
-                descripcion =
-                    "Espacio ideal para celebraciones, reuniones y todo tipo de eventos.",
-                precioHora = 850.0,
+        lifecycleScope.launch {
+            try {
+                // Llamamos a Retrofit (el token se inyecta gracias al AuthInterceptor)
+                val response = RetrofitClientSalones.getService(this@MisSalonesActivity).obtenerMisSalones()
 
-                ciudad = "Aguascalientes",
-                codigoPostal = "20000",
-                calle = "Av. Universidad",
-                numero = "123",
-                fraccionamiento = "Centro",
+                if (response.isSuccessful) {
+                    val listaBackend = response.body() ?: emptyList()
 
-                latitud = 21.8818,
-                longitud = -102.2916,
-
-                imagenes = emptyList()
-            )
-        )
-
-        salones.add(
-            Salon(
-                id = "2",
-                nombreSalon = "Salón Los Arcos",
-                capacidadPersonas = 100,
-                descripcion =
-                    "Salón amplio y cómodo para eventos familiares y reuniones.",
-                precioHora = 700.0,
-
-                ciudad = "Aguascalientes",
-                codigoPostal = "20100",
-                calle = "Av. Convención",
-                numero = "456",
-                fraccionamiento = "San Marcos",
-
-                latitud = 21.8850,
-                longitud = -102.3000,
-
-                imagenes = emptyList()
-            )
-        )
+                    // Mapeamos el JSON del backend a tu modelo visual 'Salon'
+                    listaBackend.forEach { dto ->
+                        salones.add(
+                            Salon(
+                                id = dto.id_salon.toString(),
+                                nombreSalon = dto.nombreSalon ?: "Sin nombre",
+                                capacidadPersonas = dto.capacidadPersonas ?: 0,
+                                descripcion = dto.descripcion ?: "",
+                                precioHora = dto.precio_hora ?: 0.0,
+                                ciudad = dto.ubicacion?.ciudad ?: "",
+                                codigoPostal = dto.ubicacion?.cp ?: "",
+                                calle = dto.ubicacion?.direccion ?: "",
+                                numero = "",
+                                fraccionamiento = "",
+                                latitud = dto.ubicacion?.latitud ?: 0.0,
+                                longitud = dto.ubicacion?.longitud ?: 0.0,
+                                imagenes = emptyList() // Aún no hay imágenes
+                            )
+                        )
+                    }
+                    mostrarSalones()
+                } else {
+                    Toast.makeText(this@MisSalonesActivity, "Error al cargar salones", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@MisSalonesActivity, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
-
     // =====================================================
-    // MOSTRAR SALONES
+    // MOSTRAR SALONES EN PANTALLA
     // =====================================================
 
     private fun mostrarSalones() {
-
         containerSalones.removeAllViews()
-
-
-        // CONTADOR
-
-        tvSalonNumber.text =
-            salones.size.toString()
-
-
-        // SIN SALONES
+        tvSalonNumber.text = salones.size.toString()
 
         if (salones.isEmpty()) {
-
-            layoutEmptySalones.visibility =
-                LinearLayout.VISIBLE
-
+            layoutEmptySalones.visibility = LinearLayout.VISIBLE
             return
-
         } else {
-
-            layoutEmptySalones.visibility =
-                LinearLayout.GONE
+            layoutEmptySalones.visibility = LinearLayout.GONE
         }
-
-
-        // CREAR CADA TARJETA
 
         salones.forEach { salon ->
-
-            val itemView =
-                LayoutInflater.from(this)
-                    .inflate(
-                        R.layout.item_salon,
-                        containerSalones,
-                        false
-                    )
-
-
-            configurarItemSalon(
-                itemView,
-                salon
-            )
-
-
-            containerSalones.addView(
-                itemView
-            )
+            val itemView = LayoutInflater.from(this).inflate(R.layout.item_salon, containerSalones, false)
+            configurarItemSalon(itemView, salon)
+            containerSalones.addView(itemView)
         }
     }
 
-
     // =====================================================
-    // CONFIGURAR ITEM
+    // CONFIGURAR CADA TARJETA DE SALÓN
     // =====================================================
 
-    private fun configurarItemSalon(
-        view: View,
-        salon: Salon
-    ) {
+    private fun configurarItemSalon(view: View, salon: Salon) {
+        val imgSalon = view.findViewById<ImageView>(R.id.imgSalon)
+        val tvSalonName = view.findViewById<TextView>(R.id.tvSalonName)
+        val tvSalonLocation = view.findViewById<TextView>(R.id.tvSalonLocation)
+        val tvCapacity = view.findViewById<TextView>(R.id.tvCapacity)
+        val tvPrice = view.findViewById<TextView>(R.id.tvPrice)
+        val tvPriceBadge = view.findViewById<TextView>(R.id.tvPriceBadge)
+        val tvDescription = view.findViewById<TextView>(R.id.tvDescription)
 
-        val imgSalon =
-            view.findViewById<ImageView>(
-                R.id.imgSalon
-            )
-
-        val tvSalonName =
-            view.findViewById<TextView>(
-                R.id.tvSalonName
-            )
-
-        val tvSalonLocation =
-            view.findViewById<TextView>(
-                R.id.tvSalonLocation
-            )
-
-        val tvCapacity =
-            view.findViewById<TextView>(
-                R.id.tvCapacity
-            )
-
-        val tvPrice =
-            view.findViewById<TextView>(
-                R.id.tvPrice
-            )
-
-        val tvPriceBadge =
-            view.findViewById<TextView>(
-                R.id.tvPriceBadge
-            )
-
-        val tvDescription =
-            view.findViewById<TextView>(
-                R.id.tvDescription
-            )
-
-
-        // INFORMACIÓN
-
-        tvSalonName.text =
-            salon.nombreSalon
-
-        tvSalonLocation.text =
-            "📍 ${salon.ciudad}"
-
-        tvCapacity.text =
-            "👥 ${salon.capacidadPersonas} personas"
-
-        tvPrice.text =
-            "$${salon.precioHora} / hora"
-
-        tvPriceBadge.text =
-            "$${salon.precioHora} / hora"
-
-        tvDescription.text =
-            salon.descripcion
-
-
-        // IMAGEN
+        // Textos
+        tvSalonName.text = salon.nombreSalon
+        tvSalonLocation.text = "📍 ${salon.ciudad}"
+        tvCapacity.text = "👥 ${salon.capacidadPersonas} personas"
+        tvPrice.text = "$${salon.precioHora} / hora"
+        tvPriceBadge.text = "$${salon.precioHora} / hora"
+        tvDescription.text = salon.descripcion
 
         if (salon.imagenes.isEmpty()) {
-
-            imgSalon.setImageResource(
-                R.drawable.ic_launcher_background
-            )
+            imgSalon.setImageResource(R.drawable.ic_launcher_background)
         }
 
+        // Botones
+        view.findViewById<MaterialButton>(R.id.btnEditSalon).setOnClickListener {
+            abrirEdicion(salon)
+        }
 
-        // EDITAR
+        view.findViewById<MaterialButton>(R.id.btnDeleteSalon).setOnClickListener {
+            confirmarBaja(salon)
+        }
 
-        view.findViewById<
-                MaterialButton
-                >(R.id.btnEditSalon)
-            .setOnClickListener {
-
-                abrirEdicion(salon)
-            }
-
-
-        // DAR DE BAJA
-
-        view.findViewById<
-                MaterialButton
-                >(R.id.btnDeleteSalon)
-            .setOnClickListener {
-
-                confirmarBaja(salon)
-            }
-
-
-        // DISPONIBILIDAD
-
-        view.findViewById<
-                MaterialButton
-                >(R.id.btnDisponibilidadSalon)
-            .setOnClickListener {
-
-                abrirDisponibilidad(salon)
-            }
+        view.findViewById<MaterialButton>(R.id.btnDisponibilidadSalon).setOnClickListener {
+            abrirDisponibilidad(salon)
+        }
     }
 
-
     // =====================================================
-    // EDITAR
+    // NAVEGACIÓN A EDITAR / DISPONIBILIDAD
     // =====================================================
 
-    private fun abrirEdicion(
-        salon: Salon
-    ) {
-
-        val intent =
-            Intent(
-                this,
-                SalonFormActivity::class.java
-            )
-
-        intent.putExtra(
-            "modoEdicion",
-            true
-        )
-
-        intent.putExtra(
-            "idSalon",
-            salon.id
-        )
-
-        intent.putExtra(
-            "nombreSalon",
-            salon.nombreSalon
-        )
-
-        intent.putExtra(
-            "capacidadPersonas",
-            salon.capacidadPersonas.toString()
-        )
-
-        intent.putExtra(
-            "precioHora",
-            salon.precioHora.toString()
-        )
-
-        intent.putExtra(
-            "descripcion",
-            salon.descripcion
-        )
-
-        intent.putExtra(
-            "ciudad",
-            salon.ciudad
-        )
-
-        intent.putExtra(
-            "codigoPostal",
-            salon.codigoPostal
-        )
-
-        intent.putExtra(
-            "calle",
-            salon.calle
-        )
-
-        intent.putExtra(
-            "numero",
-            salon.numero
-        )
-
-        intent.putExtra(
-            "fraccionamiento",
-            salon.fraccionamiento
-        )
-
-        intent.putExtra(
-            "latitud",
-            salon.latitud.toString()
-        )
-
-        intent.putExtra(
-            "longitud",
-            salon.longitud.toString()
-        )
-
-        intent.putStringArrayListExtra(
-            "imagenes",
-            ArrayList(
-                salon.imagenes
-            )
-        )
+    private fun abrirEdicion(salon: Salon) {
+        val intent = Intent(this, SalonFormActivity::class.java)
+        intent.putExtra("modoEdicion", true)
+        intent.putExtra("idSalon", salon.id)
+        intent.putExtra("nombreSalon", salon.nombreSalon)
+        intent.putExtra("capacidadPersonas", salon.capacidadPersonas.toString())
+        intent.putExtra("precioHora", salon.precioHora.toString())
+        intent.putExtra("descripcion", salon.descripcion)
+        intent.putExtra("ciudad", salon.ciudad)
+        intent.putExtra("codigoPostal", salon.codigoPostal)
+        intent.putExtra("calle", salon.calle)
+        intent.putExtra("numero", salon.numero)
+        intent.putExtra("fraccionamiento", salon.fraccionamiento)
+        intent.putExtra("latitud", salon.latitud.toString())
+        intent.putExtra("longitud", salon.longitud.toString())
+        intent.putStringArrayListExtra("imagenes", ArrayList(salon.imagenes))
 
         startActivity(intent)
     }
 
-
-    // =====================================================
-    // DISPONIBILIDAD
-    // =====================================================
-
-    private fun abrirDisponibilidad(
-        salon: Salon
-    ) {
-
-        val intent =
-            Intent(
-                this,
-                SalonDisponibilidadActivity::class.java
-            )
-
-        intent.putExtra(
-            "idSalon",
-            salon.id
-        )
-
-        intent.putExtra(
-            "nombreSalon",
-            salon.nombreSalon
-        )
-
+    private fun abrirDisponibilidad(salon: Salon) {
+        val intent = Intent(this, SalonDisponibilidadActivity::class.java)
+        intent.putExtra("idSalon", salon.id)
+        intent.putExtra("nombreSalon", salon.nombreSalon)
         startActivity(intent)
     }
 
-
     // =====================================================
-    // DAR DE BAJA
+    // ELIMINAR SALÓN (DELETE)
     // =====================================================
 
-    private fun confirmarBaja(
-        salon: Salon
-    ) {
-
+    private fun confirmarBaja(salon: Salon) {
         AlertDialog.Builder(this)
             .setTitle("Dar de baja salón")
-            .setMessage(
-                "¿Seguro que deseas dar de baja \"${salon.nombreSalon}\"?"
-            )
-            .setNegativeButton(
-                "Cancelar",
-                null
-            )
-            .setPositiveButton(
-                "Dar de baja"
-            ) { _, _ ->
+            .setMessage("¿Seguro que deseas dar de baja \"${salon.nombreSalon}\"?")
+            .setNegativeButton("Cancelar", null)
+            .setPositiveButton("Dar de baja") { _, _ ->
 
-                /*
-                 * TEMPORAL
-                 *
-                 * Después aquí irá:
-                 *
-                 * DELETE /api/v1/salones/{id}
-                 */
+                val idSalon = salon.id.toIntOrNull() ?: return@setPositiveButton
 
-                salones.remove(
-                    salon
-                )
+                lifecycleScope.launch {
+                    try {
+                        // Llamamos al DELETE en el servidor
+                        val response = RetrofitClientSalones.getService(this@MisSalonesActivity).eliminarSalon(idSalon)
 
-                mostrarSalones()
-
-                Toast.makeText(
-                    this,
-                    "Salón dado de baja.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                        if (response.isSuccessful) {
+                            salones.remove(salon)
+                            mostrarSalones()
+                            Toast.makeText(this@MisSalonesActivity, "Salón eliminado exitosamente.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@MisSalonesActivity, "No se pudo eliminar el salón", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(this@MisSalonesActivity, "Fallo de conexión", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .show()
     }
 
-
     // =====================================================
-    // ACTUALIZAR AL REGRESAR
+    // ACTUALIZAR AL REGRESAR DE OTRA PANTALLA
     // =====================================================
 
     override fun onResume() {
         super.onResume()
-
-        if (
-            ::containerSalones.isInitialized
-        ) {
-
-            mostrarSalones()
+        if (::containerSalones.isInitialized) {
+            // Refresca la lista desde el servidor cada vez que regresas a esta pantalla
+            cargarSalonesReales()
         }
     }
 }

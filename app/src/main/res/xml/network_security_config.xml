@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Permite tráfico HTTP (sin cifrar) SOLO hacia la IP de tu servidor por VPN.
-         El resto de la app sigue exigiendo HTTPS normalmente.
-         Si la IP del servidor cambia, actualízala aquí también. -->
+    <!-- Permite tráfico HTTP (sin cifrar) SOLO hacia las IPs de tus servidores por VPN.
+         El resto de la app sigue exigiendo HTTPS normalmente. -->
     <domain-config cleartextTrafficPermitted="true">
+
+        <!-- IP del Dominio 1 (Login y Usuarios) -->
         <domain includeSubdomains="false">172.30.209.58</domain>
+
+        <!-- IP del Dominio 2 (Salones, Servicios e Inventario) -->
+        <domain includeSubdomains="false">172.30.241.234</domain>
+
     </domain-config>
 </network-security-config>
