@@ -1,5 +1,7 @@
 package com.example.ocasion_mobil_v2.data.remote.model
 
+import com.google.gson.annotations.SerializedName
+
 data class SalonPropietarioDTO(
     val id_salon: Int,
     val nombreSalon: String?,
@@ -11,8 +13,12 @@ data class SalonPropietarioDTO(
 
 data class UbicacionDTO(
     val ciudad: String?,
+    // El backend serializa este campo como "CP" (mayúsculas) porque su
+    // entidad Java tiene el field llamado "CP" — sin este alias, Gson no
+    // lo encuentra y siempre llega null.
+    @SerializedName("CP")
     val cp: String?,
-    val direccion: String?, // Calle y número
+    val direccion: String?,
     val latitud: Double?,
     val longitud: Double?
 )

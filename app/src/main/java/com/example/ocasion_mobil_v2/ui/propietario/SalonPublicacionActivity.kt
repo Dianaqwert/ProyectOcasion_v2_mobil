@@ -10,8 +10,11 @@ import com.google.android.material.button.MaterialButton
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
+import com.example.ocasion_mobil_v2.data.remote.model.DisponibilidadRequest
 import com.example.ocasion_mobil_v2.data.remote.model.SalonCreateFase1Request
 import com.example.ocasion_mobil_v2.data.remote.model.UbicacionRequest
+import java.time.LocalDate
+import java.time.LocalTime
 
 class SalonPublicacionActivity : ComponentActivity() {
 
@@ -251,24 +254,38 @@ class SalonPublicacionActivity : ComponentActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // Preparamos el objeto con la ubicación
+                    // Ubicación: el backend espera una sola "direccion" y "cp",
+                    // no calle/numero/fraccionamiento/codigoPostal por separado.
                     val ubicacionRequest = UbicacionRequest(
+                        direccion = "$calle $numero, $fraccionamiento",
                         latitud = latitud.toDoubleOrNull() ?: 0.0,
                         longitud = longitud.toDoubleOrNull() ?: 0.0,
-                        calle = calle,
-                        numero = numero,
-                        fraccionamiento = fraccionamiento,
                         ciudad = ciudad,
-                        codigoPostal = codigoPostal
+                        cp = codigoPostal
                     )
 
-                    // Preparamos el objeto principal
+                    // El backend exige una disponibilidad inicial y el
+                    // formulario todavía no la captura, así que por ahora
+                    // mandamos el día completo de hoy como placeholder.
+                    // TODO: agregar un paso en el formulario para que el
+                    // propietario elija esta fecha/horario real.
+                    val hoy = LocalDate.now().toString() // "2026-09-07"
+                    val disponibilidadRequest = DisponibilidadRequest(
+                        hora_inicio = "${hoy}T${LocalTime.MIN}",
+                        hora_fin = "${hoy}T23:59:59",
+                        fecha = hoy,
+                        observaciones = "Disponibilidad inicial registrada automáticamente"
+                    )
+
+                    // Preparamos el objeto principal (precio_hora con
+                    // guion bajo, tal como lo espera el backend)
                     val request = SalonCreateFase1Request(
                         nombreSalon = nombreSalon,
                         capacidadPersonas = capacidadPersonas.toIntOrNull() ?: 0,
-                        precioHora = precioHora.toDoubleOrNull() ?: 0.0,
+                        precio_hora = precioHora.toDoubleOrNull() ?: 0.0,
                         descripcion = descripcion,
-                        ubicacion = ubicacionRequest
+                        ubicacion = ubicacionRequest,
+                        disponibilidadInicial = disponibilidadRequest
                     )
 
                     // Enviamos la petición al servidor
@@ -284,7 +301,12 @@ class SalonPublicacionActivity : ComponentActivity() {
                         finish()
 
                     } else {
-                        Toast.makeText(this@SalonPublicacionActivity, "Error al guardar el salón: ${response.code()}", Toast.LENGTH_LONG).show()
+                        val errorBody = response.errorBody()?.string()
+                        Toast.makeText(
+                            this@SalonPublicacionActivity,
+                            "Error al guardar el salón (${response.code()}): $errorBody",
+                            Toast.LENGTH_LONG
+                        ).show()
                         // Restauramos el botón si hubo error
                         btn.isEnabled = true
                         btn.text = "Publicar salón"
