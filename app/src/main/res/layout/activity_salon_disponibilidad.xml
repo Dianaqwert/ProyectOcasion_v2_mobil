@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/bg_general">
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="95dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,45 +21,46 @@
             android:orientation="vertical"
             android:padding="18dp">
 
-            <!-- ENCABEZADO -->
+
+            <!-- HEADER -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical">
+
 
                 <TextView
                     android:id="@+id/btnBackDisponibilidad"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
                     android:gravity="center"
                     android:text="‹"
                     android:textColor="@color/texto_principal"
-                    android:textSize="34sp"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:textSize="34sp" />
+
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingStart="5dp">
+                    android:paddingStart="6dp">
+
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Disponibilidad"
                         android:textColor="@color/texto_principal"
-                        android:textSize="22sp"
+                        android:textSize="23sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Administra las fechas y horarios no disponibles."
+                        android:text="Paso 3 de 6 · Configura horarios y bloqueos"
                         android:textColor="@color/texto_secundario"
                         android:textSize="12sp" />
 
@@ -67,158 +69,184 @@
             </LinearLayout>
 
 
-            <!-- CALENDARIO -->
+            <!-- PROGRESO -->
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="18dp">
+                android:layout_height="8dp"
+                android:layout_marginTop="14dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Selecciona una fecha"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
 
-                <CalendarView
-                    android:id="@+id/calendarDisponibilidad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:firstDayOfWeek="2" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:background="@color/verde_primario" />
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_marginStart="4dp"
+                    android:background="@color/header_footer_light" />
 
             </LinearLayout>
 
 
-            <!-- HORARIO -->
+            <!-- FECHA -->
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="18dp">
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Horario a bloquear"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-
-                <!-- FECHA -->
-
-                <TextView
-                    android:id="@+id/tvFechaSeleccionada"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Fecha: Selecciona una fecha"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="13sp" />
-
-
-                <!-- HORAS -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnHoraInicio"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_weight="1"
-                        android:text="Hora inicio"
-                        android:textAllCaps="false"
-                        android:textColor="@color/texto_principal"
-                        android:backgroundTint="@color/header_footer_light"
-                        android:background="@drawable/bg_button_secondary" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnHoraFin"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:text="Hora final"
-                        android:textAllCaps="false"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1. Selecciona la fecha"
                         android:textColor="@color/texto_principal"
-                        android:backgroundTint="@color/header_footer_light"
-                        android:background="@drawable/bg_button_secondary" />
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+
+                    <CalendarView
+                        android:id="@+id/calendarDisponibilidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:firstDayOfWeek="2" />
 
                 </LinearLayout>
 
-
-                <!-- OBSERVACIONES -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Observaciones *"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etObservaciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/bg_edittext"
-                    android:gravity="top|start"
-                    android:hint="Ej. Mantenimiento, evento privado..."
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:padding="14dp"
-                    android:textColor="@color/texto_principal"
-                    android:textColorHint="@color/texto_secundario" />
-
-                <TextView
-                    android:id="@+id/tvErrorDisponibilidad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/rojo_error"
-                    android:textSize="11sp"
-                    android:visibility="gone" />
-
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
-            <!-- BLOQUEAR -->
+            <!-- HORARIO -->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnBloquearHorario"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="18dp"
-                android:text="Bloquear horario"
-                android:textAllCaps="false"
-                android:textColor="@color/blanco"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:backgroundTint="@color/rojo_error"
-                android:background="@drawable/bg_button_secondary" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/blanco"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
 
-            <!-- BLOQUEOS -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="2. Horario a bloquear"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tvFechaSeleccionada"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/texto_secundario"
+                        android:textSize="13sp" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnHoraInicio"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:text="Hora inicio"
+                            android:textAllCaps="false"
+                            android:textColor="@color/texto_principal"
+                            android:backgroundTint="@color/header_footer_light" />
+
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnHoraFin"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:text="Hora final"
+                            android:textAllCaps="false"
+                            android:textColor="@color/texto_principal"
+                            android:backgroundTint="@color/header_footer_light" />
+
+                    </LinearLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:hint="Observaciones">
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etObservaciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:gravity="top|start"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:minLines="3" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvErrorDisponibilidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/rojo_error"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBloquearHorario"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="12dp"
+                        android:text="＋ Agregar horario"
+                        android:textAllCaps="false"
+                        android:textColor="@color/rojo_error"
+                        android:strokeColor="@color/rojo_error" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Horarios bloqueados"
+                android:layout_marginTop="22dp"
+                android:text="Horarios agregados"
                 android:textColor="@color/texto_principal"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -230,29 +258,49 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical" />
 
-            <Space
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/header_footer_light"
+                app:cardCornerRadius="14dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="13dp"
+                    android:text="El backend actual recibe el primer horario como disponibilidad inicial del salón."
+                    android:textColor="@color/texto_principal"
+                    android:textSize="11sp" />
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- MENÚ INFERIOR -->
 
-    <LinearLayout
+    <!-- BOTÓN CONTINUAR -->
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="@drawable/bg_bottom_menu"
-        android:elevation="10dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="8dp">
 
-        <include
-            layout="@layout/bottom_nav_owner"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnContinuarCatalogo"
             android:layout_width="match_parent"
-            android:layout_height="72dp" />
-    </LinearLayout>
+            android:layout_height="56dp"
+            android:text="Guardar disponibilidad y continuar"
+            android:textAllCaps="false"
+            android:textColor="@color/blanco"
+            android:textStyle="bold"
+            android:backgroundTint="@color/verde_primario" />
 
+    </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

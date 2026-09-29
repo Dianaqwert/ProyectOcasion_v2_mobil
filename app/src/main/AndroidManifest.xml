@@ -55,6 +55,13 @@
         <activity
             android:name=".ui.propietario.MisSalonesActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.propietario.catalogoSalon.CatalogoSalonActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.ConfirmacionSalonActivity"
+            android:exported="false" />
         <!--
         <activity
             android:name=".ui.propietarios.ReservasActivity"
