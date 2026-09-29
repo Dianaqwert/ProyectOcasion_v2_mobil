@@ -1,3 +1,4 @@
+
 package com.example.ocasion_mobil_v2.ui.propietario
 
 import android.content.Intent
@@ -409,48 +410,76 @@ class SalonUbicacionActivity : ComponentActivity() {
 
     private fun abrirPublicacion() {
 
-        val publicacionIntent = Intent(
-            this,
-            SalonPublicacionActivity::class.java
+        val intent =
+            Intent(
+                this,
+                SalonDisponibilidadActivity::class.java
+            )
+
+
+        intent.putExtra(
+            "nombreSalon",
+            nombreSalon
+        )
+
+        intent.putExtra(
+            "capacidadPersonas",
+            capacidadPersonas
+        )
+
+        intent.putExtra(
+            "precioHora",
+            precioHora
+        )
+
+        intent.putExtra(
+            "descripcion",
+            descripcion
         )
 
 
-        // DATOS DEL SALÓN
-
-        publicacionIntent.putExtra("nombreSalon", nombreSalon)
-
-        publicacionIntent.putExtra("capacidadPersonas", capacidadPersonas)
-
-        publicacionIntent.putExtra("precioHora", precioHora)
-
-        publicacionIntent.putExtra("descripcion", descripcion)
-
-        // IMÁGENES
-
-        publicacionIntent.putStringArrayListExtra(
+        intent.putStringArrayListExtra(
             "imagenes",
             imagenes
         )
 
-        // DATOS DE UBICACIÓN
 
-        publicacionIntent.putExtra("ciudad", etCiudad.text.toString())
-
-        publicacionIntent.putExtra("codigoPostal", etCodigoPostal.text.toString())
-
-        publicacionIntent.putExtra("calle", etCalle.text.toString())
-
-        publicacionIntent.putExtra("numero", etNumero.text.toString())
-
-        publicacionIntent.putExtra("fraccionamiento", etFraccionamiento.text.toString())
-
-        publicacionIntent.putExtra("latitud", etLatitud.text.toString())
-
-        publicacionIntent.putExtra("longitud", etLongitud.text.toString())
-
-
-        startActivity(
-            publicacionIntent
+        intent.putExtra(
+            "ciudad",
+            etCiudad.text.toString().trim()
         )
+
+        intent.putExtra(
+            "codigoPostal",
+            etCodigoPostal.text.toString().trim()
+        )
+
+        intent.putExtra(
+            "calle",
+            etCalle.text.toString().trim()
+        )
+
+        intent.putExtra(
+            "numero",
+            etNumero.text.toString().trim()
+        )
+
+        intent.putExtra(
+            "fraccionamiento",
+            etFraccionamiento.text.toString().trim()
+        )
+
+        intent.putExtra(
+            "latitud",
+            etLatitud.text.toString().trim()
+        )
+
+        intent.putExtra(
+            "longitud",
+            etLongitud.text.toString().trim()
+        )
+
+
+        startActivity(intent)
     }
 }
