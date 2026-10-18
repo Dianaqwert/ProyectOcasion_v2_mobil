@@ -178,10 +178,7 @@ class CategoriaAdapter(
             }
 
 
-            rv.layoutManager =
-                LinearLayoutManager(
-                    view.context
-                )
+            rv.layoutManager = LinearLayoutManager(itemView.context)
 
 
             rv.isNestedScrollingEnabled =

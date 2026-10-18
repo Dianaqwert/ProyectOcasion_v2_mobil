@@ -22,11 +22,12 @@ object RetrofitClientSalones {
 
             // Interceptor para ver los JSONs en el Logcat (Consola)
             val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                // El nivel BODY expone tokens y datos del propietario en Logcat.
+                level = HttpLoggingInterceptor.Level.BASIC
             }
 
             // Nuestro NUEVO interceptor que pega el Token mágicamente
-            val authInterceptor = AuthInterceptor(context)
+            val authInterceptor = AuthInterceptor(context.applicationContext)
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
@@ -38,7 +39,12 @@ object RetrofitClientSalones {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_SALONES)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(
+                    com.google.gson.GsonBuilder().registerTypeAdapter(
+                        com.example.ocasion_mobil_v2.data.remote.model.SalonPageResponse::class.java,
+                        com.example.ocasion_mobil_v2.data.remote.model.SalonPageDeserializer()
+                    ).create()
+                ))
                 .build()
 
             apiService = retrofit.create(ApiSalonesService::class.java)

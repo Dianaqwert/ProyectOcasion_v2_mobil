@@ -375,7 +375,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="📍\nMapa de Google Maps"
+                        android:text="📍\nMapa de OpenStreetMap"
                         android:textColor="@color/texto_secundario"
                         android:textSize="15sp" />
 

@@ -280,7 +280,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="Coordenadas utilizadas para mostrar el salón en el mapa."
+                    android:text="Toca el mapa para elegir la ubicación. Las coordenadas se completarán automáticamente."
                     android:textColor="@color/texto_secundario"
                     android:textSize="12sp" />
 
@@ -291,7 +291,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Latitud *"
+                    android:text="Latitud seleccionada"
                     android:textColor="@color/texto_principal"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -304,6 +304,8 @@
                     android:background="@drawable/bg_edittext"
                     android:hint="Ej. 21.8818"
                     android:inputType="numberDecimal|numberSigned"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:paddingHorizontal="14dp"
                     android:textColor="@color/texto_principal"
                     android:textColorHint="@color/texto_secundario" />
@@ -323,7 +325,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Longitud *"
+                    android:text="Longitud seleccionada"
                     android:textColor="@color/texto_principal"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -336,6 +338,8 @@
                     android:background="@drawable/bg_edittext"
                     android:hint="Ej. -102.2916"
                     android:inputType="numberDecimal|numberSigned"
+                    android:focusable="false"
+                    android:clickable="false"
                     android:paddingHorizontal="14dp"
                     android:textColor="@color/texto_principal"
                     android:textColorHint="@color/texto_secundario" />
@@ -347,19 +351,6 @@
                     android:textColor="@color/rojo_error"
                     android:textSize="11sp"
                     android:visibility="gone" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnMostrarUbicacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Mostrar ubicación en el mapa"
-                    android:textAllCaps="false"
-                    android:textColor="@color/blanco"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:backgroundTint="@color/naranja_primario"
-                    android:background="@drawable/bg_icon_circle"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -405,7 +396,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
-                                android:text="La ubicación se mostrará en el mapa utilizando las coordenadas."
+                            android:text="Toca un punto del mapa para marcar dónde está tu salón."
                                 android:textColor="@color/texto_secundario"
                                 android:textSize="12sp" />
 
@@ -422,14 +413,18 @@
                         android:layout_marginTop="15dp"
                         android:background="@drawable/bg_edittext">
 
-                        <!-- Aquí posteriormente se integrará Google Maps -->
+                        <WebView
+                            android:id="@+id/webViewMapaSalon"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/bg_general" />
 
                         <TextView
                             android:id="@+id/tvMapaPlaceholder"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="Vista previa del mapa&#10;Ingresa latitud y longitud"
+                            android:text="Cargando mapa…"
                             android:textAlignment="center"
                             android:textColor="@color/texto_secundario"
                             android:textSize="14sp" />

@@ -14,6 +14,33 @@ import retrofit2.http.Query
 
 interface ApiSalonesService {
 
+    @GET("api/v1/salones/explorar")
+    suspend fun explorarSalones(
+        @Query("texto") texto: String? = null,
+        @Query("capacidadMin") capacidadMin: Int? = null,
+        @Query("capacidadMax") capacidadMax: Int? = null,
+        @Query("precioHoraMax") precioHoraMax: Double? = null,
+        @Query("ciudad") ciudad: String? = null,
+        @Query("serviciosIds") serviciosIds: List<Int>? = null,
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 30
+    ): Response<SalonPageResponse>
+
+    @GET("api/v1/servicios")
+    suspend fun obtenerCatalogoServicios(): Response<List<ServicioBackend>>
+
+    @GET("api/v1/salones/{id}/detalle")
+    suspend fun obtenerDetalleCliente(
+        @Path("id") idSalon: Int
+    ): Response<SalonDetalleClienteDTO>
+
+    @GET("api/v1/salones/{id}/calendario")
+    suspend fun obtenerCalendarioCliente(
+        @Path("id") idSalon: Int,
+        @Query("mes") mes: Int,
+        @Query("anio") anio: Int
+    ): Response<List<DisponibilidadMesDTO>>
+
     // ==========================================
     // SALONES
     // ==========================================
@@ -41,14 +68,14 @@ interface ApiSalonesService {
     suspend fun guardarServicios(
         @Path("id") idSalon: Int,
         @Body servicios: List<ServicioAsignadoRequest>
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @DELETE("api/v1/salones/{id}/servicios/{idServicio}")
     suspend fun desvincularServicio(
         @Path("id") idSalon: Int,
         @Path("idServicio") idServicio: Int
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @POST("api/v1/servicios/personalizado")
@@ -66,7 +93,7 @@ interface ApiSalonesService {
     suspend fun guardarInventario(
         @Path("id") idSalon: Int,
         @Body inventario: InventarioBatchDTO
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @POST("api/v1/salones/{id}/inventario")
@@ -74,7 +101,7 @@ interface ApiSalonesService {
         @Path("id") idSalon: Int,
         @Query("idCategoria") idCategoria: Int,
         @Body recurso: RecursoDTO
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @POST("api/v1/salones/{id}/categorias")
@@ -82,7 +109,7 @@ interface ApiSalonesService {
         @Path("id") idSalon: Int,
         @Query("nombre") nombre: String,
         @Query("descripcion") descripcion: String? = null
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @PUT("api/v1/inventario/{id}")
@@ -90,13 +117,13 @@ interface ApiSalonesService {
         @Path("id") idRecurso: Int,
         @Query("nombre") nombre: String,
         @Query("cantidad") cantidad: Int
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @DELETE("api/v1/inventario/{id}")
     suspend fun eliminarRecurso(
         @Path("id") idRecurso: Int
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @PUT("api/v1/categorias/{id}")
@@ -104,13 +131,13 @@ interface ApiSalonesService {
         @Path("id") idCategoria: Int,
         @Query("nombre") nombre: String,
         @Query("descripcion") descripcion: String
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     @DELETE("api/v1/categorias/{id}")
     suspend fun eliminarCategoria(
         @Path("id") idCategoria: Int
-    ): Response<String>
+    ): Response<ResponseBody>
 
 
     // ==========================================
@@ -120,7 +147,7 @@ interface ApiSalonesService {
     @PATCH("api/v1/salones/{id}/publicar")
     suspend fun publicarSalon(
         @Path("id") idSalon: Int
-    ): Response<String>
+    ): Response<ResponseBody>
 }
 /*package com.example.ocasion_mobil_v2.data.remote
 

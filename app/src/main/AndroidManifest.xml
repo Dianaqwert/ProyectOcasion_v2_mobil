@@ -34,6 +34,9 @@
         <activity
             android:name=".ui.cliente.ClientPrincipalMenu"
             android:exported="false" />
+        <activity
+            android:name=".ui.cliente.DetalleSalonActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

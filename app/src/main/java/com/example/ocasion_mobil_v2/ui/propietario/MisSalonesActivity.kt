@@ -2,6 +2,7 @@ package com.example.ocasion_mobil_v2.ui.propietario
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -33,9 +34,6 @@ class MisSalonesActivity : ComponentActivity() {
 
         inicializarVistas()
         configurarNavegacion()
-
-        // Llamada a la API real al entrar a la pantalla
-        cargarSalonesReales()
 
         BottomNav.configurar(this)
     }
@@ -106,10 +104,20 @@ class MisSalonesActivity : ComponentActivity() {
                     }
                     mostrarSalones()
                 } else {
-                    Toast.makeText(this@MisSalonesActivity, "Error al cargar salones", Toast.LENGTH_SHORT).show()
+                    Log.e("MisSalones", "Error HTTP al cargar salones: ${response.code()}")
+                    Toast.makeText(
+                        this@MisSalonesActivity,
+                        "No se pudieron cargar los salones (${response.code()})",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@MisSalonesActivity, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("MisSalones", "Falló la carga o lectura de la respuesta de salones", e)
+                Toast.makeText(
+                    this@MisSalonesActivity,
+                    "No se pudieron leer los salones. Revisa Logcat para ver el detalle.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

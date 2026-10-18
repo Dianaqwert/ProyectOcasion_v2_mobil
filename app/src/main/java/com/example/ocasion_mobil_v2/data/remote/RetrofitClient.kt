@@ -13,7 +13,8 @@ object RetrofitClient {
     private const val BASE_URL = "http://172.30.209.58:8080/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        // Evita imprimir tokens y datos personales de las respuestas en Logcat.
+        level = HttpLoggingInterceptor.Level.BASIC
     }
 
     private val okHttpClient = OkHttpClient.Builder()

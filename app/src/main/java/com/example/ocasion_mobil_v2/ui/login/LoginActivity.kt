@@ -178,7 +178,6 @@ class LoginActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        Log.d("TOKEN_JWT", "El token es: ${body.token}")
                         //sessionManager.guardarToken(body.token)
                         //irAPantallaPrincipal()
                         val tipoUsuario = JwtUtils.obtenerTipoUser(body.token)

@@ -2,10 +2,15 @@
 package com.example.ocasion_mobil_v2.ui.propietario
 
 import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.TextView
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import com.example.ocasion_mobil_v2.R
 import com.google.android.material.button.MaterialButton
@@ -39,6 +44,8 @@ class SalonUbicacionActivity : ComponentActivity() {
     // MAPA
 
     private lateinit var tvMapaPlaceholder: TextView
+    private lateinit var mapaWebView: WebView
+    private var ubicacionSeleccionada = false
 
     // DATOS RECIBIDOS DEL FORMULARIO DEL SALÓN
 
@@ -60,6 +67,8 @@ class SalonUbicacionActivity : ComponentActivity() {
         recibirDatosSalon()
 
         inicializarVistas()
+
+        configurarMapa()
 
         configurarBotones()
     }
@@ -121,6 +130,11 @@ class SalonUbicacionActivity : ComponentActivity() {
         etLongitud =
             findViewById(R.id.etLongitud)
 
+        etLatitud.isFocusable = false
+        etLatitud.isClickable = false
+        etLongitud.isFocusable = false
+        etLongitud.isClickable = false
+
 
         // MENSAJES DE ERROR
 
@@ -154,6 +168,8 @@ class SalonUbicacionActivity : ComponentActivity() {
             findViewById(
                 R.id.tvMapaPlaceholder
             )
+
+        mapaWebView = findViewById(R.id.webViewMapaSalon)
     }
 
 
@@ -166,15 +182,6 @@ class SalonUbicacionActivity : ComponentActivity() {
         ).setOnClickListener {
 
             finish()
-        }
-
-        // MOSTRAR UBICACIÓN
-
-        findViewById<MaterialButton>(
-            R.id.btnMostrarUbicacion
-        ).setOnClickListener {
-
-            mostrarUbicacion()
         }
 
         // CONTINUAR
@@ -191,41 +198,50 @@ class SalonUbicacionActivity : ComponentActivity() {
     }
 
 
-    private fun mostrarUbicacion() {
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun configurarMapa() {
+        mapaWebView.settings.javaScriptEnabled = true
+        mapaWebView.settings.domStorageEnabled = true
+        mapaWebView.settings.userAgentString = "${mapaWebView.settings.userAgentString} OcasionMobil/1.0"
+        mapaWebView.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun onLocationSelected(latitude: Double, longitude: Double) {
+                runOnUiThread {
+                    ubicacionSeleccionada = true
+                    etLatitud.setText(latitude.toString())
+                    etLongitud.setText(longitude.toString())
+                    tvMapaPlaceholder.visibility = View.GONE
+                }
+            }
+        }, "AndroidBridge")
+        mapaWebView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                tvMapaPlaceholder.visibility = View.GONE
+            }
 
-        val latitud =
-            etLatitud.text
-                .toString()
-                .trim()
-                .toDoubleOrNull()
-
-        val longitud =
-            etLongitud.text
-                .toString()
-                .trim()
-                .toDoubleOrNull()
-
-
-        if (
-            latitud == null ||
-            longitud == null
-        ) {
-
-            tvMapaPlaceholder.text =
-                "Ingresa coordenadas válidas."
-
-            return
+            override fun onReceivedError(
+                view: WebView?,
+                request: android.webkit.WebResourceRequest?,
+                error: android.webkit.WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+                if (request?.isForMainFrame == true) {
+                    tvMapaPlaceholder.text = "No se pudo abrir el mapa. Verifica tu conexión a internet."
+                    tvMapaPlaceholder.visibility = View.VISIBLE
+                }
+            }
         }
-
-
-        tvMapaPlaceholder.text =
-            "Ubicación seleccionada:\n\n" +
-                    "Latitud: $latitud\n" +
-                    "Longitud: $longitud"
-
-
-        // MÁS ADELANTE:
-        // AQUÍ SE COLOCARÁ GOOGLE MAPS
+        mapaWebView.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
+                    view.parent.requestDisallowInterceptTouchEvent(true)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+                    view.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+        mapaWebView.loadUrl("file:///android_asset/mapa_ubicacion.html")
     }
 
 
@@ -336,11 +352,11 @@ class SalonUbicacionActivity : ComponentActivity() {
                 .trim()
                 .toDoubleOrNull()
 
-        if (latitud == null) {
+        if (!ubicacionSeleccionada || latitud == null || latitud !in -90.0..90.0) {
 
             mostrarError(
                 tvErrorLatitud,
-                "Ingresa una latitud válida."
+                "Selecciona una ubicación válida en el mapa."
             )
 
             valido = false
@@ -355,11 +371,11 @@ class SalonUbicacionActivity : ComponentActivity() {
                 .trim()
                 .toDoubleOrNull()
 
-        if (longitud == null) {
+        if (!ubicacionSeleccionada || longitud == null || longitud !in -180.0..180.0) {
 
             mostrarError(
                 tvErrorLongitud,
-                "Ingresa una longitud válida."
+                "Selecciona una ubicación válida en el mapa."
             )
 
             valido = false
@@ -481,5 +497,14 @@ class SalonUbicacionActivity : ComponentActivity() {
 
 
         startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        if (::mapaWebView.isInitialized) {
+            mapaWebView.removeJavascriptInterface("AndroidBridge")
+            mapaWebView.stopLoading()
+            mapaWebView.destroy()
+        }
+        super.onDestroy()
     }
 }
