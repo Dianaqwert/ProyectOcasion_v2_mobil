@@ -14,6 +14,16 @@ import retrofit2.http.Query
 
 interface ApiSalonesService {
 
+    @retrofit2.http.Multipart
+    @POST("api/v1/salones/{id}/documentos")
+    suspend fun subirDocumentosSalon(
+        @Path("id") idSalon: Int,
+        @retrofit2.http.Part archivos: List<okhttp3.MultipartBody.Part>
+    ): Response<DocumentosGuardadosDTO>
+
+    @PATCH("api/v1/salones/{id}/solicitar-validacion")
+    suspend fun solicitarValidacionSalon(@Path("id") idSalon: Int): Response<ResponseBody>
+
     @GET("api/v1/salones/explorar")
     suspend fun explorarSalones(
         @Query("texto") texto: String? = null,

@@ -98,7 +98,11 @@ class MisSalonesActivity : ComponentActivity() {
                                 fraccionamiento = "",
                                 latitud = dto.ubicacion?.latitud ?: 0.0,
                                 longitud = dto.ubicacion?.longitud ?: 0.0,
-                                imagenes = emptyList() // Aún no hay imágenes
+                                imagenes = emptyList(),
+                                estado = dto.estado,
+                                estadoRevisionAdmin = dto.documentosValidacionSalonEntity?.estadoRevisionAdmin
+                                    ?: if (dto.verificado) "APROBADO" else null,
+                                observacionesAdmin = dto.documentosValidacionSalonEntity?.observacionesAdmin
                             )
                         )
                     }
@@ -164,6 +168,29 @@ class MisSalonesActivity : ComponentActivity() {
         tvPrice.text = "$${salon.precioHora} / hora"
         tvPriceBadge.text = "$${salon.precioHora} / hora"
         tvDescription.text = salon.descripcion
+        view.findViewById<TextView>(R.id.tvEstadoRevisionSalon).text = when (salon.estadoRevisionAdmin) {
+            "APROBADO" -> "Publicado · Verificado por el administrador"
+            "PENDIENTE" -> "Publicado · Verificación pendiente"
+            "RECHAZADO" -> "Publicado · Documentos rechazados"
+            "SIN_ENVIAR" -> "Publicado · Documentos guardados, falta enviar"
+            else -> if (salon.estado == "PUBLICADO") "Publicado · Sin verificar" else "${salon.estado ?: "Estado no disponible"} · Registro sin completar"
+        }
+        view.findViewById<TextView>(R.id.tvObservacionesSalon).apply {
+            text = salon.observacionesAdmin?.let { "Observaciones: $it" }
+            visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
+        }
+        view.findViewById<MaterialButton>(R.id.btnDocumentosSalon).apply {
+            text = when (salon.estadoRevisionAdmin) {
+                "APROBADO", "PENDIENTE" -> "Consultar verificación"
+                "RECHAZADO" -> "Corregir documentos"
+                "SIN_ENVIAR" -> "Continuar envío a revisión"
+                else -> "Subir documentos para verificación"
+            }
+            setOnClickListener {
+                startActivity(Intent(this@MisSalonesActivity, DocumentosSalonActivity::class.java)
+                    .putExtra("idSalon", salon.id.toInt()).putExtra("nombreSalon", salon.nombreSalon))
+            }
+        }
 
         if (salon.imagenes.isEmpty()) {
             imgSalon.setImageResource(R.drawable.ic_launcher_background)

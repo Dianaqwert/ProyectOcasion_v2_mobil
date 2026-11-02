@@ -47,6 +47,7 @@
             android:exported="false" />
 
         <!-- PROPIETARIO -->
+        <activity android:name=".ui.propietario.DocumentosSalonActivity" android:exported="false" />
         <activity
             android:name=".ui.propietario.OwnerHomeActivity"
             android:exported="false" />

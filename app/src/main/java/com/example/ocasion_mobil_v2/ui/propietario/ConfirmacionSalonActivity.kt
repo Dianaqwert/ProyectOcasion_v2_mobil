@@ -69,7 +69,7 @@ class ConfirmacionSalonActivity :
             R.id.btnPublicarConfirmacion
         ).setOnClickListener {
 
-            publicarSalon()
+            continuarDocumentos()
         }
     }
 
@@ -176,118 +176,9 @@ class ConfirmacionSalonActivity :
     }
 
 
-    private fun publicarSalon() {
-
-        if (publicando)
-            return
-
-
-        publicando = true
-
-
-        val button =
-            findViewById<MaterialButton>(
-                R.id.btnPublicarConfirmacion
-            )
-
-
-        button.isEnabled =
-            false
-
-
-        button.text =
-            "Publicando salón..."
-
-
-        lifecycleScope.launch {
-
-            try {
-
-                val response =
-                    RetrofitClientSalones
-
-                        .getService(
-                            this@ConfirmacionSalonActivity
-                        )
-
-                        .publicarSalon(
-                            idSalon
-                        )
-
-
-                if (
-                    response.isSuccessful
-                ) {
-
-                    Toast.makeText(
-                        this@ConfirmacionSalonActivity,
-                        "¡Salón publicado exitosamente!",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-
-                    startActivity(
-
-                        Intent(
-                            this@ConfirmacionSalonActivity,
-                            MisSalonesActivity::class.java
-                        ).apply {
-
-                            flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        }
-                    )
-
-
-                    finish()
-
-                } else {
-
-                    Toast.makeText(
-
-                        this@ConfirmacionSalonActivity,
-
-                        "No fue posible publicar (${response.code()}). " +
-                                "Verifica ubicación, servicios e inventario.",
-
-                        Toast.LENGTH_LONG
-
-                    ).show()
-
-
-                    publicando = false
-
-                    button.isEnabled =
-                        true
-
-                    button.text =
-                        "Publicar salón"
-                }
-
-            } catch (e: Exception) {
-
-                Toast.makeText(
-
-                    this@ConfirmacionSalonActivity,
-
-                    "Error de red: ${
-                        e.message ?: "sin conexión"
-                    }",
-
-                    Toast.LENGTH_LONG
-
-                ).show()
-
-
-                publicando = false
-
-                button.isEnabled =
-                    true
-
-                button.text =
-                    "Publicar salón"
-            }
-        }
+    private fun continuarDocumentos() {
+        startActivity(Intent(this, DocumentosSalonActivity::class.java)
+            .putExtra("idSalon", idSalon)
+            .putExtra("nombreSalon", intent.getStringExtra("nombreSalon")))
     }
 }

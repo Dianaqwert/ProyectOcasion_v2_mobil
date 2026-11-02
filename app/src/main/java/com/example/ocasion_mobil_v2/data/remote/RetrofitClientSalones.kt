@@ -33,7 +33,9 @@ object RetrofitClientSalones {
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(authInterceptor) // <-- Se agrega a la cadena
                 .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .callTimeout(180, TimeUnit.SECONDS)
                 .build()
 
             val retrofit = Retrofit.Builder()

@@ -54,7 +54,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Paso 6 de 6 · Revisa antes de publicar"
+                        android:text="Revisa los datos y continúa con los documentos"
                         android:textColor="@color/texto_secundario"
                         android:textSize="12sp" />
 
@@ -258,7 +258,7 @@
             android:id="@+id/btnPublicarConfirmacion"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Publicar salón"
+            android:text="Continuar con documentos"
             android:textAllCaps="false"
             android:textColor="@color/blanco"
             android:textSize="15sp"

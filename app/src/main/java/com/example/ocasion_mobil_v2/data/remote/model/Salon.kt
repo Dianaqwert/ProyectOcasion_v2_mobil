@@ -17,5 +17,8 @@ data class Salon(
     val latitud: Double,
     val longitud: Double,
 
-    val imagenes: List<String> = emptyList()
+    val imagenes: List<String> = emptyList(),
+    val estado: String? = null,
+    val estadoRevisionAdmin: String? = null,
+    val observacionesAdmin: String? = null
 )

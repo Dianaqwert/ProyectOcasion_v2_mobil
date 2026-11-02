@@ -77,6 +77,12 @@
                 android:textStyle="bold" />
 
 
+            <TextView android:id="@+id/tvEstadoRevisionSalon" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                android:textStyle="bold" android:textColor="@color/verde_primario" />
+            <TextView android:id="@+id/tvObservacionesSalon" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="6dp"
+                android:visibility="gone" android:textColor="@color/rojo_error" />
             <!-- UBICACIÓN -->
 
             <TextView
@@ -226,6 +232,10 @@
             </LinearLayout>
 
 
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnDocumentosSalon"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="48dp" android:layout_marginTop="10dp"
+                android:text="Subir documentos para verificación" android:textAllCaps="false" />
             <!-- DISPONIBILIDAD -->
 
             <com.google.android.material.button.MaterialButton
