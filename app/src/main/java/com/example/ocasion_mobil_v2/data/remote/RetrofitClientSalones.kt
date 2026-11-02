@@ -41,12 +41,7 @@ object RetrofitClientSalones {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL_SALONES)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create(
-                    com.google.gson.GsonBuilder().registerTypeAdapter(
-                        com.example.ocasion_mobil_v2.data.remote.model.SalonPageResponse::class.java,
-                        com.example.ocasion_mobil_v2.data.remote.model.SalonPageDeserializer()
-                    ).create()
-                ))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
             apiService = retrofit.create(ApiSalonesService::class.java)

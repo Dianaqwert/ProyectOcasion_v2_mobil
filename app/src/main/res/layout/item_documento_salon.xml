@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_owner_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Encabezado de la tarjeta -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_circle"
+            android:importantForAccessibility="no"
+            android:padding="9dp"
+            android:src="@android:drawable/ic_menu_upload"
+            app:tint="@color/verde_primario" />
+
+        <TextView
+            android:id="@+id/tvEstadoDocumento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_badge"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="Pendiente"
+            android:textColor="@color/texto_principal"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Aquí aparecerá el nombre real del archivo seleccionado -->
+    <TextView
+        android:id="@+id/tvArchivoDocumento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="middle"
+        android:maxLines="2"
+        android:text="Ningún archivo seleccionado"
+        android:textColor="@color/texto_secundario"
+        android:textSize="14sp" />
+
+    <!-- Espacio reservado para la vista previa -->
+    <ImageView
+        android:id="@+id/ivPreviewDocumento"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="Vista previa del archivo seleccionado"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        tools:ignore="ImageContrastCheck" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSeleccionarDocumento"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:minHeight="48dp"
+        android:text="Seleccionar archivo"
+        android:textAllCaps="false"
+        android:textColor="@color/verde_primario"
+        app:cornerRadius="12dp"
+        app:strokeColor="@color/verde_primario" />
+
+</LinearLayout>

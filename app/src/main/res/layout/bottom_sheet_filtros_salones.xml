@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_general"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filtrar salones"
+            android:textColor="@color/texto_principal"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRangoCapacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/texto_principal" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/sliderCapacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="Rango de capacidad de asistentes" />
+
+        <TextView
+            android:id="@+id/tvPrecioMaximo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/texto_principal" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sliderPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="Precio máximo por hora" />
+
+        <AutoCompleteTextView
+            android:id="@+id/etCiudadCp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:completionThreshold="1"
+            android:hint="Ciudad o código postal"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:singleLine="true"
+            android:background="@drawable/bg_edittext"
+            android:textColor="@color/texto_principal"
+            android:textColorHint="@color/texto_secundario"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Servicios que debe incluir"
+            android:textColor="@color/texto_principal"
+            android:textStyle="bold" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipsServiciosFiltro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="6dp"
+            app:singleLine="false"
+            app:singleSelection="false" />
+
+        <TextView
+            android:id="@+id/tvEstadoServiciosFiltro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite"
+            android:textColor="@color/texto_secundario" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReintentarServiciosFiltro"
+            style="@style/BotonOcasionSecundario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Reintentar carga de servicios"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAplicarFiltros"
+            style="@style/BotonOcasionPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Aplicar filtros" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLimpiarFiltros"
+            style="@style/BotonOcasionSecundario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Limpiar filtros" />
+
+    </LinearLayout>
+</ScrollView>

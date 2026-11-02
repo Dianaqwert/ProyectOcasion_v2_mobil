@@ -18,30 +18,12 @@
         android:paddingEnd="18dp"
         android:background="@color/header_footer_dark">
 
-        <!-- Menú -->
+        <include layout="@layout/logo_barra_propietario" />
 
-        <!-- Logo / nombre -->
-
-        <TextView
-            android:id="@+id/btnMenu"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:gravity="center"
-            android:text="☰"
-            android:textSize="25sp"
-            android:textColor="@color/texto_principal"
-            android:background="@drawable/bg_circle_yellow"
-            android:contentDescription="Menú" />
-
-        <TextView
+        <Space
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:text="OCASIÓN"
-            android:textColor="@color/texto_principal"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <!-- Notificaciones -->
 

@@ -1,78 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="22dp">
+    android:background="@color/bg_general"
+    android:clipToPadding="false"
+    android:padding="16dp">
 
-    <View
-        android:layout_width="42dp"
-        android:layout_height="4dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/gris_borde" />
-
-    <TextView
-        android:id="@+id/tvTituloBottomSheet"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="Agregar insumo"
-        android:textColor="@color/texto_principal"
-        android:textSize="21sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Registra el artículo físico y su existencia actual."
-        android:textColor="@color/texto_secundario"
-        android:textSize="12sp" />
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/gris_borde"
+            android:importantForAccessibility="no" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="INVENTARIO DEL SALÓN"
+            android:textColor="@color/verde_primario"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:hint="Nombre del recurso">
-
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etNombreRecurso"
+        <TextView
+            android:id="@+id/tvTituloBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            android:maxLength="100" />
+            android:layout_marginTop="4dp"
+            android:text="Agregar insumo"
+            android:textColor="@color/texto_principal"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Existencias (1–10,000)">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etCantidadRecurso"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="5" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="4dp"
+            android:text="Indica el artículo y cuántas unidades tienes en el salón."
+            android:textColor="@color/texto_secundario"
+            android:textSize="14sp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGuardarRecurso"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:text="Guardar insumo"
-        android:textAllCaps="false"
-        android:textColor="@color/blanco"
-        android:textStyle="bold"
-        android:backgroundTint="@color/verde_primario" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_owner_card"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/etNombreRecurso"
+                android:text="Nombre del recurso"
+                android:textColor="@color/texto_principal"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@id/etNombreRecurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Ej. Mesa redonda para 10 personas"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:maxLength="100"
+                android:minHeight="48dp"
+                android:singleLine="true"
+                android:textColor="@color/texto_principal"
+                android:textColorHint="@color/texto_secundario"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:labelFor="@+id/etCantidadRecurso"
+                android:text="Existencias"
+                android:textColor="@color/texto_principal"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@id/etCantidadRecurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Ej. 25"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="5"
+                android:minHeight="48dp"
+                android:singleLine="true"
+                android:textColor="@color/texto_principal"
+                android:textColorHint="@color/texto_secundario"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="De 1 a 10,000 unidades."
+                android:textColor="@color/texto_secundario"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardarRecurso"
+            style="@style/BotonOcasionPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Guardar insumo" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

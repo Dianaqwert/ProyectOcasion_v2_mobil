@@ -10,40 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- ===== HEADER curvo con degradado amarillo ===== -->
-        <View
-            android:id="@+id/viewHeaderBg"
+        <include
+            android:id="@+id/headerAcceso"
+            layout="@layout/header_acceso_ocasion"
             android:layout_width="0dp"
-            android:layout_height="220dp"
-            android:background="@drawable/bg_header_curve"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- ===== CONTENEDOR DEL LOGO ===== -->
-        <!-- Reemplaza el src por el logo real de la app (ej: @drawable/logo_app) -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            app:cardCornerRadius="60dp"
-            app:cardElevation="6dp"
-            android:layout_marginTop="48dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/imgLogo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_logo_circle"
-                android:padding="16dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/logo"
-                android:contentDescription="Logo de la aplicación" />
-
-        </androidx.cardview.widget.CardView>
 
         <!-- ===== TARJETA DEL FORMULARIO ===== -->
         <TextView
@@ -52,13 +26,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Haz de cada celebración una ocasión especial"
             android:textColor="@color/texto_principal"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardLogo" />
+            app:layout_constraintTop_toBottomOf="@id/headerAcceso"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardForm"
@@ -71,7 +44,7 @@
             app:cardCornerRadius="24dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="@color/blanco"
-            app:layout_constraintTop_toBottomOf="@id/tvAppName"
+            app:layout_constraintTop_toBottomOf="@id/headerAcceso"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -252,7 +225,6 @@
                     android:background="@drawable/bg_edittext"
                     android:text="Continuar con Google"
                     android:textAllCaps="false"
-                    android:textColor="@color/texto_principal"
                     android:textSize="15sp"
                     android:drawableStart="@android:drawable/ic_dialog_email"
                     android:drawablePadding="10dp"
