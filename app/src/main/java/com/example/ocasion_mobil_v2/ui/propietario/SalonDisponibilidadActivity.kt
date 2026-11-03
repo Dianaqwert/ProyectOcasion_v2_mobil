@@ -720,17 +720,9 @@ class SalonDisponibilidadActivity :
 
             try {
 
-                val response =
-                    RetrofitClientSalones
-
-                        .getService(
-                            this@SalonDisponibilidadActivity
-                        )
-
-                        .crearSalonFase1(
-                            request
-                        )
-
+                val response = com.example.ocasion_mobil_v2.data.repository.CrearSalonRepository(
+                    this@SalonDisponibilidadActivity
+                ).crear(request)
 
                 if (
                     response.isSuccessful &&
@@ -814,7 +806,12 @@ class SalonDisponibilidadActivity :
                 } else {
 
                     mostrarError(
-                        "No se pudo crear el salón (${response.code()})."
+                        response.errorBody()?.use { body ->
+                            val json = runCatching { org.json.JSONObject(body.string()) }.getOrNull()
+                            listOf("detalle", "mensaje", "message", "detail", "error").firstNotNullOfOrNull { key ->
+                                json?.optString(key)?.takeIf { it.isNotBlank() && it != "null" }
+                            }
+                        } ?: "No se pudo crear el salón (${response.code()})."
                     )
 
 
@@ -830,7 +827,7 @@ class SalonDisponibilidadActivity :
             } catch (e: Exception) {
 
                 mostrarError(
-                    "Error de red: ${
+                    "No se pudo guardar: ${
                         e.message ?: "sin conexión"
                     }"
                 )

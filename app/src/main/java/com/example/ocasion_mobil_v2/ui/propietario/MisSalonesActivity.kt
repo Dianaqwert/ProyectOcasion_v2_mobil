@@ -1,5 +1,6 @@
 package com.example.ocasion_mobil_v2.ui.propietario
 
+import com.example.ocasion_mobil_v2.util.ImagenSalonLoader
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,8 +29,44 @@ class MisSalonesActivity : ComponentActivity() {
 
     private val salones = mutableListOf<Salon>()
 
+    private var salonFotosPendiente: Int? = null
+    private var subiendoFotos = false
+    private var carga: kotlinx.coroutines.Job? = null
+    private val selectorFotos = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia(5)
+    ) { uris ->
+        val id = salonFotosPendiente
+        salonFotosPendiente = null
+        if (id != null && uris.isNotEmpty()) {
+            subiendoFotos = true
+            carga?.cancel()
+            mostrarSalones()
+            lifecycleScope.launch {
+                try {
+                    val respuesta = com.example.ocasion_mobil_v2.data.repository.CrearSalonRepository(this@MisSalonesActivity)
+                        .reemplazarFotos(id, uris.map { it.toString() })
+                    check(respuesta.isSuccessful) { "No se pudieron actualizar las fotos (${respuesta.code()})." }
+                    Toast.makeText(this@MisSalonesActivity, "Fotos actualizadas", Toast.LENGTH_SHORT).show()
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Toast.makeText(this@MisSalonesActivity, e.message ?: "No se pudieron subir las fotos.", Toast.LENGTH_LONG).show()
+                } finally {
+                    subiendoFotos = false
+                }
+                cargarSalonesReales()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        salonFotosPendiente?.let { outState.putInt("salonFotosPendiente", it) }
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        salonFotosPendiente = savedInstanceState?.getInt("salonFotosPendiente")?.takeIf { it > 0 }
         setContentView(R.layout.activity_salones)
 
         inicializarVistas()
@@ -72,9 +109,9 @@ class MisSalonesActivity : ComponentActivity() {
     // =====================================================
 
     private fun cargarSalonesReales() {
-        salones.clear()
-
-        lifecycleScope.launch {
+        if (subiendoFotos) return
+        carga?.cancel()
+        carga = lifecycleScope.launch {
             try {
                 // Llamamos a Retrofit (el token se inyecta gracias al AuthInterceptor)
                 val response = RetrofitClientSalones.getService(this@MisSalonesActivity).obtenerMisSalones()
@@ -83,6 +120,7 @@ class MisSalonesActivity : ComponentActivity() {
                     val listaBackend = response.body() ?: emptyList()
 
                     // Mapeamos el JSON del backend a tu modelo visual 'Salon'
+                    salones.clear()
                     listaBackend.forEach { dto ->
                         salones.add(
                             Salon(
@@ -98,7 +136,7 @@ class MisSalonesActivity : ComponentActivity() {
                                 fraccionamiento = "",
                                 latitud = dto.ubicacion?.latitud ?: 0.0,
                                 longitud = dto.ubicacion?.longitud ?: 0.0,
-                                imagenes = emptyList(),
+                                imagenes = dto.imagenes.orEmpty().filter { it.isNotBlank() },
                                 estado = dto.estado,
                                 estadoRevisionAdmin = dto.documentosValidacionSalonEntity?.estadoRevisionAdmin
                                     ?: if (dto.verificado) "APROBADO" else null,
@@ -115,6 +153,8 @@ class MisSalonesActivity : ComponentActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e("MisSalones", "Falló la carga o lectura de la respuesta de salones", e)
                 Toast.makeText(
@@ -192,9 +232,24 @@ class MisSalonesActivity : ComponentActivity() {
             }
         }
 
-        if (salon.imagenes.isEmpty()) {
-            imgSalon.setImageResource(R.drawable.ic_launcher_background)
+        ImagenSalonLoader.cargar(imgSalon, salon.imagenes.firstOrNull())
+
+        view.findViewById<MaterialButton>(R.id.btnActualizarFotosSalon).apply {
+            isEnabled = !subiendoFotos
+            text = if (subiendoFotos) "Subiendo fotos…" else "Actualizar fotos"
+            setOnClickListener {
+                AlertDialog.Builder(this@MisSalonesActivity)
+                    .setTitle("Actualizar fotos de ${salon.nombreSalon}")
+                    .setMessage("Selecciona de 1 a 5 fotos JPG o PNG, de hasta 5 MB cada una. Reemplazarán todas las fotos actuales del salón.")
+                    .setNegativeButton("Cancelar", null)
+                    .setPositiveButton("Seleccionar") { _, _ ->
+                        salonFotosPendiente = salon.id.toIntOrNull()
+                        selectorFotos.launch(androidx.activity.result.PickVisualMediaRequest(
+                            androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }.show()
+            }
         }
+        imgSalon.setOnClickListener { ImagenSalonLoader.cargar(imgSalon, salon.imagenes.firstOrNull()) }
 
         // Botones
         view.findViewById<MaterialButton>(R.id.btnEditSalon).setOnClickListener {

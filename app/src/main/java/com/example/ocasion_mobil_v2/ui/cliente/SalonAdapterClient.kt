@@ -8,9 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.ocasion_mobil_v2.util.ImagenSalonLoader
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.model.SalonCardClienteDTO
 import java.text.DecimalFormat
@@ -42,12 +40,7 @@ class SalonAdapterClient(
         holder.capacity.text = "${salon.capacidad ?: "—"} personas"
         holder.city.text = "📍 ${salon.ciudad ?: "Ubicación por confirmar"}"
         holder.price.text = salon.precioHora?.let { "${currency.format(it)} / hr" } ?: "Precio por consultar"
-        Glide.with(holder.image)
-            .load(salon.imagenPortada)
-            .placeholder(R.drawable.bg_map_placeholder)
-            .error(R.drawable.bg_map_placeholder)
-            .transform(CenterCrop(), RoundedCorners(16))
-            .into(holder.image)
+        ImagenSalonLoader.cargar(holder.image, salon.imagenPortada, esquinasRedondeadasPx = 16)
         bindService(holder.service1, salon.servicios.orEmpty().getOrNull(0))
         bindService(holder.service2, salon.servicios.orEmpty().getOrNull(1))
         holder.itemView.setOnClickListener { onSalonClick(salon) }

@@ -17,7 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import com.example.ocasion_mobil_v2.util.ImagenSalonLoader
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
 import com.example.ocasion_mobil_v2.data.remote.model.SalonDetalleClienteDTO
@@ -175,7 +175,7 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
         val portada = requireArguments().getString(DetalleSalonActivity.EXTRA_IMAGEN)
         val fotos = salon.galeriaFotos.orEmpty()
             .filter { it.isNotBlank() }
-            .ifEmpty { listOfNotNull(portada) }
+            .ifEmpty { listOfNotNull(portada?.takeIf { it.isNotBlank() }) }
             .distinct()
             .take(5)
 
@@ -193,12 +193,7 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
             }
             fila.addView(imagen, params)
 
-            Glide.with(imagen)
-                .load(url)
-                .placeholder(R.drawable.bg_map_placeholder)
-                .error(R.drawable.bg_map_placeholder)
-                .centerCrop()
-                .into(imagen)
+            ImagenSalonLoader.cargar(imagen, url)
         }
 
         val direccion = listOfNotNull(salon.direccion, salon.ciudad)

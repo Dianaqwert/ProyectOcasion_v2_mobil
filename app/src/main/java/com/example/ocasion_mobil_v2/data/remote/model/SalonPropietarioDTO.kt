@@ -9,6 +9,7 @@ data class SalonPropietarioDTO(
     val descripcion: String?,
     val precio_hora: Double?,
     val ubicacion: UbicacionDTO?,
+    val imagenes: List<String>? = emptyList(),
     val estado: String? = null,
     val verificado: Boolean = false,
     val documentosValidacionSalonEntity: ExpedientePropietarioDTO? = null

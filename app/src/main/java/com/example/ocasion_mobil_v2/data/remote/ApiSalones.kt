@@ -15,6 +15,13 @@ import retrofit2.http.Query
 interface ApiSalonesService {
 
     @retrofit2.http.Multipart
+    @PUT("api/v1/salones/{id}/imagenes")
+    suspend fun reemplazarFotosSalon(
+        @Path("id") id: Int,
+        @retrofit2.http.Part imagenes: List<okhttp3.MultipartBody.Part>
+    ): Response<List<String>>
+
+    @retrofit2.http.Multipart
     @POST("api/v1/salones/{id}/documentos")
     suspend fun subirDocumentosSalon(
         @Path("id") idSalon: Int,
@@ -63,6 +70,13 @@ interface ApiSalonesService {
     suspend fun eliminarSalon(
         @Path("id") id: Int
     ): Response<ResponseBody>
+
+    @retrofit2.http.Multipart
+    @POST("api/v1/salones/fase1")
+    suspend fun crearSalonConFotos(
+        @retrofit2.http.Part("salon") salon: okhttp3.RequestBody,
+        @retrofit2.http.Part imagenes: List<okhttp3.MultipartBody.Part>
+    ): Response<SalonResponse>
 
     @POST("api/v1/salones/fase1")
     suspend fun crearSalonFase1(

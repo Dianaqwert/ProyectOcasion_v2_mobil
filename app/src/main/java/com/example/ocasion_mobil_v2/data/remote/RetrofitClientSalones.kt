@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClientSalones {
 
     // IP y Puerto del Dominio 2 (Microservicio de Salones)
-    private const val BASE_URL_SALONES = "http://172.30.241.234:8081/"
+    const val BASE_URL_SALONES = "http://172.30.241.234:8081/"
     private var apiService: ApiSalonesService? = null
 
     /**

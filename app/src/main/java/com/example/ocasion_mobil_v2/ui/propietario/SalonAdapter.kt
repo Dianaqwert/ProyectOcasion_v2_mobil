@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
+import com.example.ocasion_mobil_v2.util.ImagenSalonLoader
 import androidx.core.view.isVisible
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.model.Salon
@@ -126,28 +126,7 @@ class SalonAdapter(
         // IMAGEN
         // ==========================================
 
-        if (salon.imagenes.isNotEmpty()) {
-
-            try {
-
-                imgSalon.setImageURI(
-                    salon.imagenes.first().toUri()
-                )
-
-            } catch (e: Exception) {
-
-                imgSalon.setImageResource(
-                    R.drawable.ic_launcher_background
-                )
-            }
-
-        } else {
-
-            imgSalon.setImageResource(
-                R.drawable.ic_launcher_background
-            )
-        }
-
+        ImagenSalonLoader.cargar(imgSalon, salon.imagenes.firstOrNull())
 
         // ==========================================
         // EDITAR
