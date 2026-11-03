@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_general"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <!-- ENCABEZADO -->
@@ -67,7 +66,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/tvNombreSalonDocumentos"
+                android:id="@+id/tvNombreDocumentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Expediente del salón"
@@ -79,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Agrega un archivo por apartado y revisa que se pueda leer antes de enviarlo. Tamaño máximo: 5 MB por archivo."
+                android:text="Identificación y fotos: JPG o PNG. Propiedad, domicilio y Vo.Bo.: PDF, JPG o PNG. Máximo 5 MB por archivo. Para corregir un rechazo, selecciona de nuevo el expediente completo."
                 android:textColor="@color/texto_secundario"
                 android:textSize="14sp" />
 
@@ -95,65 +94,56 @@
                 android:textSize="14sp"
                 android:visibility="gone" />
 
-            <!-- 1. COMPROBANTE -->
             <TextView
+                android:id="@+id/tvEstadoDocumentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="6dp"
-                android:text="1. Comprobante de domicilio del salón"
+                android:layout_marginTop="16dp"
+                android:accessibilityLiveRegion="polite"
                 android:textColor="@color/texto_principal"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <include
-                android:id="@+id/cardComprobanteDomicilio"
-                layout="@layout/item_documento_salon" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnActualizarDocumentos"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actualizar estado"
+                android:textAllCaps="false"
+                app:cornerRadius="12dp" />
 
-            <!-- 2. LICENCIA -->
+            <!-- La actividad genera los apartados según TipoDocumento. -->
+            <LinearLayout
+                android:id="@+id/containerDocumentos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="6dp"
-                android:text="2. Licencia de funcionamiento municipal o Vo. Bo."
-                android:textColor="@color/texto_principal"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="12dp"
+                android:text="El salón se publica antes de solicitar la verificación. Podrá aparecer en las búsquedas mientras se revisan sus documentos. Si la carga falla, puedes reintentar desde Mis salones."
+                android:textColor="@color/texto_secundario"
+                android:textSize="14sp" />
 
-            <include
-                android:id="@+id/cardLicenciaFuncionamiento"
-                layout="@layout/item_documento_salon" />
+            <ProgressBar
+                android:id="@+id/progresoDocumentos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
 
-            <!-- 3. CONSTANCIA -->
             <TextView
+                android:id="@+id/tvErrorDocumentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="6dp"
-                android:text="3. Constancia de situación fiscal"
-                android:textColor="@color/texto_principal"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <include
-                android:id="@+id/cardConstanciaFiscal"
-                layout="@layout/item_documento_salon" />
-
-            <!-- 4. FOTOGRAFÍA -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="6dp"
-                android:text="4. Fotografía de la persona propietaria"
-                android:textColor="@color/texto_principal"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <include
-                android:id="@+id/cardFotografiaPersona"
-                layout="@layout/item_documento_salon" />
+                android:layout_marginTop="12dp"
+                android:accessibilityLiveRegion="polite"
+                android:textColor="@color/rojo_error"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -168,23 +158,31 @@
         android:paddingVertical="10dp">
 
         <TextView
-            android:id="@+id/tvProgresoDocumentos"
+            android:id="@+id/tvTotalDocumentos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:accessibilityLiveRegion="polite"
             android:gravity="center"
-            android:text="0 de 4 documentos seleccionados"
+            android:text="0 archivos · 0 MB / 99 MB"
             android:textColor="@color/texto_secundario"
             android:textSize="13sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEnviarRevision"
+            android:id="@+id/btnEnviarDocumentos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:enabled="false"
             android:minHeight="48dp"
             android:text="Enviar a revisión"
+            android:textAllCaps="false"
+            app:cornerRadius="12dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMisSalonesDocumentos"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Volver a Mis salones"
             android:textAllCaps="false"
             app:cornerRadius="12dp" />
     </LinearLayout>
