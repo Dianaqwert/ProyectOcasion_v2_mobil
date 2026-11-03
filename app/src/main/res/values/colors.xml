@@ -1,6 +1,6 @@
 <resources>
     <!--  Fondo general  -->
-    <color name="bg_general">#F7F6DC</color>
+    <color name="bg_general">#FFFFFF</color>
     <!--  Footer, Header, Marcos  -->
     <color name="header_footer_light">#FFE9A0</color>
     <color name="header_footer_dark">#FFD65A</color>

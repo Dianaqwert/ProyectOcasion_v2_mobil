@@ -43,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="24dp"
+                android:background="@drawable/bg_owner_card">
 
                 <!-- TITULO -->
 
@@ -111,17 +112,17 @@
 
                 <!-- BOTON -->
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVerificar"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="18dp"
-                    android:background="@drawable/bg_button_primary"
+                    style="@style/BotonOcasionSecundario"
                     android:elevation="0dp"
                     android:stateListAnimator="@null"
                     android:text="Verificar código"
                     android:textAllCaps="false"
-                    android:textColor="@color/blanco"
+
                     android:textSize="15sp"
                     android:fontFamily="sans-serif-medium"
                     android:textStyle="bold" />

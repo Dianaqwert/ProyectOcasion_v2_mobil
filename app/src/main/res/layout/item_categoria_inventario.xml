@@ -101,7 +101,8 @@
             android:text="＋ Agregar insumo"
             android:textAllCaps="false"
             android:textColor="@color/verde_primario"
-            android:backgroundTint="@color/header_footer_light" />
+            android:backgroundTint="@color/header_footer_light"
+            app:cornerRadius="22dp"/>
 
     </LinearLayout>
 

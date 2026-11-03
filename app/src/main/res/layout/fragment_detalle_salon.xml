@@ -1,188 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_general"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- ENCABEZADO FIJO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <Button
-            android:id="@+id/btnVolverDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="‹ Volver a salones"
-            />
-
-        <TextView
-            android:id="@+id/tvNombreDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/texto_principal"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvResumenDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:textColor="@color/texto_secundario"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvEstadoDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:accessibilityLiveRegion="polite"
-            android:textColor="@color/texto_secundario" />
-
-        <Button
-            android:id="@+id/btnReintentarDetalle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reintentar ficha"
-            android:visibility="gone" />
-
-        <HorizontalScrollView
-            android:id="@+id/scrollFotosDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/filaFotosDetalle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
-        <LinearLayout
-            android:id="@+id/contenidoDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tvDescripcionDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/texto_principal"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Servicios incluidos"
-                android:textColor="@color/texto_principal"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvServiciosDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/texto_secundario" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Ubicación"
-                android:textColor="@color/texto_principal"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvDireccionDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/texto_secundario" />
-
-            <Button
-                android:id="@+id/btnMapsDetalle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver en Google Maps" />
-        </LinearLayout>
+        android:minHeight="64dp"
+        android:background="@color/header_footer_light"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDisponibilidadDetalle"
-            android:layout_width="match_parent"
+            android:id="@+id/btnVolverDetalle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:gravity="center"
+            android:contentDescription="Volver al catálogo de salones"
+            android:text="←"
+            android:textColor="@color/texto_principal"
+            android:textSize="23sp"
+            app:backgroundTint="@color/blanco"
+            app:cornerRadius="24dp" />
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/verde_primario"
-            android:text="Revisar disponibilidad"
-            android:textColor="@color/blanco"
-            />
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Detalle del salón"
+            android:textColor="@color/texto_principal"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO DESPLAZABLE -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/panelCalendarioDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:padding="16dp">
 
-            <LinearLayout
+            <!-- NOMBRE, CIUDAD, CAPACIDAD Y PRECIO -->
+            <TextView
+                android:id="@+id/tvNombreDetalle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:textColor="@color/texto_principal"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_owner_card"/>
 
-                <Button
-                    android:id="@+id/btnMesAnteriorDetalle"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="Mes anterior"
-                    android:text="‹" />
+            <TextView
+                android:id="@+id/tvResumenDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/texto_secundario"
+                android:textSize="16sp"
+                android:background="@drawable/bg_owner_card"/>
+
+            <TextView
+                android:id="@+id/tvEstadoDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:accessibilityLiveRegion="polite"
+                android:textColor="@color/texto_secundario"
+                android:textSize="14sp"
+                android:background="@drawable/bg_owner_card"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReintentarDetalle"
+                style="@style/BotonOcasionSecundario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Reintentar ficha"
+                android:visibility="gone" />
+
+            <!-- GALERÍA HORIZONTAL -->
+            <HorizontalScrollView
+                android:id="@+id/scrollFotosDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/filaFotosDetalle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <!-- INFORMACIÓN DEL SALÓN -->
+            <LinearLayout
+                android:id="@+id/contenidoDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_owner_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tvMesDetalle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:text="Sobre el salón"
                     android:textColor="@color/texto_principal"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btnMesSiguienteDetalle"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="Mes siguiente"
-                    android:text="›" />
+                <TextView
+                    android:id="@+id/tvDescripcionDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Servicios incluidos"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvServiciosDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:text="Ubicación"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDireccionDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/texto_secundario"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMapsDetalle"
+                    style="@style/BotonOcasionSecundario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Ver en Google Maps" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvEstadoCalendarioDetalle"
+            <!-- ACCIÓN PRINCIPAL -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDisponibilidadDetalle"
+                style="@style/BotonOcasionPrincipal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:accessibilityLiveRegion="polite"
-                android:textColor="@color/texto_principal" />
+                android:layout_marginTop="16dp"
+                android:text="Revisar disponibilidad" />
 
-            <GridLayout
-                android:id="@+id/gridDiasDetalle"
+            <!-- CALENDARIO MENSUAL -->
+            <LinearLayout
+                android:id="@+id/panelCalendarioDetalle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="7" />
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_owner_card"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/btnReintentarCalendarioDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Reintentar carga de disponibilidad"
-                android:visibility="gone" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMesAnteriorDetalle"
+                        style="@style/BotonOcasionSecundario"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:minWidth="0dp"
+                        android:padding="0dp"
+                        android:contentDescription="Mes anterior"
+                        android:text="‹"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/tvMesDetalle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMesSiguienteDetalle"
+                        style="@style/BotonOcasionSecundario"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:minWidth="0dp"
+                        android:padding="0dp"
+                        android:contentDescription="Mes siguiente"
+                        android:text="›"
+                        android:textSize="22sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvEstadoCalendarioDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:accessibilityLiveRegion="polite"
+                    android:textColor="@color/texto_principal"
+                    android:textSize="14sp" />
+
+                <GridLayout
+                    android:id="@+id/gridDiasDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="7" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReintentarCalendarioDetalle"
+                    style="@style/BotonOcasionSecundario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Reintentar carga de disponibilidad"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+</LinearLayout>

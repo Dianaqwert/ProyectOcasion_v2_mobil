@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="18dp"
-            android:paddingBottom="25dp">
+            >
 
             <!-- ENCABEZADO -->
 
@@ -29,7 +28,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:background="@color/header_footer_light"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp">
 
                 <TextView
                     android:id="@+id/btnBack"
@@ -73,14 +75,18 @@
 
             </LinearLayout>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp">
             <!-- INFORMACIÓN DEL SALÓN -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_owner_card"
                 android:orientation="vertical"
                 android:padding="18dp">
 
@@ -271,7 +277,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_owner_card"
                 android:orientation="vertical"
                 android:padding="18dp">
 
@@ -322,12 +328,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/bg_button_secondary"
                     android:text="📷   Agregar imágenes"
                     android:textAllCaps="false"
                     android:textColor="@color/verde_primario"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    style="@style/BotonOcasionSecundario"/>
 
 
                 <TextView
@@ -355,7 +361,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="110dp"
                     android:layout_marginTop="12dp"
-                    android:scrollbars="none">
+                    android:scrollbars="none"
+                    android:background="@drawable/bg_owner_card">
 
                     <LinearLayout
                         android:id="@+id/containerImages"
@@ -375,15 +382,16 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
-                android:backgroundTint="@color/rojo_error"
                 app:cornerRadius="27dp"
                 android:text="Continuar con ubicación"
                 android:textAllCaps="false"
-                android:textColor="@color/blanco"
+                android:textColor="@color/verde_primario"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_button_secondary"/>
+                style="@style/BotonOcasionSecundario"
+               />
 
+        </LinearLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

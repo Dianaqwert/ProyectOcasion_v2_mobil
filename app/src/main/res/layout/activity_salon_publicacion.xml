@@ -18,15 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="18dp">
+            >
 
             <!-- ENCABEZADO -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:background="@color/header_footer_light"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp">
 
                 <TextView
                     android:id="@+id/btnBackPublicacion"
@@ -66,7 +69,11 @@
 
             </LinearLayout>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp">
             <!-- GALERÍA -->
 
             <com.google.android.material.card.MaterialCardView
@@ -115,7 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_owner_card"
                 android:orientation="vertical"
                 android:padding="18dp">
 
@@ -318,7 +325,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_owner_card"
                 android:orientation="vertical"
                 android:padding="18dp">
 
@@ -393,9 +400,7 @@
                 android:layout_marginTop="18dp"
                 android:text="Gestionar disponibilidad"
                 android:textAllCaps="false"
-                android:textColor="@color/texto_principal"
-                android:backgroundTint="@color/header_footer_light"
-                android:background="@drawable/bg_button_secondary" />
+                style="@style/BotonOcasionSecundario" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditarImagenes"
@@ -404,9 +409,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Editar imágenes"
                 android:textAllCaps="false"
-                android:textColor="@color/texto_principal"
-                android:backgroundTint="@color/header_footer_light"
-                android:background="@drawable/bg_button_secondary" />
+                style="@style/BotonOcasionSecundario" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPublicarSalon"
@@ -415,17 +418,16 @@
                 android:layout_marginTop="18dp"
                 android:text="Publicar salón"
                 android:textAllCaps="false"
-                android:textColor="@color/blanco"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:backgroundTint="@color/naranja_primario"
-                android:background="@drawable/bg_button_secondary" />
+                style="@style/BotonOcasionSecundario" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
 
 
+        </LinearLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

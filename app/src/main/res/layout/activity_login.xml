@@ -52,7 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="24dp"
+                android:background="@drawable/bg_owner_card">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -162,12 +163,14 @@
                     android:padding="4dp" />
 
                 <!-- Botón de inicio de sesión -->
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="52dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_button_primary"
+                    style="@style/BotonOcasionPrincipal"
+                    app:backgroundTint="@color/naranja_primario"
                     android:text="Iniciar sesión"
                     android:textColor="@color/blanco"
                     android:textSize="16sp"
@@ -217,17 +220,18 @@
                         android:background="@color/borde_input" />
 
                 </LinearLayout>
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGoogleSignIn"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="52dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
+                    style="@style/BotonOcasionPrincipal"
+                    app:backgroundTint="@color/naranja_primario"
                     android:text="Continuar con Google"
                     android:textAllCaps="false"
                     android:textSize="15sp"
-                    android:drawableStart="@android:drawable/ic_dialog_email"
-                    android:drawablePadding="10dp"
+                    android:textColor="@color/blanco"
                     android:gravity="center" />
                 <!-- Registro -->
                 <LinearLayout
