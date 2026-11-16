@@ -1,166 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bg_general"
-    android:fitsSystemWindows="true">
-
+    android:fitsSystemWindows="true"
+    android:background="@color/bg_general">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:background="@color/header_footer_light">
+        <include
+            layout="@layout/logo_barra_propietario" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+            <TextView
+                style="@style/ClienteTitulo"
+                android:text="Tu próxima celebración"
+                android:textSize="18sp" />
+            <TextView
+                style="@style/ClienteTexto"
+                android:text="Explora espacios para tu evento"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarSesionCliente"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:text="Salir"
+            android:contentDescription="Cerrar sesión"
+            android:textColor="@color/texto_principal" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:layout_weight="1"
             android:background="@drawable/bg_edittext"
-            app:queryHint="Nombre, ciudad o código postal" app:iconifiedByDefault="false" />
+            app:queryHint="Nombre, ciudad o código postal"
+            app:iconifiedByDefault="false" />
         <ImageButton
             android:id="@+id/btnFiltros"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/bg_edittext"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="10dp"
+            android:padding="14dp"
+            android:background="@drawable/bg_badge"
             android:src="@android:drawable/ic_menu_preferences"
-            android:contentDescription="Abrir filtros" />
+            app:tint="@color/texto_principal"
+            android:contentDescription="Abrir filtros de salones" />
     </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp">
-            <TextView
-                android:id="@+id/tvTituloSalones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:text="Encuentra tu salón ideal"
-                android:textColor="@color/texto_principal"
-                android:textSize="21sp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/tvSubtituloSalones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:layout_marginTop="4dp"
-                android:text="Explora espacios para celebrar tus momentos especiales"
-                android:textColor="@color/texto_secundario"
-                android:textSize="13sp" />
-            <TextView
-                android:id="@+id/tvEstadoBusqueda"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/texto_secundario"
-                android:accessibilityLiveRegion="polite" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLimpiarBusqueda"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Limpiar búsqueda y filtros"
-                android:visibility="gone" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="360dp">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSalonesHorizontales"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="350dp"
-                    android:paddingHorizontal="16dp"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never" />
-                <ProgressBar
-                    android:id="@+id/progressSalones"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
-                <LinearLayout
-                    android:id="@+id/emptyStateSalones"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="24dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:visibility="gone">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⌕"
-                        android:textColor="@color/naranja_primario"
-                        android:textSize="48sp"
-                        android:importantForAccessibility="no" />
-                    <TextView
-                        android:id="@+id/tvEmptySalones"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@color/texto_secundario"
-                        android:textSize="15sp" />
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnReintentarSalones"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Reintentar"
-                        android:visibility="gone"
-                        app:backgroundTint="@color/naranja_primario" />
-                </LinearLayout>
-            </FrameLayout>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnMasSalones"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Cargar más salones"
-                android:visibility="gone"
-                app:backgroundTint="@color/verde_primario" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_general"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnActualizarSalones"
-            style="@style/BotonOcasionPrincipal"
-            android:layout_width="0dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp">
+        <TextView
+            android:id="@+id/tvTituloSalones"
+            style="@style/ClienteTitulo"
+            android:text="Encuentra tu salón ideal"
+            android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/tvSubtituloSalones"
+            style="@style/ClienteTexto"
+            android:text="Compara espacios, servicios y precios en un solo lugar."
+            android:textSize="13sp"
+            android:layout_marginTop="4dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Actualizar" />
-
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/tvEstadoBusqueda"
+                style="@style/ClienteTexto"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:accessibilityLiveRegion="polite" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnActualizarSalones"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Actualizar"
+                android:textColor="@color/verde_primario" />
+        </LinearLayout>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCerrarSesionCliente"
-            style="@style/BotonOcasionSalida"
-            android:layout_width="0dp"
+            android:id="@+id/btnLimpiarBusqueda"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="Cerrar sesión" />
-
+            android:text="Limpiar búsqueda y filtros"
+            android:textColor="@color/verde_primario"
+            android:visibility="gone" />
     </LinearLayout>
+    <!-- El RecyclerView administra el desplazamiento y recicla las tarjetas. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSalonesCliente"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+        <ProgressBar
+            android:id="@+id/progressSalones"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/verde_primario"
+            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/emptyStateSalones"
+            style="@style/ClienteSeccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⌕"
+                android:textSize="48sp"
+                android:textColor="@color/naranja_primario"
+                android:importantForAccessibility="no" />
+            <TextView
+                android:id="@+id/tvEmptySalones"
+                style="@style/ClienteTexto"
+                android:gravity="center" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReintentarSalones"
+                style="@style/BotonOcasionPrincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Reintentar"
+                android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMasSalones"
+        style="@style/BotonOcasionSecundario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Cargar más salones"
+        android:visibility="gone" />
 </LinearLayout>

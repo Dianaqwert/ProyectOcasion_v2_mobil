@@ -1,10 +1,12 @@
 package com.example.ocasion_mobil_v2.data.remote
 
+import com.example.ocasion_mobil_v2.data.remote.model.ActualizarPerfilRequest
 import com.example.ocasion_mobil_v2.data.remote.model.GenericMessageResponse
 import com.example.ocasion_mobil_v2.data.remote.model.GoogleLoginRequest
 import com.example.ocasion_mobil_v2.data.remote.model.GoogleRegisterRequest
 import com.example.ocasion_mobil_v2.data.remote.model.LoginRequest
 import com.example.ocasion_mobil_v2.data.remote.model.LoginResponse
+import com.example.ocasion_mobil_v2.data.remote.model.PerfilUsuario
 import com.example.ocasion_mobil_v2.data.remote.model.RegisterRequest
 import com.example.ocasion_mobil_v2.data.remote.model.RegisterResponse
 import com.example.ocasion_mobil_v2.data.remote.model.ResetPasswordRequest
@@ -12,7 +14,10 @@ import com.example.ocasion_mobil_v2.data.remote.model.ValidateRegisterRequest
 import com.example.ocasion_mobil_v2.data.remote.model.ValidateRegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -38,5 +43,12 @@ interface ApiService {
     // 2. Enviar la nueva contraseña junto con el token
     @POST("api/v1/auth/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): Response<GenericMessageResponse>
+
+    @PUT("api/v1/usuarios/{id}")
+    suspend fun actualizarPerfil(
+        @Header("Authorization") authorization: String,
+        @Path("id") idUsuario: Int,
+        @Body request: ActualizarPerfilRequest
+    ): Response<PerfilUsuario>
 
 }

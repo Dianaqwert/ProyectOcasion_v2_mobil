@@ -188,12 +188,13 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
                 contentDescription = "Foto ${indice + 1} de ${fotos.size}"
                 scaleType = ImageView.ScaleType.CENTER_CROP
             }
-            val params = LinearLayout.LayoutParams(dp(270), dp(175)).apply {
-                marginEnd = dp(8)
+            val ancho = resources.displayMetrics.widthPixels - dp(48)
+            val params = LinearLayout.LayoutParams(ancho.coerceAtMost(dp(520)), dp(210)).apply {
+                marginEnd = dp(12)
             }
             fila.addView(imagen, params)
 
-            ImagenSalonLoader.cargar(imagen, url)
+            ImagenSalonLoader.cargar(imagen, url, esquinasRedondeadasPx = dp(18))
         }
 
         val direccion = listOfNotNull(salon.direccion, salon.ciudad)
@@ -235,12 +236,9 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
         capacidad: Int?,
         precio: Double?
     ) {
-        view.findViewById<TextView>(R.id.tvResumenDetalle).text =
-            listOfNotNull(
-                ciudad?.takeIf { it.isNotBlank() },
-                capacidad?.let { "$it personas" },
-                precio?.let { "${moneda.format(it)} / hr" }
-            ).joinToString(" · ")
+        view.findViewById<TextView>(R.id.tvResumenDetalle).text = ciudad?.takeIf { it.isNotBlank() } ?: "Ubicación por confirmar"
+        view.findViewById<TextView>(R.id.tvCapacidadDetalle).text = capacidad?.let { "Hasta $it personas" } ?: "Capacidad por confirmar"
+        view.findViewById<TextView>(R.id.tvPrecioDetalle).text = precio?.let { "${moneda.format(it)} / hora" } ?: "Precio por consultar"
     }
 
     private fun cargarCalendario(view: View) {
@@ -296,6 +294,7 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
             val celda = TextView(requireContext()).apply {
                 text = texto
                 gravity = Gravity.CENTER
+                setTextColor(requireContext().getColor(R.color.texto_principal))
             }
             val params = GridLayout.LayoutParams().apply {
                 width = 0
@@ -318,8 +317,13 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
 
             celda(dia.toString()).apply {
                 val color = if (libre) R.color.verde_primario else R.color.rojo_error
-                setBackgroundColor(requireContext().getColor(color))
-                setTextColor(Color.WHITE)
+                val tono = requireContext().getColor(color)
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = dp(10).toFloat()
+                    setColor(Color.argb(20, Color.red(tono), Color.green(tono), Color.blue(tono)))
+                    setStroke(dp(1), tono)
+                }
+                setTextColor(tono)
                 contentDescription = if (libre) {
                     "$fecha, disponible"
                 } else {

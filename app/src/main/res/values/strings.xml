@@ -8,4 +8,25 @@
     <string name="login_forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="login_no_account">¿No tienes cuenta? </string>
     <string name="login_register">Regístrate</string>
+    <string name="perfil_editar">Editar información</string>
+    <string name="perfil_guardar">Guardar</string>
+    <string name="perfil_guardando">Guardando…</string>
+    <string name="perfil_guardado">Perfil actualizado</string>
+    <string name="perfil_sin_dato">—</string>
+    <string name="perfil_nombres">Nombres</string>
+    <string name="perfil_apellido_paterno">Apellido paterno</string>
+    <string name="perfil_apellido_materno">Apellido materno</string>
+    <string name="perfil_apellido_materno_opcional">Apellido materno (opcional)</string>
+    <string name="perfil_telefono">Teléfono</string>
+    <string name="perfil_primera_carga">Guarda tu nombre, apellidos y teléfono para mostrar los datos de tu cuenta en este dispositivo.</string>
+    <string name="perfil_sesion_requerida">Inicia sesión de nuevo para ver y editar tu perfil.</string>
+    <string name="perfil_nombre_requerido">Ingresa tu nombre.</string>
+    <string name="perfil_apellido_requerido">Ingresa tu apellido paterno.</string>
+    <string name="perfil_telefono_invalido">Ingresa un teléfono de 10 dígitos.</string>
+    <string name="perfil_error_datos">Revisa tus datos e inténtalo de nuevo.</string>
+    <string name="perfil_error_permiso">Tu cuenta no tiene permiso para editar el perfil.</string>
+    <string name="perfil_error_no_encontrado">El servidor no encontró tu cuenta.</string>
+    <string name="perfil_error_guardar">No se pudo guardar el perfil. Inténtalo de nuevo.</string>
+    <string name="perfil_error_conexion">No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="perfil_error_respuesta">El servidor no devolvió los datos de tu perfil.</string>
 </resources>

@@ -32,21 +32,21 @@ class ClientPrincipalMenu : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.cliente_menu_principal)
 
-        recycler = findViewById(R.id.rvSalonesHorizontales)
+        recycler = findViewById(R.id.rvSalonesCliente)
         emptyState = findViewById(R.id.emptyStateSalones)
         progress = findViewById(R.id.progressSalones)
         emptyMessage = findViewById(R.id.tvEmptySalones)
         retryButton = findViewById(R.id.btnReintentarSalones)
 
         adapter = SalonAdapterClient(::abrirDetalle)
-        recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recycler.setHasFixedSize(false)
         recycler.itemAnimator = null
         recycler.adapter = adapter
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val manager = recyclerView.layoutManager as? LinearLayoutManager ?: return
-                if (dx > 0 && viewModel.state.value.error == null && manager.findLastVisibleItemPosition() >= adapter.itemCount - 3) {
+                if (dy > 0 && viewModel.state.value.error == null && manager.findLastVisibleItemPosition() >= adapter.itemCount - 3) {
                     viewModel.cargarSiguientePagina()
                 }
             }

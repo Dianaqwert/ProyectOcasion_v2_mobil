@@ -5,7 +5,7 @@
     <domain-config cleartextTrafficPermitted="true">
 
         <!-- IP del Dominio 1 (Login y Usuarios) -->
-        <domain includeSubdomains="false">172.30.209.58</domain>
+        <domain includeSubdomains="false">172.30.198.223</domain>
 
         <!-- IP del Dominio 2 (Salones, Servicios e Inventario) -->
         <domain includeSubdomains="false">172.30.241.234</domain>

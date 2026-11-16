@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Ocasion_mobil_v2" parent="Theme.MaterialComponents.Light.NoActionBar" />
+    <style name="Theme.Ocasion_mobil_v2" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/verde_primario</item>
+        <item name="colorPrimaryVariant">@color/verde_primario</item>
+        <item name="colorOnPrimary">@color/blanco</item>
+        <item name="colorSecondary">@color/naranja_primario</item>
+        <item name="colorOnSecondary">@color/texto_principal</item>
+        <item name="colorAccent">@color/naranja_primario</item>
+
+        <!-- Barra superior: amarillo de la marca e iconos oscuros. -->
+        <item name="colorPrimaryDark">@color/header_footer_dark</item>
+        <item name="android:statusBarColor">@color/header_footer_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+    </style>
 </resources>

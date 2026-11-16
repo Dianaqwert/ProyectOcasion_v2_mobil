@@ -56,6 +56,14 @@ class FiltrosSalonesBottomSheet : BottomSheetDialogFragment() {
         capacidad = view.findViewById(R.id.sliderCapacidad)
         precio = view.findViewById(R.id.sliderPrecio)
         ciudadCp = view.findViewById(R.id.etCiudadCp)
+        val verde = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.verde_primario))
+        val borde = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.borde_input))
+        capacidad.setThumbTintList(verde)
+        capacidad.setTrackActiveTintList(verde)
+        capacidad.setTrackInactiveTintList(borde)
+        precio.setThumbTintList(verde)
+        precio.setTrackActiveTintList(verde)
+        precio.setTrackInactiveTintList(borde)
 
         val textoCapacidad = view.findViewById<TextView>(R.id.tvRangoCapacidad)
         val textoPrecio = view.findViewById<TextView>(R.id.tvPrecioMaximo)
@@ -152,6 +160,13 @@ class FiltrosSalonesBottomSheet : BottomSheetDialogFragment() {
                             text = servicio.nombreServicio
                             isCheckable = true
                             isChecked = servicio.idServicio in serviciosSeleccionados
+                            chipBackgroundColor = android.content.res.ColorStateList(
+                                arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+                                intArrayOf(context.getColor(R.color.header_footer_light), context.getColor(R.color.blanco)))
+                            chipStrokeColor = borde
+                            chipStrokeWidth = resources.displayMetrics.density
+                            checkedIconTint = verde
+                            setTextColor(context.getColor(R.color.texto_principal))
 
                             setOnCheckedChangeListener { _, marcado ->
                                 if (marcado) {

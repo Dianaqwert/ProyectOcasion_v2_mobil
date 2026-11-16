@@ -1,26 +1,33 @@
 package com.example.ocasion_mobil_v2.util
 
 import android.util.Base64
+import org.json.JSONException
 import org.json.JSONObject
-import android.util.Log // Asegúrate de importar Log
+
 object JwtUtils {
+    data class IdentidadUsuario(val id: Int, val correo: String)
+
     fun obtenerTipoUser(token: String): String? {
+        val roles = obtenerPayload(token)?.optJSONArray("roles") ?: return null
+        return roles.optString(0).takeIf { it.isNotEmpty() }
+            ?.replace("ROLE_", "")?.uppercase()
+    }
+
+    fun obtenerIdentidadUsuario(token: String): IdentidadUsuario? {
+        val payload = obtenerPayload(token) ?: return null
+        val id = payload.optString("id_usuario").toIntOrNull()?.takeIf { it > 0 } ?: return null
+        val correo = (payload.opt("sub") as? String)?.takeIf { it.isNotBlank() } ?: return null
+        return IdentidadUsuario(id, correo)
+    }
+
+    private fun obtenerPayload(token: String): JSONObject? {
+        val payload = token.split('.').getOrNull(1) ?: return null
         return try {
-            val partes = token.split(".")
-            if (partes.size < 2) return null
-
-            val payloadBase64 = partes[1]
-            val decodedBytes = Base64.decode(payloadBase64, Base64.URL_SAFE or Base64.NO_WRAP)
-            val json = JSONObject(String(decodedBytes, Charsets.UTF_8))
-
-            // Extraemos el arreglo "roles"
-            val rolesArray = json.optJSONArray("roles")
-            if (rolesArray != null && rolesArray.length() > 0) {
-                val rolCompleto = rolesArray.getString(0) // Obtiene "ROLE_Cliente"
-                return rolCompleto.replace("ROLE_", "").uppercase() // Retorna "CLIENTE"
-            }
+            val decodedBytes = Base64.decode(payload, Base64.URL_SAFE or Base64.NO_WRAP)
+            JSONObject(String(decodedBytes, Charsets.UTF_8))
+        } catch (_: IllegalArgumentException) {
             null
-        } catch (e: Exception) {
+        } catch (_: JSONException) {
             null
         }
     }
