@@ -31,6 +31,8 @@ import java.io.IOException
 import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
 import com.example.ocasion_mobil_v2.util.JwtUtils
 import android.util.Log
+import com.example.ocasion_mobil_v2.notifications.ReservacionesNotifications
+import com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservacionesActivity
 class LoginActivity : ComponentActivity() {
 
     private lateinit var etEmail: EditText
@@ -68,6 +70,7 @@ class LoginActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (abrirBandejaSiCorresponde()) return
         setContentView(R.layout.activity_login)
 
         sessionManager = SessionManager(this)
@@ -78,6 +81,22 @@ class LoginActivity : ComponentActivity() {
         setupLoginButton()
         setupGoogleButton()
         setupSecondaryActions()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        abrirBandejaSiCorresponde()
+    }
+
+    private fun abrirBandejaSiCorresponde(): Boolean {
+        if (!ReservacionesNotifications.esEntradaBandeja(intent)) return false
+        val token = SessionManager(this).obtenerToken() ?: return false
+        if (!ReservacionesNotifications.esPropietario(JwtUtils.obtenerTipoUser(token))) return false
+        startActivity(Intent(this, ReservacionesActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
+        finish()
+        return true
     }
 
     private fun bindViews() {
@@ -341,10 +360,8 @@ class LoginActivity : ComponentActivity() {
 
         if( rolFormato == "CLIENTE"){
             destino = ClientPrincipalMenu::class.java
-        }else if(rolFormato=="VENDEDOR"){
-            destino= OwnerHomeActivity::class.java
-            startActivity(Intent(this, OwnerHomeActivity::class.java))
-            finish()
+        }else if(ReservacionesNotifications.esPropietario(rolFormato)){
+            destino = if (ReservacionesNotifications.esEntradaBandeja(intent)) ReservacionesActivity::class.java else OwnerHomeActivity::class.java
         }else {
             mostrarError("Tipo de cuenta no reconocido: $tipoUsuario")
             return

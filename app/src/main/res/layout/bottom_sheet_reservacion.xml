@@ -1,0 +1,24 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:fillViewport="true" android:clipToPadding="false"
+    android:padding="24dp" android:paddingBottom="32dp" android:background="@color/bg_general">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleReferencia" android:textColor="@color/texto_secundario" android:textSize="13sp" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleSalon" android:textSize="25sp" android:textStyle="bold" android:accessibilityHeading="true" />
+        <TextView style="@style/ReservaSeccion" android:text="CLIENTE" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleCliente" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleContacto" android:textIsSelectable="true" />
+        <TextView style="@style/ReservaSeccion" android:text="EVENTO" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleFechas" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleInvitados" />
+        <TextView style="@style/ReservaSeccion" android:text="SERVICIOS SOLICITADOS" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleServicios" />
+        <TextView style="@style/ReservaSeccion" android:text="INVENTARIO RETENIDO" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleInventario" />
+        <TextView style="@style/ReservaSeccion" android:text="OBSERVACIONES" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleObservaciones" />
+        <TextView style="@style/ReservaTexto" android:id="@+id/tvDetalleError" android:textColor="@color/rojo_error" android:visibility="gone" android:accessibilityLiveRegion="polite" />
+        <Button android:id="@+id/btnAprobarReserva" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:minHeight="52dp" android:text="@string/reserva_aprobar" />
+        <Button android:id="@+id/btnRechazarReserva" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="52dp" android:text="@string/reserva_rechazar" />
+        <Button android:id="@+id/btnCerrarDetalle" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:text="Cerrar" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

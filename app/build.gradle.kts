@@ -14,6 +14,12 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        val reservacionesUrl = providers.gradleProperty("reservaciones.baseUrl")
+            .orElse("http://172.30.155.214:8082/").get()
+        require(reservacionesUrl.matches(Regex("https?://[A-Za-z0-9.:-]+/"))) {
+            "reservaciones.baseUrl debe ser una URL http(s) con / final, sin rutas ni credenciales"
+        }
+        buildConfigField("String", "RESERVACIONES_BASE_URL", "\"$reservacionesUrl\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,10 +42,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation("androidx.work:work-runtime-ktx:2.10.1")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.androidx.core.ktx)

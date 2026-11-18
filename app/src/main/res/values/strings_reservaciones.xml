@@ -1,0 +1,26 @@
+<resources>
+    <string name="reserva_bandeja">Solicitudes pendientes</string>
+    <string name="reserva_aprobar">Aprobar</string>
+    <string name="reserva_rechazar">Rechazar solicitud</string>
+    <string name="reserva_cancelar">Cancelar</string>
+    <string name="reserva_procesando">Procesando…</string>
+    <string name="reserva_rechazo_aviso">Indica el motivo. El servidor procesará el rechazo y la liberación de la fecha y los recursos asociados.</string>
+    <string name="reserva_motivo_requerido">Escribe el motivo del rechazo.</string>
+    <string name="reserva_canal">Nuevas solicitudes de renta</string>
+    <string name="reserva_canal_descripcion">Alertas de solicitudes pendientes para tus salones.</string>
+    <string name="reserva_push_titulo">Nueva solicitud de cotización</string>
+    <string name="reserva_push_cuerpo">Nueva solicitud de cotización recibida para %1$s</string>
+    <style name="ReservaTexto">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:layout_marginTop">6dp</item>
+    </style>
+    <style name="ReservaSeccion" parent="ReservaTexto">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/verde_primario</item>
+        <item name="android:layout_marginTop">22dp</item>
+    </style>
+</resources>

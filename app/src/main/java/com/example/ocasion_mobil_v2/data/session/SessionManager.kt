@@ -12,6 +12,7 @@ import com.google.gson.JsonParseException
  * peticiones que requieran autenticación (Authorization: Bearer <token>).
  */
 class SessionManager(context: Context) {
+    private val appContext = context.applicationContext
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences("ocasion_session", Context.MODE_PRIVATE)
@@ -44,6 +45,7 @@ class SessionManager(context: Context) {
 
     fun invalidarSesion() {
         prefs.edit().clear().apply()
+        com.example.ocasion_mobil_v2.notifications.ReservacionesNotifications.detener(appContext)
     }
 
     fun cerrarSesion() {
@@ -59,6 +61,7 @@ class SessionManager(context: Context) {
     }
     //------ GUARDAR EL TOCKEN Y EL ROL
     fun guardarSesion(token: String, rol: String?) {
+        if (obtenerToken() != token) com.example.ocasion_mobil_v2.notifications.ReservacionesNotifications.detener(appContext)
         prefs.edit()
             .putString(KEY_TOKEN, token)
             .putString(KEY_ROL, rol)

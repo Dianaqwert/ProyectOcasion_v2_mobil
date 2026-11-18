@@ -21,6 +21,13 @@ object BottomNav {
         val btnPerfil =
             activity.findViewById<LinearLayout>(R.id.btnPerfil)
 
+        activity.findViewById<LinearLayout>(R.id.navReservas)?.setOnClickListener {
+            if (activity !is com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservacionesActivity) {
+                activity.startActivity(Intent(activity, com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservacionesActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            }
+        }
+
 
         // INICIO
 

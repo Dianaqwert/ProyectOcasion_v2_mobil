@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootReservaciones" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bg_general">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+        android:gravity="center_vertical" android:padding="12dp" android:background="@color/header_footer_dark">
+        <Button android:id="@+id/btnVolverReservas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minHeight="48dp" android:text="Volver" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp"
+            android:text="Reservaciones" android:textSize="21sp" android:textStyle="bold" android:textColor="@color/texto_principal" />
+    </LinearLayout>
+    <androidx.fragment.app.FragmentContainerView android:id="@+id/inboxContainer"
+        android:name="com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservacionesInboxFragment"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    <include layout="@layout/bottom_nav_owner" />
+</LinearLayout>

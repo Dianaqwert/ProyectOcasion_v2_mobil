@@ -99,6 +99,22 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/navReservas"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+            <TextView android:layout_width="45dp" android:layout_height="45dp"
+                android:gravity="center" android:text="📥" android:textSize="21sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Solicitudes" android:textColor="@color/texto_secundario" android:textSize="11sp" />
+        </LinearLayout>
+
         <!-- PERFIL -->
 
         <LinearLayout

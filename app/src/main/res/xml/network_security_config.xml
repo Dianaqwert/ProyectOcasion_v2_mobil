@@ -10,5 +10,8 @@
         <!-- IP del Dominio 2 (Salones, Servicios e Inventario) -->
         <domain includeSubdomains="false">172.30.241.234</domain>
 
+        <!-- IP del Dominio 3 (Reservaciones y Operaciones) -->
+        <domain includeSubdomains="false">172.30.155.214</domain>
+
     </domain-config>
 </network-security-config>
