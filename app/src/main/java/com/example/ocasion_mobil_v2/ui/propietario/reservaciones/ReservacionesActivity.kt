@@ -15,26 +15,95 @@ import com.example.ocasion_mobil_v2.ui.propietario.BottomNav
 import com.example.ocasion_mobil_v2.util.JwtUtils
 
 class ReservacionesActivity : FragmentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val token = SessionManager(this).obtenerToken()
-        if (token == null) { iniciarSesion(); return }
-        if (!ReservacionesNotifications.esPropietario(JwtUtils.obtenerTipoUser(token))) { finish(); return }
+
+        if (token == null) {
+            iniciarSesion()
+            return
+        }
+
+        if (
+            !ReservacionesNotifications.esPropietario(
+                JwtUtils.obtenerTipoUser(token)
+            )
+        ) {
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_reservaciones)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.rootReservaciones)) { view, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
-            view.updatePadding(left = bars.left, top = bars.top, right = bars.right, bottom = bars.bottom)
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById(R.id.rootReservaciones)
+        ) { view, insets ->
+
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or
+                        WindowInsetsCompat.Type.displayCutout()
+            )
+
+            view.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom
+            )
+
             insets
         }
+
+        findViewById<Button>(
+            R.id.btnNuevasT7
+        ).setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    PanelPropietarioActivity::class.java
+                ).putExtra("soloNuevas", true)
+            )
+        }
+
+        findViewById<Button>(
+            R.id.btnMensualT13
+        ).setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    PanelPropietarioActivity::class.java
+                )
+            )
+        }
+
+        findViewById<Button>(
+            R.id.btnVolverReservas
+        ).setOnClickListener {
+            finish()
+        }
+
         BottomNav.configurar(this)
-        findViewById<Button>(R.id.btnVolverReservas).setOnClickListener { finish() }
+
         ReservacionesNotifications.programar(this)
     }
 
     fun iniciarSesion() {
         SessionManager(this).invalidarSesion()
-        startActivity(Intent(this, LoginActivity::class.java).putExtra(ReservacionesNotifications.EXTRA_BANDEJA, true)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+
+        startActivity(
+            Intent(this, LoginActivity::class.java)
+                .putExtra(
+                    ReservacionesNotifications.EXTRA_BANDEJA,
+                    true
+                )
+                .addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+        )
+
         finish()
     }
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".notifications.OcasionApplication"
         android:allowBackup="true"
@@ -28,30 +30,50 @@
             </intent-filter>
 
         </activity>
+
         <activity
             android:name=".ui.login.VerifyCodeActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.login.RegisterActivity"
             android:exported="false" />
+
         <activity
-            android:name=".ui.cliente.ClientPrincipalMenu"
+            android:name=".ui.login.ForgotPasswordActivity"
             android:exported="false" />
+
         <activity
-            android:name=".ui.cliente.DetalleSalonActivity"
-            android:exported="false" />
+            android:name=".ui.login.NewPasswordActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="localhost"
+                    android:port="4200"
+                    android:pathPrefix="/cambiar-password" />
+            </intent-filter>
+
+        </activity>
 
         <activity
             android:name=".MainActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.login.ForgotPasswordActivity"
+            android:name=".ui.cliente.ClientPrincipalMenu"
             android:exported="false" />
 
-        <!-- PROPIETARIO -->
-        <activity android:name=".ui.propietario.reservaciones.ReservacionesActivity" android:exported="false" />
-        <activity android:name=".ui.propietario.DocumentosSalonActivity" android:exported="false" />
+        <activity
+            android:name=".ui.cliente.DetalleSalonActivity"
+            android:exported="false" />
+
         <activity
             android:name=".ui.propietario.OwnerHomeActivity"
             android:exported="false" />
@@ -63,6 +85,7 @@
         <activity
             android:name=".ui.propietario.MisSalonesActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.propietario.catalogoSalon.CatalogoSalonActivity"
             android:exported="false" />
@@ -70,10 +93,6 @@
         <activity
             android:name=".ui.propietario.ConfirmacionSalonActivity"
             android:exported="false" />
-        <!--
-        <activity
-            android:name=".ui.propietarios.ReservasActivity"
-            android:exported="false" /> -->
 
         <activity
             android:name=".ui.propietario.PerfilPropietarioActivity"
@@ -92,22 +111,46 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.login.NewPasswordActivity"
-            android:exported="true">
+            android:name=".ui.propietario.DocumentosSalonActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.reservaciones.ReservacionesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.reservaciones.ReservaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.reservaciones.PanelPropietarioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.propietario.reservaciones.CotizarPropietarioActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".notifications.OcasionMessagingService"
+            android:exported="false">
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Cambiamos el pathPrefix por el correcto -->
-                <data
-                    android:scheme="http"
-                    android:host="localhost"
-                    android:port="4200"
-                    android:pathPrefix="/cambiar-password" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </activity>
+
+        </service>
+
+        <provider
+            android:name=".ui.propietario.reservaciones.ReservasPdfProvider"
+            android:authorities="${applicationId}.reservas.pdf"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/reservas_pdf_paths" />
+
+        </provider>
 
     </application>
 

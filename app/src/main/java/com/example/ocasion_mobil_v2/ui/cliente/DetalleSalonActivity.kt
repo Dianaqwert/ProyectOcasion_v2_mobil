@@ -102,8 +102,12 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
             cargarDetalle(view)
         }
         view.findViewById<View>(R.id.btnDisponibilidadDetalle).setOnClickListener {
-            calendarioAbierto = true
-            cargarCalendario(view)
+            startActivity(
+                Intent(
+                    requireContext(),
+                    com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservaActivity::class.java
+                ).putExtra("idSalon", idSalon)
+            )
         }
         view.findViewById<Button>(R.id.btnMesAnteriorDetalle).setOnClickListener {
             mes = mes.minusMonths(1)

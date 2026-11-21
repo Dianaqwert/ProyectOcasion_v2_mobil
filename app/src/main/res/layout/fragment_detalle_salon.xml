@@ -146,13 +146,14 @@
                 <TextView
                     style="@style/ClienteTexto"
                     android:text="Consulta el calendario antes de planear tu evento. Revisar una fecha no genera una reservación." />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDisponibilidadDetalle"
                     style="@style/BotonOcasionPrincipal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Revisar disponibilidad" />
+                    android:text="Consultar disponibilidad" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/panelCalendarioDetalle"

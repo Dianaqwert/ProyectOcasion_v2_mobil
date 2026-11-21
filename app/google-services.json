@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "356328098918",
+    "project_id": "ocasion-be19b",
+    "storage_bucket": "ocasion-be19b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356328098918:android:908331ae81895e6e7ef1a7",
+        "android_client_info": {
+          "package_name": "com.example.ocasion_mobil_v2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0AD_fdry_ma-DfXLFh0_sEt393aWjPnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

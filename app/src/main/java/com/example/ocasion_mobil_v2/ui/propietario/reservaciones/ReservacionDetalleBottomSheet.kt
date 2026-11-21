@@ -59,26 +59,68 @@ class ReservacionDetalleBottomSheet : BottomSheetDialogFragment(R.layout.bottom_
 
     private fun pedirMotivo() {
         if (rechazo?.isShowing == true) return
-        val content = layoutInflater.inflate(R.layout.dialog_rechazar_reservacion, null)
-        val input = content.findViewById<TextInputEditText>(R.id.etMotivoRechazo)
-        val campo = content.findViewById<TextInputLayout>(R.id.campoMotivoRechazo)
+
+        val content = layoutInflater.inflate(
+            R.layout.dialog_rechazar_reservacion,
+            null
+        )
+
+        val input = content.findViewById<TextInputEditText>(
+            R.id.etMotivoRechazo
+        )
+
+        val campo = content.findViewById<TextInputLayout>(
+            R.id.campoMotivoRechazo
+        )
+
         input.setText(vm.obtenerMotivo())
-        rechazo = MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.reserva_rechazar)
-            .setMessage(R.string.reserva_rechazo_aviso).setView(content)
-            .setNegativeButton(R.string.reserva_cancelar, null).setPositiveButton(R.string.reserva_rechazar, null).create().apply {
+
+        rechazo = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.reserva_rechazar)
+            .setMessage(
+                "Puedes indicar un motivo (opcional). " +
+                        "El servidor procesará el rechazo y la liberación " +
+                        "de la fecha y los recursos asociados."
+            )
+            .setView(content)
+            .setNegativeButton(R.string.reserva_cancelar, null)
+            .setPositiveButton(R.string.reserva_rechazar, null)
+            .create()
+            .apply {
+
                 setOnShowListener {
-                    getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
-                        if (vm.state.value.cargando || vm.state.value.procesando != null) {
-                            campo.error = "Espera a que termine la actualización y vuelve a intentar."
+                    getButton(
+                        DialogInterface.BUTTON_POSITIVE
+                    ).setOnClickListener {
+
+                        if (
+                            vm.state.value.cargando ||
+                            vm.state.value.procesando != null
+                        ) {
+                            campo.error =
+                                "Espera a que termine la actualización."
                             return@setOnClickListener
                         }
-                        val motivo = input.text?.toString()?.trim().orEmpty()
-                        if (motivo.isBlank()) { campo.error = getString(R.string.reserva_motivo_requerido); return@setOnClickListener }
-                        vm.seleccion?.let { vm.dictaminar(it, false, motivo) }
+
+                        val motivo = input.text
+                            ?.toString()
+                            ?.trim()
+                            .orEmpty()
+
+                        vm.seleccion?.let {
+                            vm.dictaminar(it, false, motivo)
+                        }
+
                         dismiss()
                     }
                 }
-                setOnDismissListener { vm.guardarMotivo(input.text?.toString().orEmpty()) }
+
+                setOnDismissListener {
+                    vm.guardarMotivo(
+                        input.text?.toString().orEmpty()
+                    )
+                }
+
                 show()
             }
     }

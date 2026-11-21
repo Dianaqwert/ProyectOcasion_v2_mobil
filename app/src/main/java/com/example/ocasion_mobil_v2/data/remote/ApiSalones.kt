@@ -13,7 +13,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiSalonesService {
-
+    @GET("api/v1/salones/{id}/inventario")
+    suspend fun inventarioParaCotizar(
+        @Path("id") id: Int
+    ): Response<List<RecursoCatalogoDTO>>
     @retrofit2.http.Multipart
     @PUT("api/v1/salones/{id}/imagenes")
     suspend fun reemplazarFotosSalon(
