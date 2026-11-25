@@ -260,10 +260,10 @@
             android:layout_height="56dp"
             android:text="Continuar con documentos"
             android:textAllCaps="false"
-            android:textColor="@color/blanco"
+            android:textColor="@color/boton_texto"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:backgroundTint="@color/verde_primario" />
+            app:backgroundTint="@color/boton_principal_fondo" />
 
     </com.google.android.material.card.MaterialCardView>
 

@@ -14,8 +14,8 @@ data class Salon(
     val numero: String,
     val fraccionamiento: String,
 
-    val latitud: Double,
-    val longitud: Double,
+    val latitud: Double?,
+    val longitud: Double?,
 
     val imagenes: List<String> = emptyList(),
     val estado: String? = null,

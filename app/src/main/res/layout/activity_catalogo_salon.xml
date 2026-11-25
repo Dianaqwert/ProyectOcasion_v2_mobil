@@ -180,8 +180,8 @@
                             android:layout_marginTop="12dp"
                             android:text="＋ Crear servicio personalizado"
                             android:textAllCaps="false"
-                            android:textColor="@color/verde_primario"
-                            app:strokeColor="@color/verde_primario" />
+                            android:textColor="@color/boton_texto"
+                            app:strokeColor="@color/boton_secundario_borde" />
 
                     </LinearLayout>
 
@@ -246,8 +246,8 @@
                     android:layout_marginTop="12dp"
                     android:text="＋ Nueva categoría"
                     android:textAllCaps="false"
-                    android:textColor="@color/verde_primario"
-                    app:strokeColor="@color/verde_primario" />
+                    android:textColor="@color/boton_texto"
+                    app:strokeColor="@color/boton_secundario_borde" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCategorias"
@@ -298,10 +298,10 @@
             android:layout_height="56dp"
             android:text="Guardar y continuar"
             android:textAllCaps="false"
-            android:textColor="@color/blanco"
+            android:textColor="@color/boton_texto"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:backgroundTint="@color/verde_primario" />
+            app:backgroundTint="@color/boton_principal_fondo" />
 
     </com.google.android.material.card.MaterialCardView>
 

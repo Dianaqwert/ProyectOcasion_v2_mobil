@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_owner_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tituloConfirmacionLegal"
+        style="@style/ClienteTitulo"
+        android:accessibilityHeading="true"
+        android:text="@string/legal_centro" />
+
+    <TextView android:id="@+id/resumenConfirmacionLegal" style="@style/ClienteTexto" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrivacidadIntegral"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="start|center_vertical"
+        android:minHeight="48dp"
+        android:text="@string/legal_privacidad"
+        android:textAllCaps="false"
+        android:textColor="@color/boton_texto" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTerminosUso"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:minHeight="48dp"
+        android:text="@string/legal_terminos"
+        android:textAllCaps="false"
+        android:textColor="@color/boton_texto" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAvisoLegal"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:minHeight="48dp"
+        android:text="@string/legal_aviso"
+        android:textAllCaps="false"
+        android:textColor="@color/boton_texto" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/casillaConfirmacionLegal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:minHeight="48dp"
+        android:textColor="@color/texto_principal" />
+
+    <TextView
+        android:id="@+id/errorConfirmacionLegal"
+        style="@style/ClienteTexto"
+        android:accessibilityLiveRegion="polite"
+        android:text="@string/legal_error_aceptacion"
+        android:textColor="@color/rojo_error"
+        android:visibility="gone" />
+</LinearLayout>

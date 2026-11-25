@@ -4,6 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -12,16 +16,37 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
+import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.data.remote.model.Reservacion
 import com.example.ocasion_mobil_v2.data.session.SessionManager
 import com.example.ocasion_mobil_v2.notifications.ReservacionesNotifications
 import com.example.ocasion_mobil_v2.ui.login.LoginActivity
 import com.example.ocasion_mobil_v2.util.JwtUtils
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.text.NumberFormat
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 internal fun Context.dp(n: Int): Int =
     (n * resources.displayMetrics.density).toInt()
+
+private val localeMx = Locale.forLanguageTag("es-MX")
+private val formatoFechaEvento = DateTimeFormatter.ofPattern("d 'de' MMM 'de' yyyy", localeMx)
+
+internal fun Reservacion.fechaYHorario(): String {
+    val fechas = listOfNotNull(fechaInicio, fechaFin).distinct().joinToString(" al ") {
+        ReglasPropietario.fecha(it)?.format(formatoFechaEvento) ?: it
+    }.ifBlank { "Fecha por definir" }
+    val horario = listOfNotNull(horaInicio?.take(5), horaFin?.take(5)).joinToString(" a ")
+    return listOf(fechas, horario, numeroInvitados?.let { "$it invitados" }.orEmpty())
+        .filter { it.isNotBlank() }.joinToString(" · ")
+}
+
+internal fun importeReserva(importe: String?): String? =
+    importe?.toBigDecimalOrNull()?.let { "${NumberFormat.getCurrencyInstance(localeMx).format(it)} MXN" }
 
 internal fun Context.columna(): LinearLayout =
     LinearLayout(this).apply {
@@ -58,24 +83,22 @@ internal fun LinearLayout.texto(
 
 internal fun LinearLayout.boton(
     valor: String,
+    secundario: Boolean = false,
     accion: () -> Unit
 ): MaterialButton =
-    MaterialButton(context).also {
+    (if (secundario) LayoutInflater.from(context)
+        .inflate(R.layout.boton_reserva_secundario, this, false) as MaterialButton
+    else MaterialButton(context)).also {
         it.text = valor
         it.isAllCaps = false
         it.minHeight = context.dp(48)
-        it.setTextColor(Color.WHITE)
+        it.cornerRadius = context.dp(12)
+        it.letterSpacing = 0f
 
-        it.backgroundTintList = ColorStateList(
-            arrayOf(
-                intArrayOf(-android.R.attr.state_enabled),
-                intArrayOf()
-            ),
-            intArrayOf(
-                Color.LTGRAY,
-                Color.rgb(54, 126, 24)
-            )
-        )
+        if (!secundario) {
+            it.setTextColor(androidx.core.content.ContextCompat.getColorStateList(context, R.color.boton_texto))
+            it.backgroundTintList = androidx.core.content.ContextCompat.getColorStateList(context, R.color.boton_principal_fondo)
+        }
 
         addView(
             it,
@@ -84,6 +107,28 @@ internal fun LinearLayout.boton(
 
         it.setOnClickListener { accion() }
     }
+
+internal fun LinearLayout.seccion(titulo: String? = null, destacada: Boolean = false): LinearLayout {
+    val tarjeta = MaterialCardView(context).apply {
+        radius = context.dp(18).toFloat()
+        cardElevation = context.dp(1).toFloat()
+        strokeWidth = context.dp(1)
+        strokeColor = context.getColor(R.color.borde_input)
+        setCardBackgroundColor(context.getColor(if (destacada) R.color.reserva_superficie_destacada else R.color.blanco))
+    }
+    val contenido = context.columna().apply {
+        setPadding(context.dp(16), context.dp(12), context.dp(16), context.dp(12))
+    }
+    titulo?.let {
+        contenido.texto(it, 19f).apply {
+            setTypeface(typeface, Typeface.BOLD)
+            setAccessibilityHeading(true)
+        }
+    }
+    tarjeta.addView(contenido)
+    addView(tarjeta, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = context.dp(12) })
+    return contenido
+}
 
 internal data class Entrada(
     val campo: TextInputLayout,
@@ -109,7 +154,7 @@ internal fun LinearLayout.entrada(
 
     campo.addView(
         input,
-        ViewGroup.LayoutParams(-1, -2)
+        LinearLayout.LayoutParams(-1, -2)
     )
 
     addView(
@@ -129,6 +174,13 @@ internal fun TextView.mostrarError(mensaje: String?) {
         if (mensaje == null) View.GONE else View.VISIBLE
 
     setTextColor(Color.rgb(170, 28, 28))
+    if (mensaje != null) {
+        setPadding(context.dp(12), context.dp(8), context.dp(12), context.dp(8))
+        background = GradientDrawable().apply {
+            cornerRadius = context.dp(12).toFloat()
+            setColor(Color.rgb(252, 226, 225))
+        }
+    }
 }
 
 abstract class PantallaPropietario : FragmentActivity() {
@@ -171,7 +223,7 @@ abstract class PantallaPropietario : FragmentActivity() {
         tokenInicial = token
 
         raiz = columna().apply {
-            setBackgroundColor(Color.WHITE)
+            setBackgroundColor(getColor(R.color.reserva_fondo))
         }
 
         setContentView(
@@ -198,8 +250,40 @@ abstract class PantallaPropietario : FragmentActivity() {
             insets
         }
 
-        raiz.boton("Volver") { finish() }
-        raiz.texto(titulo, 24f)
+        val barra = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(10), dp(8), dp(14), dp(8))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(16).toFloat()
+                setColor(getColor(R.color.header_footer_light))
+            }
+        }
+        val volver = MaterialButton(this).apply {
+            text = "←"
+            textSize = 22f
+            contentDescription = "Volver"
+            cornerRadius = dp(12)
+            minWidth = 0
+            setPadding(0, 0, 0, 0)
+            stateListAnimator = null
+            backgroundTintList = ColorStateList.valueOf(getColor(R.color.header_footer_dark))
+            setTextColor(getColor(R.color.texto_principal))
+            setOnClickListener { finish() }
+        }
+        barra.addView(volver, LinearLayout.LayoutParams(dp(48), dp(48)))
+        barra.addView(TextView(this).apply {
+            text = titulo
+            textSize = 22f
+            setTypeface(typeface, Typeface.BOLD)
+            setTextColor(getColor(R.color.texto_principal))
+            setPadding(dp(12), 0, 0, 0)
+            setAccessibilityHeading(true)
+        }, LinearLayout.LayoutParams(0, -2, 1f))
+        raiz.addView(barra, LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dp(6)
+            bottomMargin = dp(8)
+        })
 
         return true
     }

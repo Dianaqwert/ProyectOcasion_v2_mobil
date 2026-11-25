@@ -25,13 +25,11 @@ data class RecursoCotizadoDTO(
 
 data class ServicioCotizadoDTO(
     val idServicio: Long,
-    val precioContratado: BigDecimal,
-    val cantidad: Int
+    val precio: BigDecimal
 )
 
 data class CotizacionPropietarioDTO(
     val precioRentaSalon: BigDecimal,
-    val servicios: List<ServicioCotizadoDTO>,
     val inventario: List<RecursoCotizadoDTO>,
-    val observaciones: String?
+    val servicios: List<ServicioCotizadoDTO> = emptyList()
 )

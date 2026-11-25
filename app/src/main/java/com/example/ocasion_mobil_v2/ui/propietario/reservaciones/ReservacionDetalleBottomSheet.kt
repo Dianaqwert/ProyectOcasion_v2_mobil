@@ -34,7 +34,7 @@ class ReservacionDetalleBottomSheet : BottomSheetDialogFragment(R.layout.bottom_
                     texto(R.id.tvDetalleSalon, r.nombreSalon ?: "Salón #${r.idSalon ?: "sin dato"}")
                     texto(R.id.tvDetalleReferencia, "Solicitud #${r.id}")
                     texto(R.id.tvDetalleCliente, r.nombreCliente)
-                    texto(R.id.tvDetalleContacto, "Correo: ${r.correoCliente ?: "No disponible"}\nTeléfono: ${r.telefonoCliente ?: "No disponible"}")
+                    texto(R.id.tvDetalleContacto, "Correo · ${r.correoCliente ?: "No disponible"}")
                     texto(R.id.tvDetalleFechas, fechasReserva(r))
                     texto(R.id.tvDetalleInvitados, "${r.numeroInvitados?.toString() ?: "No disponible"} invitados")
                     texto(R.id.tvDetalleServicios, r.servicios.joinToString("\n") {
@@ -78,7 +78,7 @@ class ReservacionDetalleBottomSheet : BottomSheetDialogFragment(R.layout.bottom_
         rechazo = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.reserva_rechazar)
             .setMessage(
-                "Puedes indicar un motivo (opcional). " +
+                "Indica el motivo del rechazo. " +
                         "El servidor procesará el rechazo y la liberación " +
                         "de la fecha y los recursos asociados."
             )
@@ -107,6 +107,10 @@ class ReservacionDetalleBottomSheet : BottomSheetDialogFragment(R.layout.bottom_
                             ?.trim()
                             .orEmpty()
 
+                        if (motivo.isBlank()) {
+                            campo.error = getString(R.string.reserva_motivo_requerido)
+                            return@setOnClickListener
+                        }
                         vm.seleccion?.let {
                             vm.dictaminar(it, false, motivo)
                         }

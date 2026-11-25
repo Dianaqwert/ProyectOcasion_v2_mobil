@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="24dp"
     android:padding="16dp"
-    android:hint="Motivo del rechazo (opcional)"
+    android:hint="Motivo del rechazo"
     app:counterEnabled="true"
     app:counterMaxLength="500">
     <com.google.android.material.textfield.TextInputEditText

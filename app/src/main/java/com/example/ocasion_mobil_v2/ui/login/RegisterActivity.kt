@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.ui.legal.ConfirmacionLegal
+import com.example.ocasion_mobil_v2.ui.legal.ContextoAviso
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClient
 import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
 import com.example.ocasion_mobil_v2.data.remote.model.RegisterRequest
@@ -80,13 +82,15 @@ class RegisterActivity : ComponentActivity() {
                 else android.R.drawable.ic_menu_view
             )
 
-            etPassword.setSelection(cursorPosition)
+            etPassword.setSelection(cursorPosition.coerceIn(0, etPassword.length()))
         }
     }
 
     private fun setupRegisterButton() {
+        val aviso = ConfirmacionLegal(findViewById(R.id.panelConfirmacionLegal), ContextoAviso.REGISTRO)
         btnRegister.setOnClickListener {
             hideError()
+            if (!aviso.verificar()) return@setOnClickListener
 
             val nombres = etNombres.text.toString().trim()
             val apellidoPaterno = etApellidoPaterno.text.toString().trim()

@@ -111,7 +111,7 @@ class NewPasswordActivity : ComponentActivity() {
         } else {
             InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
-        field.setSelection(cursorPosition)
+        field.setSelection(cursorPosition.coerceIn(0, field.length()))
     }
 
     private fun setupChangeButton() {

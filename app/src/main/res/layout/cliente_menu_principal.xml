@@ -10,81 +10,92 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:background="@color/header_footer_light">
-        <include
-            layout="@layout/logo_barra_propietario" />
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/bg_inicio_cliente">
+
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
-            <TextView
-                style="@style/ClienteTitulo"
-                android:text="Tu próxima celebración"
-                android:textSize="18sp" />
-            <TextView
-                style="@style/ClienteTexto"
-                android:text="Explora espacios para tu evento"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <include layout="@layout/logo_barra_propietario" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMisReservacionesCliente"
+                style="@style/BotonOcasionSecundario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mis reservaciones"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCerrarSesionCliente"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:text="Salir"
+                android:textAllCaps="false"
+                android:textColor="@color/texto_principal"
+                android:contentDescription="Cerrar sesión" />
         </LinearLayout>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCerrarSesionCliente"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
+
+        <TextView
+            style="@style/ClienteTitulo"
+            android:layout_marginTop="8dp"
+            android:accessibilityHeading="true"
+            android:text="Encuentra tu salón ideal"
+            android:textSize="23sp" />
+
+        <TextView
+            style="@style/ClienteTexto"
+            android:layout_marginTop="3dp"
+            android:text="Compara espacios, servicios y precios."
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minWidth="48dp"
-            android:text="Salir"
-            android:contentDescription="Cerrar sesión"
-            android:textColor="@color/texto_principal" />
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_buscador_cliente"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="Nombre, ciudad o CP" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltros"
+                style="@style/BotonOcasionPrincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:minWidth="0dp"
+                android:text="Filtros" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp">
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_edittext"
-            app:queryHint="Nombre, ciudad o código postal"
-            app:iconifiedByDefault="false" />
-        <ImageButton
-            android:id="@+id/btnFiltros"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="10dp"
-            android:padding="14dp"
-            android:background="@drawable/bg_badge"
-            android:src="@android:drawable/ic_menu_preferences"
-            app:tint="@color/texto_principal"
-            android:contentDescription="Abrir filtros de salones" />
-    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="16dp">
-        <TextView
-            android:id="@+id/tvTituloSalones"
-            style="@style/ClienteTitulo"
-            android:text="Encuentra tu salón ideal"
-            android:layout_marginTop="8dp" />
-        <TextView
-            android:id="@+id/tvSubtituloSalones"
-            style="@style/ClienteTexto"
-            android:text="Compara espacios, servicios y precios en un solo lugar."
-            android:textSize="13sp"
-            android:layout_marginTop="4dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Actualizar"
-                android:textColor="@color/verde_primario" />
+                android:textColor="@color/boton_texto" />
         </LinearLayout>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLimpiarBusqueda"
@@ -109,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Limpiar búsqueda y filtros"
-            android:textColor="@color/verde_primario"
+            android:textColor="@color/boton_texto"
             android:visibility="gone" />
     </LinearLayout>
     <!-- El RecyclerView administra el desplazamiento y recicla las tarjetas. -->

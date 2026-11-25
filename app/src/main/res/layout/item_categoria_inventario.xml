@@ -67,7 +67,7 @@
                 android:layout_height="40dp"
                 android:minWidth="0dp"
                 android:text="✎"
-                android:textColor="@color/verde_primario" />
+                android:textColor="@color/boton_texto" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEliminarCategoria"
                 style="?attr/materialButtonOutlinedStyle"
@@ -100,7 +100,7 @@
             android:layout_marginTop="10dp"
             android:text="＋ Agregar insumo"
             android:textAllCaps="false"
-            android:textColor="@color/verde_primario"
+            android:textColor="@color/boton_texto"
             android:backgroundTint="@color/header_footer_light"
             app:cornerRadius="22dp"/>
 

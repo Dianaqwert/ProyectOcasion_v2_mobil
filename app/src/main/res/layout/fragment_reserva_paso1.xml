@@ -60,39 +60,14 @@
             android:orientation="vertical"
             android:padding="18dp">
 
-            <!-- INDICADOR DE PASOS -->
             <TextView
+                android:id="@+id/tvEtapaReserva"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PASO 1 · FECHAS E INVITADOS"
-                android:textColor="@color/verde_primario"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Después: selección de servicios"
-                android:textColor="@color/texto_secundario"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Planeemos tu evento"
+                android:text="Fecha, horario e invitados"
                 android:textColor="@color/texto_principal"
                 android:textSize="25sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Selecciona las fechas y cuéntanos cuántas personas asistirán."
-                android:textColor="@color/texto_secundario"
-                android:textSize="15sp" />
 
             <ProgressBar
                 android:id="@+id/progresoReserva"
@@ -120,6 +95,13 @@
                 android:text="Reintentar"
                 android:visibility="gone" />
 
+            <include
+                android:id="@+id/tarjetaHorarioReserva"
+                layout="@layout/tarjeta_horario_salon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+
             <!-- FORMULARIO -->
             <LinearLayout
                 android:id="@+id/formularioReserva"
@@ -140,7 +122,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fechas del evento"
+                        android:text="Fecha y horario"
                         android:textColor="@color/texto_principal"
                         android:textSize="19sp"
                         android:textStyle="bold" />
@@ -159,16 +141,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Seleccionar fechas" />
+                        android:text="Seleccionar fecha" />
 
                     <TextView
                         android:id="@+id/tvFechasReserva"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Sin fechas seleccionadas"
+                        android:text="Sin fecha seleccionada"
                         android:textColor="@color/texto_principal"
                         android:textSize="15sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHoraInicioReserva"
+                        style="@style/BotonOcasionSecundario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Hora de inicio" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHoraFinReserva"
+                        style="@style/BotonOcasionSecundario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Hora de fin" />
 
                     <TextView
                         android:id="@+id/tvErrorFechasReserva"
@@ -221,6 +218,17 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvResumenReserva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_owner_card"
+                android:padding="18dp"
+                android:textColor="@color/texto_principal"
+                android:textSize="17sp"
+                android:visibility="gone" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSiguienteReserva"
                 style="@style/BotonOcasionPrincipal"
@@ -228,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:enabled="false"
-                android:text="Siguiente: servicios" />
+                android:text="Ver resumen" />
 
         </LinearLayout>
     </ScrollView>

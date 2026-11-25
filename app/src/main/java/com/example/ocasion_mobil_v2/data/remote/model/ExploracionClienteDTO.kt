@@ -34,7 +34,8 @@ data class SalonDetalleClienteDTO(
     val direccion: String? = null,
     val ciudad: String? = null,
     @SerializedName("serviciosCompletos") val serviciosCompletos: List<String>? = null,
-    val verificado: Boolean = false
+    val verificado: Boolean = false,
+    val horarioAtencion: HorarioSalonDTO? = null
 )
 
 data class DisponibilidadMesDTO(

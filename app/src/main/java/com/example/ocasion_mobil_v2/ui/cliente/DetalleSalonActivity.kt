@@ -21,11 +21,13 @@ import com.example.ocasion_mobil_v2.util.ImagenSalonLoader
 import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
 import com.example.ocasion_mobil_v2.data.remote.model.SalonDetalleClienteDTO
+import com.example.ocasion_mobil_v2.data.remote.model.DisponibilidadMesDTO
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -38,6 +40,7 @@ class DetalleSalonActivity : FragmentActivity() {
         const val EXTRA_IMAGEN = "imagen"
         const val EXTRA_PRECIO = "precio"
         const val EXTRA_CAPACIDAD = "capacidad"
+        const val EXTRA_VERIFICADO = "verificado"
         const val EXTRA_CIUDAD = "ciudad"
     }
 
@@ -71,10 +74,13 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
     private val localeMx = Locale.forLanguageTag("es-MX")
     private val moneda = NumberFormat.getCurrencyInstance(localeMx)
     private val formatoMes = DateTimeFormatter.ofPattern("MMMM yyyy", localeMx)
+    private val formatoHora = DateTimeFormatter.ofPattern("HH:mm")
 
     private var mes = YearMonth.now()
     private var calendarioAbierto = false
     private var consultaCalendario: Job? = null
+    private var serviciosDelSalon = arrayListOf<String>()
+    private var disponibleDesde: LocalDate? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,6 +93,11 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
         val args = requireArguments()
         view.findViewById<TextView>(R.id.tvNombreDetalle).text =
             args.getString(DetalleSalonActivity.EXTRA_NOMBRE) ?: "Detalle del salón"
+        view.findViewById<TextView>(R.id.tvIdentificadorSalonDetalle).text =
+            getString(R.string.salon_identificador, idSalon.toString())
+        if (args.containsKey(DetalleSalonActivity.EXTRA_VERIFICADO)) {
+            mostrarVerificacion(view, args.getBoolean(DetalleSalonActivity.EXTRA_VERIFICADO))
+        }
 
         mostrarResumen(
             view,
@@ -102,11 +113,17 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
             cargarDetalle(view)
         }
         view.findViewById<View>(R.id.btnDisponibilidadDetalle).setOnClickListener {
+            calendarioAbierto = true
+            cargarCalendario(view)
+        }
+        view.findViewById<View>(R.id.btnIniciarReserva).setOnClickListener {
             startActivity(
                 Intent(
                     requireContext(),
                     com.example.ocasion_mobil_v2.ui.propietario.reservaciones.ReservaActivity::class.java
                 ).putExtra("idSalon", idSalon)
+                    .putExtra("nombreSalon", view.findViewById<TextView>(R.id.tvNombreDetalle).text.toString())
+                    .putStringArrayListExtra("serviciosDelSalon", serviciosDelSalon)
             )
         }
         view.findViewById<Button>(R.id.btnMesAnteriorDetalle).setOnClickListener {
@@ -160,6 +177,14 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
     }
 
     private fun mostrarDetalle(view: View, salon: SalonDetalleClienteDTO) {
+        val horario = salon.horarioAtencion
+        val desde = horario?.let { LocalDate.parse(it.fechaDesde) }
+        val actualizarCalendario = calendarioAbierto && disponibleDesde != desde
+        disponibleDesde = desde
+        view.findViewById<View>(R.id.tvHorarioHabitualDetalle).mostrarHorarioSalon(horario)
+        if (actualizarCalendario) cargarCalendario(view)
+        mostrarVerificacion(view, salon.verificado)
+        serviciosDelSalon = ArrayList(salon.serviciosCompletos.orEmpty().filter { it.isNotBlank() }.distinct())
         view.findViewById<View>(R.id.contenidoDetalle).isVisible = true
 
         salon.nombreSalon?.let {
@@ -234,6 +259,13 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
         }
     }
 
+    private fun mostrarVerificacion(view: View, verificado: Boolean) {
+        view.findViewById<TextView>(R.id.tvVerificacionDetalle).apply {
+            mostrarVerificacion(verificado)
+            isVisible = true
+        }
+    }
+
     private fun mostrarResumen(
         view: View,
         ciudad: String?,
@@ -274,9 +306,9 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
                 check(respuesta.isSuccessful)
 
                 val bloqueos = checkNotNull(respuesta.body())
-                val ocupados = bloqueos.map { LocalDate.parse(it.fecha) }.toSet()
+                val ocupados = bloqueos.groupBy { LocalDate.parse(it.fecha) }
 
-                estado.text = "Verde: libre · Rojo: con horario bloqueado"
+                estado.text = "Verde: sin bloqueos · Rojo: con bloqueos · Gris: fuera de fechas disponibles"
                 dibujarMes(grid, mesConsultado, ocupados, estado)
             } catch (e: CancellationException) {
                 throw e
@@ -291,7 +323,7 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
     private fun dibujarMes(
         grid: GridLayout,
         mesConsultado: YearMonth,
-        ocupados: Set<LocalDate>,
+        ocupados: Map<LocalDate, List<DisponibilidadMesDTO>>,
         estado: TextView
     ) {
         fun celda(texto: String): TextView {
@@ -317,10 +349,24 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
 
         for (dia in 1..mesConsultado.lengthOfMonth()) {
             val fecha = mesConsultado.atDay(dia)
-            val libre = fecha !in ocupados
+            val habilitada = !fecha.isBefore(LocalDate.now()) && disponibleDesde?.isAfter(fecha) != true
+            val bloqueos = ocupados[fecha].orEmpty()
+            val disponibilidad = when {
+                !habilitada -> "Fecha no disponible"
+                bloqueos.isEmpty() -> "Sin bloqueos registrados"
+                else -> bloqueos.joinToString(", ") {
+                    val inicio = it.horaInicio?.let { hora -> LocalTime.parse(hora).format(formatoHora) }
+                    val fin = it.horaFin?.let { hora -> LocalTime.parse(hora).format(formatoHora) }
+                    if (inicio != null && fin != null) "$inicio a $fin" else "Sin horario disponible"
+                }
+            }
 
             celda(dia.toString()).apply {
-                val color = if (libre) R.color.verde_primario else R.color.rojo_error
+                val color = when {
+                    !habilitada -> R.color.texto_secundario
+                    bloqueos.isEmpty() -> R.color.verde_primario
+                    else -> R.color.rojo_error
+                }
                 val tono = requireContext().getColor(color)
                 background = android.graphics.drawable.GradientDrawable().apply {
                     cornerRadius = dp(10).toFloat()
@@ -328,16 +374,9 @@ class DetalleSalonFragment : Fragment(R.layout.fragment_detalle_salon) {
                     setStroke(dp(1), tono)
                 }
                 setTextColor(tono)
-                contentDescription = if (libre) {
-                    "$fecha, disponible"
-                } else {
-                    "$fecha, con horario bloqueado"
-                }
-
-                isEnabled = libre
-                if (libre) {
-                    setOnClickListener { estado.text = "$fecha · Disponible" }
-                }
+                contentDescription = "$fecha, $disponibilidad"
+                isEnabled = habilitada
+                if (habilitada) setOnClickListener { estado.text = "$fecha · $disponibilidad" }
             }
         }
     }

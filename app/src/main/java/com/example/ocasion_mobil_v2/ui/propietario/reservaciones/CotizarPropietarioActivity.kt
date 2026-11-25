@@ -1,6 +1,7 @@
 package com.example.ocasion_mobil_v2.ui.propietario.reservaciones
 
 import android.os.Bundle
+import android.graphics.Typeface
 import android.text.InputFilter
 import android.text.InputType
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ocasion_mobil_v2.R
 import com.example.ocasion_mobil_v2.data.remote.model.ServicioReservado
 import com.example.ocasion_mobil_v2.data.repository.StockCotizacion
 import kotlinx.coroutines.delay
@@ -31,7 +33,8 @@ class CotizarPropietarioActivity : PantallaPropietario() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!preparar("Armar cotización")) return
+        val editar = intent.getBooleanExtra("editar", false)
+        if (!preparar(if (editar) "Editar cotización" else "Armar cotización")) return
 
         val id = intent.getLongExtra("idReservacion", -1)
 
@@ -47,26 +50,30 @@ class CotizarPropietarioActivity : PantallaPropietario() {
             LinearLayout.LayoutParams(-1, 0, 1f)
         )
 
-        val formulario = columna()
+        val formulario = columna().apply { setPadding(dp(1), dp(6), dp(1), dp(12)) }
         scroll.addView(formulario)
 
-        val resumen = formulario.texto(
-            "Cargando solicitud…",
-            20f
-        )
+        val evento = formulario.seccion("Solicitud #$id", destacada = true)
+        val resumen = evento.texto("Cargando solicitud…", 22f).apply { setTypeface(typeface, Typeface.BOLD) }
+        val datosEvento = evento.texto("", 14f).apply { setTextColor(context.getColor(R.color.texto_secundario)) }
 
+        val documentos = ViewModelProvider(this)[PanelPropietarioViewModel::class.java]
+        val pdf = evento.boton("Ver PDF guardado", secundario = true) { documentos.descargar(id) }
+        evento.texto("El PDF muestra los importes y el mobiliario guardados en la reserva.", 14f)
+        val errorPdf = evento.texto("")
         val error = formulario.texto("")
 
         val reintentar = formulario.boton(
-            "Actualizar solicitud / Reintentar"
+            "Actualizar solicitud", secundario = true
         ) {
             vm.cargar()
         }
 
-        val renta = formulario.entrada(
-            "Precio de renta del salón",
-            InputType.TYPE_CLASS_NUMBER or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
+        val cotizacion = formulario.seccion("Renta base")
+        val tipoImporte = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        val renta = cotizacion.entrada(
+            "Renta del salón (MXN)",
+            tipoImporte
         )
 
         renta.input.filters =
@@ -76,18 +83,15 @@ class CotizarPropietarioActivity : PantallaPropietario() {
             vm.renta(it.toString())
         }
 
-        formulario.texto("Servicios solicitados", 20f)
-
-        val servicios = columna()
-        formulario.addView(servicios)
-
-        val camposServicios = mutableMapOf<Long, Entrada>()
+        val servicios = formulario.seccion("Servicios solicitados")
+        servicios.texto("Captura el precio unitario. Usa 0 si el servicio está incluido.", 14f)
+        val filasServicios = columna().apply { setPadding(0, 0, 0, 0) }
+        servicios.addView(filasServicios)
         var serviciosMostrados: List<ServicioReservado>? = null
-
-        formulario.texto(
-            "Inventario para estas fechas",
-            20f
-        )
+        val entradas = mutableMapOf<Long, Pair<ServicioReservado, Entrada>>()
+        var aplicandoPrecios = false
+        val mobiliario = formulario.seccion("Mobiliario disponible")
+        mobiliario.texto("Asignar mobiliario es opcional.", 14f)
 
         val inventario = RecyclerView(this).apply {
             layoutManager = LinearLayoutManager(
@@ -104,31 +108,16 @@ class CotizarPropietarioActivity : PantallaPropietario() {
 
         inventario.adapter = adapter
 
-        formulario.addView(
+        mobiliario.addView(
             inventario,
             LinearLayout.LayoutParams(-1, -2)
         )
 
-        val stockVacio = formulario.texto("")
+        val stockVacio = mobiliario.texto("")
 
-        val notas = formulario.entrada(
-            "Observaciones (opcional)",
-            InputType.TYPE_CLASS_TEXT or
-                    InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        )
+        val total = raiz.texto("", 18f).apply { setTypeface(typeface, Typeface.BOLD) }
 
-        notas.input.filters =
-            arrayOf(InputFilter.LengthFilter(500))
-
-        notas.input.doAfterTextChanged {
-            vm.notas(it.toString())
-        }
-
-        formulario.texto(
-            "El servidor calculará el total final de la cotización."
-        )
-
-        val enviar = formulario.boton(
+        val enviar = raiz.boton(
             "Enviar cotización"
         ) {
             vm.enviar()
@@ -136,6 +125,17 @@ class CotizarPropietarioActivity : PantallaPropietario() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    documentos.state.collect { documento ->
+                        pdf.isEnabled = documento.descargando == null
+                        errorPdf.mostrarError(documento.error)
+                        documento.documento?.let {
+                            documentos.documentoAbierto()
+                            abrirPdfPropietario(it)
+                        }
+                    }
+                }
 
                 launch {
                     while (true) {
@@ -161,9 +161,10 @@ class CotizarPropietarioActivity : PantallaPropietario() {
                         return@collect
                     }
 
-                    resumen.text = estado.reserva?.let {
-                        desglose(it)
-                    } ?: "Cargando solicitud…"
+                    resumen.text = estado.reserva?.nombreSalon ?: if (estado.cargando) "Cargando solicitud…" else "Datos del evento"
+                    datosEvento.text = estado.reserva?.let {
+                        listOfNotNull(it.nombreCliente, it.correoCliente, it.fechaYHorario()).joinToString("\n")
+                    }
 
                     error.mostrarError(estado.error)
 
@@ -174,7 +175,7 @@ class CotizarPropietarioActivity : PantallaPropietario() {
                         if (estado.cargando) {
                             "Consultando disponibilidad…"
                         } else {
-                            "Actualizar solicitud / Reintentar"
+                            "Actualizar solicitud"
                         }
 
                     val editable =
@@ -183,7 +184,6 @@ class CotizarPropietarioActivity : PantallaPropietario() {
                                 !estado.enviando
 
                     renta.input.isEnabled = editable
-                    notas.input.isEnabled = editable
 
                     if (
                         renta.input.text.toString() !=
@@ -192,95 +192,52 @@ class CotizarPropietarioActivity : PantallaPropietario() {
                         renta.input.setText(estado.renta)
                     }
 
-                    if (
-                        notas.input.text.toString() !=
-                        estado.notas
-                    ) {
-                        notas.input.setText(estado.notas)
-                    }
-
                     renta.campo.error =
                         if (
                             estado.renta.isNotEmpty() &&
                             ReglasPropietario.dinero(
                                 estado.renta
-                            ) == null
+                            )?.signum() != 1
                         ) {
                             "Ingresa un precio válido, con hasta dos decimales."
                         } else {
                             null
                         }
 
-                    val lista =
-                        estado.reserva?.servicios.orEmpty()
-
-                    if (serviciosMostrados != lista) {
-                        serviciosMostrados = lista
-
-                        servicios.removeAllViews()
-                        camposServicios.clear()
-
-                        if (lista.isEmpty()) {
-                            servicios.texto(
-                                "Sin servicios adicionales solicitados."
-                            )
-                        }
-
-                        lista.forEach { servicio ->
-                            servicios.texto(
-                                "${servicio.nombre ?: "Servicio #${servicio.id}"}" +
-                                        " · Cantidad: ${servicio.cantidad ?: "—"}"
-                            )
-
-                            servicio.id?.let { servicioId ->
-
-                                val campo = servicios.entrada(
-                                    "Precio unitario contratado",
-                                    InputType.TYPE_CLASS_NUMBER or
-                                            InputType.TYPE_NUMBER_FLAG_DECIMAL
-                                )
-
-                                campo.input.filters = arrayOf(
-                                    InputFilter.LengthFilter(12)
-                                )
-
-                                campo.input.doAfterTextChanged {
-                                    vm.precio(
-                                        servicioId,
-                                        it.toString()
-                                    )
-                                }
-
-                                camposServicios[servicioId] =
-                                    campo
+                    if (serviciosMostrados != estado.servicios) {
+                        serviciosMostrados = estado.servicios
+                        filasServicios.removeAllViews()
+                        entradas.clear()
+                        if (estado.servicios.isEmpty()) filasServicios.texto("Sin servicios adicionales solicitados.", 14f)
+                        for (servicio in estado.servicios) {
+                            val idServicio = servicio.id?.takeIf { it > 0 }
+                            val nombre = servicio.nombre ?: "Servicio"
+                            if (idServicio == null) {
+                                filasServicios.texto("$nombre · Cantidad ${servicio.cantidad ?: 1}", 14f)
+                                continue
                             }
+                            if (idServicio in entradas) continue
+                            val cantidad = estado.servicios.filter { it.id == idServicio }.sumOf { it.cantidad ?: 1 }
+                            filasServicios.texto("$nombre · Cantidad $cantidad", 15f)
+                            val entrada = filasServicios.entrada("Precio unitario (MXN)", tipoImporte)
+                            entrada.input.filters = arrayOf(InputFilter.LengthFilter(12))
+                            entrada.input.doAfterTextChanged {
+                                if (!aplicandoPrecios) vm.precioServicio(idServicio, it.toString())
+                            }
+                            entradas[idServicio] = servicio to entrada
                         }
                     }
-
-                    camposServicios.forEach {
-                            (servicioId, campo) ->
-
-                        val valor =
-                            estado.precios[servicioId].orEmpty()
-
-                        if (
-                            campo.input.text.toString() != valor
-                        ) {
-                            campo.input.setText(valor)
-                        }
-
-                        campo.input.isEnabled = editable
-
-                        campo.campo.error =
-                            if (
-                                editable &&
-                                ReglasPropietario.dinero(valor) == null
-                            ) {
-                                "Ingresa el precio de este servicio."
-                            } else {
-                                null
-                            }
+                    aplicandoPrecios = true
+                    entradas.values.forEach { (servicio, entrada) ->
+                        val precio = estado.precio(servicio)
+                        if (entrada.input.text.toString() != precio) entrada.input.setText(precio)
+                        entrada.input.isEnabled = editable
+                        entrada.campo.error = if (ReglasPropietario.dinero(precio) == null)
+                            "Ingresa un importe desde 0 con hasta dos decimales." else null
                     }
+                    aplicandoPrecios = false
+                    total.text = importeReserva(estado.totalCotizado?.toPlainString())
+                        ?.let { "Total cotizado · $it" } ?: "Total por calcular"
 
                     adapter.actualizar(
                         estado.stock,
@@ -301,7 +258,7 @@ class CotizarPropietarioActivity : PantallaPropietario() {
                         if (estado.enviando) {
                             "Verificando y enviando…"
                         } else {
-                            "Enviar cotización"
+                            if (editar) "Guardar cotización" else "Enviar cotización"
                         }
                 }
             }
@@ -331,14 +288,18 @@ private class InventarioCotizacionAdapter(
             InputType.TYPE_CLASS_NUMBER
         )
 
-        private val menos = panel.boton(
-            "− Quitar una unidad"
+        private val controles = LinearLayout(panel.context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            panel.addView(this, LinearLayout.LayoutParams(-1, -2).apply { topMargin = panel.context.dp(4) })
+        }
+        private val menos = controles.boton(
+            "− Quitar", secundario = true
         ) {
             ajustar(-1)
         }
 
-        private val mas = panel.boton(
-            "+ Agregar una unidad"
+        private val mas = controles.boton(
+            "+ Agregar", secundario = true
         ) {
             ajustar(1)
         }
@@ -347,6 +308,9 @@ private class InventarioCotizacionAdapter(
         private var vinculando = false
 
         init {
+            menos.layoutParams = LinearLayout.LayoutParams(0, -2, 1f).apply { marginEnd = panel.context.dp(4) }
+            mas.layoutParams = LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = panel.context.dp(4) }
+            nombre.setTypeface(nombre.typeface, Typeface.BOLD)
             cantidad.input.filters = arrayOf(
                 InputFilter.LengthFilter(10)
             )
@@ -407,10 +371,7 @@ private class InventarioCotizacionAdapter(
 
             nombre.text = recurso.nombre
 
-            stock.text =
-                "Total: ${recurso.total}" +
-                        " · Ocupado: ${recurso.ocupado}" +
-                        " · Disponible: ${recurso.disponible}"
+            stock.text = "${recurso.disponible} disponibles · ${recurso.ocupado} ocupadas de ${recurso.total}"
 
             val texto = cantidades[recurso.id] ?: "0"
 

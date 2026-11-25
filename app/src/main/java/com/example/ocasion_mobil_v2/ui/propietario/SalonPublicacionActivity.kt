@@ -6,6 +6,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.ui.legal.ConfirmacionLegal
+import com.example.ocasion_mobil_v2.ui.legal.ContextoAviso
 import com.google.android.material.button.MaterialButton
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -242,7 +244,9 @@ class SalonPublicacionActivity : ComponentActivity() {
         // PUBLICAR (Fase 1: Guardar Borrador)
         // ==========================================
 
+        val aviso = ConfirmacionLegal(findViewById(R.id.panelConfirmacionLegal), ContextoAviso.SALON)
         findViewById<MaterialButton>(R.id.btnPublicarSalon).setOnClickListener {
+            if (!aviso.verificar()) return@setOnClickListener
             val btn = it as MaterialButton
 
             // Bloqueamos el botón para evitar doble clic

@@ -49,6 +49,9 @@ android {
 }
 
 dependencies {
+    implementation("androidx.browser:browser:1.8.0")
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(platform("com.google.firebase:firebase-bom:35.2.0"))
     implementation("com.google.firebase:firebase-messaging")
     implementation("androidx.work:work-runtime-ktx:2.10.1")

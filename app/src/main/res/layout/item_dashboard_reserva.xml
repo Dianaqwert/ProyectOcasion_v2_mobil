@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    app:cardBackgroundColor="@color/blanco"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="1dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/borde_input">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/dashboardEstado"
+            style="@style/ClienteEtiqueta"
+            android:layout_marginTop="0dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dashboardSalon"
+            style="@style/ClienteTitulo"
+            android:layout_marginTop="8dp"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/dashboardFolio"
+            style="@style/ClienteTexto"
+            android:layout_marginTop="2dp" />
+
+        <TextView android:id="@+id/dashboardFecha" style="@style/ClienteTexto" />
+        <TextView android:id="@+id/dashboardInvitados" style="@style/ClienteTexto" />
+        <TextView android:id="@+id/dashboardTotal" style="@style/ClienteTexto" />
+
+        <TextView
+            android:id="@+id/dashboardSaldo"
+            style="@style/ClienteTitulo"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="9dp"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dashboardDetalle"
+            style="@style/BotonOcasionPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Ver detalle"
+            app:cornerRadius="12dp" />
+
+        <include android:id="@+id/dashboardPdf" layout="@layout/boton_reserva_secundario" />
+        <include android:id="@+id/dashboardQr" layout="@layout/boton_reserva_secundario" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

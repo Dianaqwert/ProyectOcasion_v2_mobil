@@ -13,10 +13,32 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiSalonesService {
-    @GET("api/v1/salones/{id}/inventario")
-    suspend fun inventarioParaCotizar(
-        @Path("id") id: Int
-    ): Response<List<RecursoCatalogoDTO>>
+    @PUT("api/v1/salones/{id}")
+    suspend fun actualizarSalon(@Path("id") id: Int, @Body salon: SalonCreateFase1Request): Response<Unit>
+
+    @GET("api/v1/salones/{id}/horario")
+    suspend fun obtenerHorarioSalon(@Path("id") id: Int): Response<HorarioSalonDTO>
+
+    @PUT("api/v1/salones/{id}/horario")
+    suspend fun actualizarHorarioSalon(
+        @Path("id") id: Int,
+        @Body horario: HorarioSalonDTO
+    ): Response<HorarioSalonDTO>
+
+    @GET("api/v1/salones/{id}/disponibilidad")
+    suspend fun obtenerBloqueosSalon(@Path("id") id: Int): Response<List<BloqueoSalonDTO>>
+
+    @POST("api/v1/salones/{id}/disponibilidad")
+    suspend fun registrarBloqueoSalon(
+        @Path("id") id: Int,
+        @Body bloqueo: DisponibilidadInicialRequest
+    ): Response<BloqueoSalonDTO>
+
+    @DELETE("api/v1/salones/{id}/disponibilidad/{bloqueo}")
+    suspend fun eliminarBloqueoSalon(
+        @Path("id") id: Int,
+        @Path("bloqueo") bloqueo: Int
+    ): Response<Unit>
     @retrofit2.http.Multipart
     @PUT("api/v1/salones/{id}/imagenes")
     suspend fun reemplazarFotosSalon(

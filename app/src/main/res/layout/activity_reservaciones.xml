@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bg_general">
+    android:background="@color/reserva_fondo">
 
     <!-- ENCABEZADO -->
 
@@ -31,13 +31,14 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:gravity="center"
-            android:text="‹"
-            android:textSize="34sp"
+            android:text="←"
+            android:textSize="22sp"
             android:textAllCaps="false"
             android:textColor="@color/texto_principal"
             android:contentDescription="Volver a la pantalla anterior"
-            app:backgroundTint="@android:color/transparent"
-            app:cornerRadius="24dp" />
+            android:stateListAnimator="@null"
+            app:backgroundTint="@color/header_footer_dark"
+            app:cornerRadius="12dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -81,7 +82,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Organiza tus eventos"
+            android:text="Gestión de eventos"
             android:textColor="@color/texto_principal"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -118,12 +119,13 @@
                 android:textAllCaps="false"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="@color/blanco"
-                app:backgroundTint="@color/naranja_primario"
+                android:textColor="@color/boton_texto"
+                app:backgroundTint="@color/boton_principal_fondo"
                 app:cornerRadius="12dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMensualT13"
+                style="@style/BotonOcasionSecundario"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -138,9 +140,10 @@
                 android:textAllCaps="false"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="@color/verde_primario"
+                android:textColor="@color/boton_texto"
+                android:stateListAnimator="@null"
                 app:backgroundTint="@color/bg_general"
-                app:strokeColor="@color/verde_primario"
+                app:strokeColor="@color/boton_secundario_borde"
                 app:strokeWidth="1dp"
                 app:cornerRadius="12dp" />
 

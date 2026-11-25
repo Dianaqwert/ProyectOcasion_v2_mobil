@@ -39,6 +39,7 @@ class ReservacionesRepository(
             ?.trim()
             ?.takeIf { it.isNotEmpty() }
 
+        require(aprobar || rechazo != null) { "Escribe el motivo del rechazo." }
         val actualizada = resultado(
             api.cambiarEstado(
                 id,

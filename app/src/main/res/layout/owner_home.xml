@@ -75,6 +75,16 @@
                 android:textSize="14sp" />
 
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCerrarSesionPropietario"
+                style="@style/BotonOcasionSecundario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:minHeight="48dp"
+                android:text="Cerrar sesión"
+                android:textAllCaps="false" />
+
             <!-- TARJETA MIS SALONES -->
 
             <LinearLayout
@@ -264,6 +274,15 @@
                 android:minHeight="56dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/reserva_bandeja" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckInPropietario"
+                style="@style/BotonOcasionSecundario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="56dp"
+                android:text="Escanear pase QR" />
 
             <!-- ACTIVIDAD -->
 

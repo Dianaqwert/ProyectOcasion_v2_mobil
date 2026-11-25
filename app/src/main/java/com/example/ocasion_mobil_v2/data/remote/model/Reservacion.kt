@@ -2,6 +2,7 @@ package com.example.ocasion_mobil_v2.data.remote.model
 
 import com.google.gson.*
 import java.lang.reflect.Type
+import java.math.BigDecimal
 
 object EstadosReservacion {
     const val PENDIENTE = "COTIZACION_PENDIENTE"
@@ -18,13 +19,19 @@ data class ServicioReservado(
     val id: Long?,
     val nombre: String?,
     val cantidad: Int?,
-    val precio: String?
+    val precio: String?,
+    val subtotal: String? = null
 )
 
 data class InventarioRetenido(
     val id: Long?,
     val nombre: String?,
     val cantidad: Int?
+)
+
+data class MovimientoReserva(
+    val id: Long?, val fecha: String?, val tipo: String?, val estado: String?,
+    val metodo: String?, val monto: String?
 )
 
 data class Reservacion(
@@ -42,7 +49,17 @@ data class Reservacion(
     val inventario: List<InventarioRetenido>,
     val observaciones: String?,
     val idCliente: Long? = null,
-    val costoTotal: String? = null
+    val costoTotal: String? = null,
+    val saldoPendiente: String? = null,
+    val tokenQr: String? = null,
+    val horaInicio: String? = null,
+    val horaFin: String? = null,
+    val ubicacionSalon: String? = null,
+    val precioHoraSalon: String? = null,
+    val totalPagado: String? = null,
+    val pagos: List<MovimientoReserva> = emptyList(),
+    val checkInRealizado: Boolean? = null,
+    val fechaCheckIn: String? = null
 )
 
 class ReservacionDeserializer : JsonDeserializer<Reservacion> {
@@ -176,7 +193,8 @@ class ReservacionDeserializer : JsonDeserializer<Reservacion> {
                     precio = s.str(
                         "precioContratado",
                         "precio_contratado"
-                    )
+                    ),
+                    subtotal = s.str("subtotal")
                 )
             },
 
@@ -232,9 +250,38 @@ class ReservacionDeserializer : JsonDeserializer<Reservacion> {
             costoTotal = o.str(
                 "costo_total",
                 "costoTotal"
-            )
+            ),
+            saldoPendiente = o.str("saldoPendiente", "saldo_pendiente") ?: o.saldoDesdePagos(),
+            tokenQr = o.str("tokenQr", "token_qr"),
+            horaInicio = o.str("horaInicio", "hora_inicio"),
+            horaFin = o.str("horaFin", "hora_fin"),
+            ubicacionSalon = o.str("ubicacionSalon", "ubicacion_salon"),
+            precioHoraSalon = o.str("precioHoraSalon", "precio_hora_salon"),
+            totalPagado = o.str("totalPagado", "total_pagado"),
+            pagos = o.get("pagos")?.takeIf { it.isJsonArray }?.asJsonArray
+                ?.mapNotNull { it.takeIf { e -> e.isJsonObject }?.asJsonObject }
+                ?.map { pago ->
+                    MovimientoReserva(pago.long("idPago", "id_pago"), pago.str("fechaPago", "fecha_pago"),
+                        pago.str("tipoPago", "tipo_pago"), pago.str("estadoPago", "estado_pago"),
+                        pago.str("metodoPago", "metodo_pago"), pago.str("monto"))
+                }.orEmpty(),
+            checkInRealizado = o.str("checkInRealizado", "check_in_realizado")?.toBooleanStrictOrNull(),
+            fechaCheckIn = o.str("fechaCheckIn", "fecha_checkin")
         )
     }
+}
+
+private fun JsonObject.saldoDesdePagos(): String? {
+    val total = str("costo_total", "costoTotal")?.toBigDecimalOrNull() ?: return null
+    val pagos = get("pagos")?.takeIf { it.isJsonArray }?.asJsonArray ?: return null
+    var pagado = BigDecimal.ZERO
+    for (elemento in pagos) {
+        val pago = elemento.takeIf { it.isJsonObject }?.asJsonObject ?: return null
+        if (!pago.str("estadoPago", "estado_pago").equals("COMPLETADO", ignoreCase = true)) continue
+        val monto = pago.str("monto")?.toBigDecimalOrNull()?.takeIf { it.signum() > 0 } ?: return null
+        pagado += monto
+    }
+    return (total - pagado).takeIf { it.signum() >= 0 }?.toPlainString()
 }
 
 private fun JsonObject.str(vararg keys: String): String? =

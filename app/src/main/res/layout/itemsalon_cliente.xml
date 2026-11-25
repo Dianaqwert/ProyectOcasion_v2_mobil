@@ -49,6 +49,11 @@
                 android:ellipsize="end"
                 tools:text="Hacienda Los Laureles" />
             <TextView
+                android:id="@+id/tvVerificacionSalon"
+                style="@style/ClienteEtiqueta"
+                android:textStyle="bold"
+                tools:text="Verificado por Ocasion" />
+            <TextView
                 android:id="@+id/tvCiudad"
                 style="@style/ClienteTexto"
                 android:layout_marginTop="4dp"

@@ -12,7 +12,8 @@ data class SalonPropietarioDTO(
     val imagenes: List<String>? = emptyList(),
     val estado: String? = null,
     val verificado: Boolean = false,
-    val documentosValidacionSalonEntity: ExpedientePropietarioDTO? = null
+    val documentosValidacionSalonEntity: ExpedientePropietarioDTO? = null,
+    val inventario: List<RecursoCatalogoDTO>? = null
 )
 
 data class ExpedientePropietarioDTO(
@@ -31,10 +32,8 @@ data class DocumentosGuardadosDTO(
 
 data class UbicacionDTO(
     val ciudad: String?,
-    // El backend serializa este campo como "CP" (mayúsculas) porque su
-    // entidad Java tiene el field llamado "CP" — sin este alias, Gson no
-    // lo encuentra y siempre llega null.
-    @SerializedName("CP")
+    // El listado actual usa cp. Las respuestas anteriores usaban CP.
+    @SerializedName(value = "cp", alternate = ["CP"])
     val cp: String?,
     val direccion: String?,
     val latitud: Double?,

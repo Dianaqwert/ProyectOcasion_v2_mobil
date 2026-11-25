@@ -63,6 +63,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvFormSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -274,6 +275,7 @@
             <!-- IMÁGENES -->
 
             <LinearLayout
+                android:id="@+id/seccionFotosAlta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -330,7 +332,7 @@
                     android:layout_marginTop="15dp"
                     android:text="📷   Agregar imágenes"
                     android:textAllCaps="false"
-                    android:textColor="@color/verde_primario"
+                    android:textColor="@color/boton_texto"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     style="@style/BotonOcasionSecundario"/>
@@ -375,6 +377,54 @@
             </LinearLayout>
 
             <!-- GUARDAR -->
+            <LinearLayout
+                android:id="@+id/ubicacionEdicion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_owner_card"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:visibility="gone">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Ubicación del salón" android:textColor="@color/texto_principal"
+                    android:textSize="18sp" android:textStyle="bold" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:hint="Dirección">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/direccionEdicion" android:inputType="textPostalAddress"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:hint="Ciudad">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ciudadEdicion" android:inputType="textCapWords"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:hint="Código postal">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cpEdicion" android:inputType="number"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:hint="Latitud">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/latitudEdicion" android:inputType="numberDecimal|numberSigned"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:hint="Longitud">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/longitudEdicion" android:inputType="numberDecimal|numberSigned"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnContinuarUbicacion"
@@ -385,7 +435,7 @@
                 app:cornerRadius="27dp"
                 android:text="Continuar con ubicación"
                 android:textAllCaps="false"
-                android:textColor="@color/verde_primario"
+                android:textColor="@color/boton_texto"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 style="@style/BotonOcasionSecundario"

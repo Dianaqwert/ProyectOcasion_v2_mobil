@@ -17,6 +17,9 @@ import kotlinx.coroutines.launch
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
+import com.example.ocasion_mobil_v2.data.remote.model.SalonCreateFase1Request
+import com.example.ocasion_mobil_v2.data.remote.model.UbicacionRequest
 import com.google.android.material.button.MaterialButton
 
 
@@ -91,6 +94,79 @@ class SalonFormActivity : ComponentActivity() {
         cargarDatosEdicion()
 
         actualizarContadorImagenes()
+        if (intent.hasExtra("idSalon")) {
+            val id = intent.getStringExtra("idSalon")?.toIntOrNull()
+            if (id == null || id <= 0) {
+                Toast.makeText(this, "Vuelve a seleccionar el salón.", Toast.LENGTH_LONG).show()
+                finish()
+                return
+            }
+            configurarEdicionSalon(id)
+        }
+    }
+
+    private fun configurarEdicionSalon(id: Int) {
+        findViewById<TextView>(R.id.tvFormTitle).text = "Editar salón"
+        findViewById<TextView>(R.id.tvFormSubtitle).text = "Puedes cambiar la galería desde Mis salones → Actualizar fotos."
+        findViewById<View>(R.id.seccionFotosAlta).visibility = View.GONE
+        findViewById<View>(R.id.ubicacionEdicion).visibility = View.VISIBLE
+        fun campo(vista: Int, extra: String) = findViewById<EditText>(vista).apply {
+            setText(intent.getStringExtra(extra))
+        }
+        val direccion = campo(R.id.direccionEdicion, "calle")
+        val ciudad = campo(R.id.ciudadEdicion, "ciudad")
+        val cp = campo(R.id.cpEdicion, "codigoPostal")
+        val latitud = campo(R.id.latitudEdicion, "latitud")
+        val longitud = campo(R.id.longitudEdicion, "longitud")
+        val guardar = findViewById<MaterialButton>(R.id.btnContinuarUbicacion)
+        guardar.text = "Guardar cambios"
+        guardar.setOnClickListener {
+            viewModel.validarFormularioCompleto()
+            val datos = viewModel.uiState.value
+            if (listOf(datos.errorNombre, datos.errorCapacidad, datos.errorPrecio, datos.errorDescripcion).any { it != null })
+                return@setOnClickListener
+            val vacio = listOf(direccion, ciudad, cp).firstOrNull { it.text.isBlank() }
+            if (vacio != null) {
+                vacio.error = "Completa este campo"
+                vacio.requestFocus()
+                return@setOnClickListener
+            }
+            val lat = latitud.text.toString().toDoubleOrNull()
+            val lon = longitud.text.toString().toDoubleOrNull()
+            if (lat == null || lat !in -90.0..90.0) {
+                latitud.error = "Ingresa una latitud entre −90 y 90"
+                return@setOnClickListener
+            }
+            if (lon == null || lon !in -180.0..180.0) {
+                longitud.error = "Ingresa una longitud entre −180 y 180"
+                return@setOnClickListener
+            }
+            val solicitud = SalonCreateFase1Request(
+                nombreSalon = datos.nombreSalon.trim(), capacidadPersonas = datos.capacidadPersonas.trim().toInt(),
+                precioHora = datos.precioHora.trim().toDouble(), descripcion = datos.descripcion.trim(),
+                ubicacion = UbicacionRequest(direccion.text.toString().trim(), lat, lon,
+                    ciudad.text.toString().trim(), cp.text.toString().trim())
+            )
+            guardar.isEnabled = false
+            guardar.text = "Guardando…"
+            lifecycleScope.launch {
+                try {
+                    val respuesta = RetrofitClientSalones.getService(this@SalonFormActivity).actualizarSalon(id, solicitud)
+                    if (respuesta.isSuccessful) {
+                        Toast.makeText(this@SalonFormActivity, "Salón actualizado", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        respuesta.errorBody()?.close()
+                        Toast.makeText(this@SalonFormActivity, "D2 no aceptó los cambios (HTTP ${respuesta.code()}).", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: java.io.IOException) {
+                    Toast.makeText(this@SalonFormActivity, "No se pudo confirmar el guardado. Revisa tu conexión.", Toast.LENGTH_LONG).show()
+                } finally {
+                    guardar.isEnabled = true
+                    guardar.text = "Guardar cambios"
+                }
+            }
+        }
     }
 
 
@@ -305,9 +381,7 @@ class SalonFormActivity : ComponentActivity() {
                 parametros
 
 
-            imageView.setImageURI(
-                uri
-            )
+            com.example.ocasion_mobil_v2.util.ImagenSalonLoader.cargar(imageView, uri.toString())
 
 
             imageView.scaleType =

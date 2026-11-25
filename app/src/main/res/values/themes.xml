@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Ocasion_mobil_v2" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="materialButtonStyle">@style/BotonOcasionPrincipal</item>
+        <item name="materialButtonOutlinedStyle">@style/BotonOcasionSecundario</item>
         <item name="colorPrimary">@color/verde_primario</item>
         <item name="colorPrimaryVariant">@color/verde_primario</item>
         <item name="colorOnPrimary">@color/blanco</item>

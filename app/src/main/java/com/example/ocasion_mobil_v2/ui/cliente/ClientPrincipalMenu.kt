@@ -3,7 +3,6 @@ package com.example.ocasion_mobil_v2.ui.cliente
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -63,7 +62,10 @@ class ClientPrincipalMenu : FragmentActivity() {
             }
         )
 
-        findViewById<ImageButton>(R.id.btnFiltros).setOnClickListener { abrirFiltros() }
+        findViewById<View>(R.id.btnFiltros).setOnClickListener { abrirFiltros() }
+        findViewById<View>(R.id.btnMisReservacionesCliente).setOnClickListener {
+            startActivity(Intent(this, com.example.ocasion_mobil_v2.ui.cliente.pagos.MisReservacionesActivity::class.java))
+        }
         retryButton.setOnClickListener { viewModel.reintentar() }
         findViewById<View>(R.id.btnActualizarSalones).setOnClickListener {
             viewModel.aplicarFiltros(viewModel.state.value.filtros)
@@ -147,6 +149,7 @@ class ClientPrincipalMenu : FragmentActivity() {
             putExtra(DetalleSalonActivity.EXTRA_IMAGEN, salon.imagenPortada)
             putExtra(DetalleSalonActivity.EXTRA_PRECIO, salon.precioHora ?: -1.0)
             putExtra(DetalleSalonActivity.EXTRA_CAPACIDAD, salon.capacidad ?: -1)
+            putExtra(DetalleSalonActivity.EXTRA_VERIFICADO, salon.verificado)
             putExtra(DetalleSalonActivity.EXTRA_CIUDAD, salon.ciudad)
         })
     }

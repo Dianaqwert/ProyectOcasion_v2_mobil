@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
+import java.math.BigDecimal
 import java.time.YearMonth
 
 data class PanelPropietarioState(
@@ -139,42 +140,52 @@ data class CotizarState(
     val reserva: Reservacion? = null,
     val stock: List<StockCotizacion> = emptyList(),
     val cantidades: Map<Long, String> = emptyMap(),
-    val precios: Map<Long, String> = emptyMap(),
+    val preciosServicios: Map<Long, String> = emptyMap(),
     val renta: String = "",
-    val notas: String = "",
     val verificado: Boolean = false,
     val enviado: Boolean = false,
     val error: String? = null
 ) {
+    val servicios: List<ServicioReservado> get() = reserva?.servicios.orEmpty()
+
+    fun precio(servicio: ServicioReservado): String =
+        servicio.id?.let(preciosServicios::get) ?:
+            servicios.firstOrNull { servicio.id != null && it.id == servicio.id }?.precioTexto() ?:
+            servicio.precioTexto()
+
+    val subtotalServicios: BigDecimal?
+        get() {
+            var subtotal = BigDecimal.ZERO
+            for (servicio in servicios) {
+                val unitario = ReglasPropietario.dinero(precio(servicio)) ?: return null
+                subtotal += unitario.multiply(BigDecimal.valueOf((servicio.cantidad ?: 1).toLong()))
+            }
+            return subtotal
+        }
+
+    val totalCotizado: BigDecimal?
+        get() {
+            val base = ReglasPropietario.dinero(renta)?.takeIf { it.signum() > 0 } ?: return null
+            return subtotalServicios?.let(base::add)
+        }
+
+    private fun ServicioReservado.precioTexto(): String =
+        precio?.toBigDecimalOrNull()?.stripTrailingZeros()?.toPlainString() ?: "0"
+
+    fun serviciosCotizados(): List<ServicioCotizadoDTO> =
+        servicios.distinctBy { it.id }.mapNotNull { servicio ->
+            val idServicio = servicio.id?.takeIf { it > 0 } ?: return@mapNotNull null
+            ServicioCotizadoDTO(idServicio, requireNotNull(ReglasPropietario.dinero(precio(servicio))))
+        }
+
     val puedeEnviar: Boolean
         get() {
             val solicitud = reserva ?: return false
 
-            return verificado &&
-                    !cargando &&
-                    !enviando &&
-                    !enviado &&
-                    solicitud.estado == "SOLICITUD_NUEVA" &&
-                    ReglasPropietario.dinero(renta) != null &&
-
-                    stock.all {
-                        ReglasPropietario.cantidad(
-                            cantidades[it.id] ?: "0",
-                            it.disponible
-                        ) != null
-                    } &&
-
-                    stock.any {
-                        (cantidades[it.id]?.toIntOrNull() ?: 0) > 0
-                    } &&
-
-                    solicitud.servicios.all {
-                        it.id != null &&
-                                (it.cantidad ?: 0) > 0 &&
-                                ReglasPropietario.dinero(
-                                    precios[it.id].orEmpty()
-                                ) != null
-                    }
+            return verificado && !cargando && !enviando && !enviado &&
+                ReglasPropietario.puedeCotizar(solicitud) &&
+                totalCotizado != null &&
+                stock.all { ReglasPropietario.cantidad(cantidades[it.id] ?: "0", it.disponible) != null }
         }
 }
 
@@ -232,32 +243,35 @@ class CotizarPropietarioViewModel(
                 validarSesion()
 
                 _state.update {
-                    it.copy(reserva = reserva)
+                    val precios = it.preciosServicios.filterKeys { clave -> reserva.servicios.any { s -> s.id == clave } }
+                    val actualizado = it.copy(
+                        reserva = reserva,
+                        preciosServicios = precios
+                    )
+                    val anterior = it.reserva
+                    if (anterior == null || anterior.costoTotal != reserva.costoTotal ||
+                        anterior.servicios != reserva.servicios || anterior.inventario != reserva.inventario ||
+                        anterior.estado != reserva.estado) {
+                        val guardado = actualizado.copy(preciosServicios = emptyMap())
+                        val asignados = reserva.inventario.associate { recurso ->
+                            requireNotNull(recurso.id) to requireNotNull(recurso.cantidad).toString()
+                        }
+                        val base = reserva.costoTotal?.toBigDecimalOrNull()
+                            ?.subtract(guardado.subtotalServicios ?: BigDecimal.ZERO)
+                            ?.takeIf { monto -> monto.signum() > 0 }
+                        guardado.copy(renta = base?.toPlainString().orEmpty(), cantidades = asignados)
+                    } else actualizado
                 }
 
-                check(reserva.estado == "SOLICITUD_NUEVA") {
+                check(ReglasPropietario.puedeCotizar(reserva)) {
                     "Esta solicitud ya cambió de estado. " +
                             "Regresa a la bandeja."
                 }
 
-                require(
-                    reserva.servicios.all {
-                        it.id != null &&
-                                (it.cantidad ?: 0) > 0
-                    }
-                ) {
-                    "La solicitud contiene servicios incompletos."
-                }
-
-                require(
-                    reserva.servicios.map { it.id }
-                        .distinct().size ==
-                            reserva.servicios.size
-                ) {
-                    "La solicitud contiene servicios duplicados."
-                }
-
                 val stock = repo.stock(reserva)
+                check(reserva.inventario.all { retenido -> stock.any { it.id == retenido.id } }) {
+                    "Un recurso asignado ya no aparece en el catálogo del salón."
+                }
 
                 validarSesion()
 
@@ -271,12 +285,6 @@ class CotizarPropietarioViewModel(
                                 recursoId -> stock.any { it.id == recursoId }
                         },
 
-                        precios = reserva.servicios.associate {
-                            it.id!! to (
-                                    anterior.precios[it.id]
-                                        ?: it.precio.orEmpty()
-                                    )
-                        }
                     )
                 }
             } catch (e: CancellationException) {
@@ -303,24 +311,15 @@ class CotizarPropietarioViewModel(
         }
     }
 
-    fun precio(id: Long, texto: String) {
-        if (_state.value.enviando) return
-
-        _state.update {
-            it.copy(precios = it.precios + (id to texto))
-        }
-    }
-
     fun renta(texto: String) {
         if (_state.value.enviando) return
 
         _state.update { it.copy(renta = texto) }
     }
 
-    fun notas(texto: String) {
+    fun precioServicio(id: Long, texto: String) {
         if (_state.value.enviando) return
-
-        _state.update { it.copy(notas = texto) }
+        _state.update { it.copy(preciosServicios = it.preciosServicios + (id to texto)) }
     }
 
     fun enviar() {
@@ -342,10 +341,14 @@ class CotizarPropietarioViewModel(
                 val actual = repo.detalle(id)
 
                 check(
-                    actual.estado == "SOLICITUD_NUEVA" &&
+                    ReglasPropietario.puedeCotizar(actual) && actual.estado == original.estado &&
+                            actual.inventario == original.inventario &&
                             actual.idSalon == original.idSalon &&
                             actual.fechaInicio == original.fechaInicio &&
                             actual.fechaFin == original.fechaFin &&
+                            actual.horaInicio == original.horaInicio &&
+                            actual.horaFin == original.horaFin &&
+                            actual.costoTotal == original.costoTotal &&
                             actual.numeroInvitados ==
                             original.numeroInvitados &&
                             actual.servicios == original.servicios
@@ -389,31 +392,17 @@ class CotizarPropietarioViewModel(
                         )
                     ),
 
-                    servicios = actual.servicios.map {
-                        ServicioCotizadoDTO(
-                            idServicio = it.id!!,
-                            precioContratado = requireNotNull(
-                                ReglasPropietario.dinero(
-                                    capturado.precios[it.id].orEmpty()
-                                )
-                            ),
-                            cantidad = it.cantidad!!
-                        )
-                    },
-
                     inventario = elegidos.map {
                         RecursoCotizadoDTO(
                             idRecurso = it.key,
                             cantidadAsignada = it.value.toInt()
                         )
                     },
+                    servicios = capturado.serviciosCotizados()
 
-                    observaciones = capturado.notas
-                        .trim()
-                        .takeIf { it.isNotEmpty() }
                 )
 
-                repo.enviar(id, dto)
+                repo.enviar(id, dto, requireNotNull(capturado.totalCotizado))
 
                 validarSesion()
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="salon_verificado">Verificado por Ocasion</string>
+    <string name="salon_no_verificado">Sin verificar</string>
+    <color name="verificacion_salon_fondo">#E1F1DA</color>
+    <color name="verificacion_salon_texto">#265B1E</color>
+</resources>

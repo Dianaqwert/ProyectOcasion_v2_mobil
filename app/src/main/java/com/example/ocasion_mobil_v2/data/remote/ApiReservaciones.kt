@@ -13,6 +13,17 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface ApiReservaciones {
+    @POST("api/v1/reservaciones/solicitar")
+    suspend fun solicitar(@Body solicitud: SolicitarReserva): Response<SolicitudEnviada>
+
+    @GET("api/v1/reservaciones/mis-reservaciones")
+    suspend fun misReservaciones(): Response<List<Reservacion>>
+
+    @POST("api/v1/reservaciones/{id}/paypal/crear-orden")
+    suspend fun iniciarPaypal(@Path("id") id: Long, @Body pago: CrearOrdenPaypal): Response<OrdenPaypal>
+
+    @POST("api/v1/reservaciones/{id}/paypal/capturar-orden")
+    suspend fun capturarPaypal(@Path("id") id: Long, @Body orden: CapturarOrdenPaypal): Response<PagoRegistrado>
 
     @GET("api/v1/reservaciones/salon/{id}/calendario")
     suspend fun obtenerCalendario(
@@ -25,10 +36,8 @@ interface ApiReservaciones {
         estado: String? = EstadosReservacion.PENDIENTE
     ): Response<List<Reservacion>>
 
-    @GET("api/v1/reservaciones/{id}")
-    suspend fun detalle(
-        @Path("id") id: Long
-    ): Response<Reservacion>
+    @POST("api/v1/reservaciones/check-in")
+    suspend fun registrarCheckIn(@Query("tokenQr") token: String): Response<CheckInRegistrado>
 
     @GET("api/v1/reservaciones/{id}/inventario-disponible")
     suspend fun ocupados(
@@ -67,6 +76,7 @@ object RetrofitClientReservaciones {
 
                 .client(
                     OkHttpClient.Builder()
+                        .followSslRedirects(false)
                         .addInterceptor(
                             AuthInterceptor(context.applicationContext)
                         )

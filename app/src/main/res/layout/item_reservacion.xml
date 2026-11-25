@@ -1,12 +1,13 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:layout_marginHorizontal="3dp"
     android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="16dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/blanco">
+    app:cardCornerRadius="18dp" app:cardElevation="1dp" app:cardBackgroundColor="@color/blanco"
+    app:strokeWidth="1dp" app:strokeColor="@color/borde_input">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
-        <TextView style="@style/ReservaTexto" android:text="POR REVISAR" android:textColor="@color/verde_primario" android:textSize="12sp" android:textStyle="bold" />
+        <TextView style="@style/ClienteEtiqueta" android:layout_marginTop="0dp" android:text="Por revisar" android:textStyle="bold" />
         <TextView style="@style/ReservaTexto" android:id="@+id/tvReservaSalon" android:textSize="20sp" android:textStyle="bold" />
         <TextView style="@style/ReservaTexto" android:id="@+id/tvReservaCliente" />
         <TextView style="@style/ReservaTexto" android:id="@+id/tvReservaFecha" android:textColor="@color/texto_secundario" />
         <TextView style="@style/ReservaTexto" android:id="@+id/tvReservaReferencia" android:textSize="13sp" android:textColor="@color/texto_secundario" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

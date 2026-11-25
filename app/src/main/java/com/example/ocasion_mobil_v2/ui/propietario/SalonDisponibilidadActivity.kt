@@ -1,1226 +1,319 @@
 package com.example.ocasion_mobil_v2.ui.propietario
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.CalendarView
+import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.ocasion_mobil_v2.R
-import com.example.ocasion_mobil_v2.data.remote.RetrofitClientSalones
+import com.example.ocasion_mobil_v2.ui.legal.ConfirmacionLegal
+import com.example.ocasion_mobil_v2.ui.legal.ContextoAviso
 import com.example.ocasion_mobil_v2.data.remote.model.DisponibilidadInicialRequest
+import com.example.ocasion_mobil_v2.data.remote.model.HorarioSalonDTO
 import com.example.ocasion_mobil_v2.data.remote.model.SalonCreateFase1Request
 import com.example.ocasion_mobil_v2.data.remote.model.UbicacionRequest
 import com.example.ocasion_mobil_v2.ui.propietario.catalogoSalon.CatalogoSalonActivity
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import java.util.Locale
-
-class SalonDisponibilidadActivity :
-    ComponentActivity() {
-
-    private lateinit var calendar:
-            CalendarView
-
-    private lateinit var tvFecha:
-            TextView
-
-    private lateinit var btnHoraInicio:
-            MaterialButton
-
-    private lateinit var btnHoraFin:
-            MaterialButton
-
-    private lateinit var etObservaciones:
-            EditText
-
-    private lateinit var tvError:
-            TextView
-
-    private lateinit var containerBloqueos:
-            LinearLayout
-
-    private lateinit var btnContinuar:
-            MaterialButton
-
-
-    private var fechaSeleccionada = ""
-
-    private var horaInicio:
-            String? = null
-
-    private var horaFin:
-            String? = null
-
-
-    private var nombreSalon = ""
-
-    private var capacidadPersonas = ""
-
-    private var precioHora = ""
-
-    private var descripcion = ""
-
-    private var ciudad = ""
-
-    private var codigoPostal = ""
-
-    private var calle = ""
-
-    private var numero = ""
-
-    private var fraccionamiento = ""
-
-    private var latitud = ""
-
-    private var longitud = ""
-
-    private var imagenes =
-        arrayListOf<String>()
-
-
-    private var guardando = false
-
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
-        super.onCreate(
-            savedInstanceState
-        )
-
-        setContentView(
-            R.layout.activity_salon_disponibilidad
-        )
-
-
-        recuperarDatos()
-
-        inicializarVistas()
-
-        configurarCalendario()
-
-        configurarBotones()
-    }
-
-
-    private fun recuperarDatos() {
-
-        nombreSalon =
-            intent.getStringExtra(
-                "nombreSalon"
-            ).orEmpty()
-
-        capacidadPersonas =
-            intent.getStringExtra(
-                "capacidadPersonas"
-            ).orEmpty()
-
-        precioHora =
-            intent.getStringExtra(
-                "precioHora"
-            ).orEmpty()
-
-        descripcion =
-            intent.getStringExtra(
-                "descripcion"
-            ).orEmpty()
-
-        ciudad =
-            intent.getStringExtra(
-                "ciudad"
-            ).orEmpty()
-
-        codigoPostal =
-            intent.getStringExtra(
-                "codigoPostal"
-            ).orEmpty()
-
-        calle =
-            intent.getStringExtra(
-                "calle"
-            ).orEmpty()
-
-        numero =
-            intent.getStringExtra(
-                "numero"
-            ).orEmpty()
-
-        fraccionamiento =
-            intent.getStringExtra(
-                "fraccionamiento"
-            ).orEmpty()
-
-        latitud =
-            intent.getStringExtra(
-                "latitud"
-            ).orEmpty()
-
-        longitud =
-            intent.getStringExtra(
-                "longitud"
-            ).orEmpty()
-
-        imagenes =
-            intent.getStringArrayListExtra(
-                "imagenes"
-            ) ?: arrayListOf()
-    }
-
-
-    private fun inicializarVistas() {
-
-        calendar =
-            findViewById(
-                R.id.calendarDisponibilidad
-            )
-
-        tvFecha =
-            findViewById(
-                R.id.tvFechaSeleccionada
-            )
-
-        btnHoraInicio =
-            findViewById(
-                R.id.btnHoraInicio
-            )
-
-        btnHoraFin =
-            findViewById(
-                R.id.btnHoraFin
-            )
-
-        etObservaciones =
-            findViewById(
-                R.id.etObservaciones
-            )
-
-        tvError =
-            findViewById(
-                R.id.tvErrorDisponibilidad
-            )
-
-        containerBloqueos =
-            findViewById(
-                R.id.containerBloqueos
-            )
-
-        btnContinuar =
-            findViewById(
-                R.id.btnContinuarCatalogo
-            )
-
-
-        findViewById<TextView>(
-            R.id.btnBackDisponibilidad
-        ).setOnClickListener {
-
-            finish()
-        }
-    }
-
-
-    private fun configurarCalendario() {
-
-        val hoy =
-            Calendar.getInstance()
-
-
-        fechaSeleccionada =
-            String.format(
-                Locale.getDefault(),
-
-                "%04d-%02d-%02d",
-
-                hoy.get(
-                    Calendar.YEAR
-                ),
-
-                hoy.get(
-                    Calendar.MONTH
-                ) + 1,
-
-                hoy.get(
-                    Calendar.DAY_OF_MONTH
-                )
-            )
-
-
-        tvFecha.text =
-            "Fecha: ${
-                formatearFechaVisible(
-                    fechaSeleccionada
-                )
-            }"
-
-
-        calendar.setOnDateChangeListener {
-
-                _,
-                year,
-                month,
-                day ->
-
-            fechaSeleccionada =
-                String.format(
-                    Locale.getDefault(),
-
-                    "%04d-%02d-%02d",
-
-                    year,
-
-                    month + 1,
-
-                    day
-                )
-
-
-            tvFecha.text =
-                "Fecha: ${
-                    formatearFechaVisible(
-                        fechaSeleccionada
-                    )
-                }"
-        }
-    }
-
-
-    private fun configurarBotones() {
-
-        btnHoraInicio.setOnClickListener {
-
-            mostrarTimePicker(
-                true
-            )
-        }
-
-
-        btnHoraFin.setOnClickListener {
-
-            mostrarTimePicker(
-                false
-            )
-        }
-
-
-        findViewById<MaterialButton>(
-            R.id.btnBloquearHorario
-        ).setOnClickListener {
-
-            if (
-                validarBloqueo()
-            ) {
-
-                agregarBloqueo()
-            }
-        }
-
-
-        btnContinuar.setOnClickListener {
-
-            guardarFase1YContinuar()
-        }
-    }
-
-
-    private fun mostrarTimePicker(
-        esInicio: Boolean
-    ) {
-
-        val ahora =
-            Calendar.getInstance()
-
-
-        TimePickerDialog(
-
-            this,
-
-            { _, hour, minute ->
-
-                val hora =
-                    String.format(
-                        Locale.getDefault(),
-                        "%02d:%02d",
-                        hour,
-                        minute
-                    )
-
-
-                if (esInicio) {
-
-                    horaInicio =
-                        hora
-
-                    btnHoraInicio.text =
-                        "Inicio: $hora"
-
-                } else {
-
-                    horaFin =
-                        hora
-
-                    btnHoraFin.text =
-                        "Final: $hora"
-                }
-            },
-
-            ahora.get(
-                Calendar.HOUR_OF_DAY
-            ),
-
-            ahora.get(
-                Calendar.MINUTE
-            ),
-
-            true
-
-        ).show()
-    }
-
-
-    private fun validarBloqueo():
-            Boolean {
-
-        tvError.visibility =
-            View.GONE
-
-
-        if (
-            fechaSeleccionada.isBlank()
-        )
-            return mostrarError(
-                "Selecciona una fecha."
-            )
-
-
-        if (
-            horaInicio == null
-        )
-            return mostrarError(
-                "Selecciona la hora de inicio."
-            )
-
-
-        if (
-            horaFin == null
-        )
-            return mostrarError(
-                "Selecciona la hora final."
-            )
-
-
-        if (
-            horaFin!! <=
-            horaInicio!!
-        )
-            return mostrarError(
-                "La hora final debe ser mayor que la hora de inicio."
-            )
-
-
-        if (
-            etObservaciones
-                .text
-                .toString()
-                .trim()
-                .isBlank()
-        )
-            return mostrarError(
-                "Escribe una observación para el horario."
-            )
-
-
-        return true
-    }
-
-
-    private fun mostrarError(
-        mensaje: String
-    ): Boolean {
-
-        tvError.text =
-            mensaje
-
-        tvError.visibility =
-            View.VISIBLE
-
-        return false
-    }
-
-
-    private fun agregarBloqueo() {
-
-        val tarjeta =
-            LinearLayout(this).apply {
-
-                orientation =
-                    LinearLayout.VERTICAL
-
-                setPadding(
-                    18,
-                    18,
-                    18,
-                    18
-                )
-
-                setBackgroundResource(
-                    R.drawable.bg_card
-                )
-            }
-
-
-        val titulo =
-            TextView(this).apply {
-
-                text =
-                    "📅 ${
-                        formatearFechaVisible(
-                            fechaSeleccionada
-                        )
-                    }  •  $horaInicio - $horaFin"
-
-                textSize = 14f
-
-                setTextColor(
-                    getColor(
-                        R.color.rojo_error
-                    )
-                )
-
-                setTypeface(
-                    null,
-                    android.graphics.Typeface.BOLD
-                )
-            }
-
-
-        val observacion =
-            TextView(this).apply {
-
-                text =
-                    etObservaciones
-                        .text
-                        .toString()
-                        .trim()
-
-                textSize = 12f
-
-                setTextColor(
-                    getColor(
-                        R.color.texto_secundario
-                    )
-                )
-
-                setPadding(
-                    0,
-                    8,
-                    0,
-                    0
-                )
-            }
-
-
-        tarjeta.addView(
-            titulo
-        )
-
-        tarjeta.addView(
-            observacion
-        )
-
-
-        val params =
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-
-        params.setMargins(
-            0,
-            0,
-            0,
-            10
-        )
-
-
-        tarjeta.layoutParams =
-            params
-
-
-        containerBloqueos.addView(
-            tarjeta
-        )
-
-
-        Toast.makeText(
-            this,
-            "Horario agregado",
-            Toast.LENGTH_SHORT
-        ).show()
-
-
-        etObservaciones
-            .text
-            .clear()
-
-
-        horaInicio = null
-
-        horaFin = null
-
-
-        btnHoraInicio.text =
-            "Hora inicio"
-
-        btnHoraFin.text =
-            "Hora final"
-    }
-
-
-    private fun guardarFase1YContinuar() {
-
-        if (
-            containerBloqueos
-                .childCount == 0
-        ) {
-
-            mostrarError(
-                "Agrega al menos un horario antes de continuar."
-            )
-
-            return
-        }
-
-
-        if (guardando)
-            return
-
-
-        guardando = true
-
-
-        btnContinuar.isEnabled =
-            false
-
-
-        btnContinuar.text =
-            "Creando salón..."
-
-
-        val horaInicioFinal =
-            obtenerHoraDelPrimerBloqueo(
-                true
-            )
-
-
-        val horaFinFinal =
-            obtenerHoraDelPrimerBloqueo(
-                false
-            )
-
-
-        val observacionFinal =
-            obtenerObservacionPrimerBloqueo()
-
-
-        if (
-            horaInicioFinal == null ||
-            horaFinFinal == null
-        ) {
-
-            guardando = false
-
-            btnContinuar.isEnabled =
-                true
-
-            btnContinuar.text =
-                "Guardar disponibilidad y continuar"
-
-
-            mostrarError(
-                "No se pudo leer el primer horario."
-            )
-
-            return
-        }
-
-
-        val request =
-            SalonCreateFase1Request(
-
-                nombreSalon =
-                    nombreSalon,
-
-                capacidadPersonas =
-                    capacidadPersonas
-                        .toIntOrNull()
-                        ?: 0,
-
-                precioHora =
-                    precioHora
-                        .toDoubleOrNull()
-                        ?: 0.0,
-
-                descripcion =
-                    descripcion,
-
-                imagenes =
-                    imagenes,
-
-                ubicacion =
-                    UbicacionRequest(
-
-                        direccion =
-                            "$calle $numero, $fraccionamiento",
-
-                        latitud =
-                            latitud
-                                .toDoubleOrNull()
-                                ?: 0.0,
-
-                        longitud =
-                            longitud
-                                .toDoubleOrNull()
-                                ?: 0.0,
-
-                        ciudad =
-                            ciudad,
-
-                        codigoPostal =
-                            codigoPostal
-                    ),
-
-                disponibilidadInicial =
-                    DisponibilidadInicialRequest(
-
-                        horaInicio =
-                            "${fechaSeleccionada}T${horaInicioFinal}:00",
-
-                        horaFin =
-                            "${fechaSeleccionada}T${horaFinFinal}:00",
-
-                        fecha =
-                            fechaSeleccionada,
-
-                        observaciones =
-                            observacionFinal
-                    )
-            )
-
-
-        lifecycleScope.launch {
-
-            try {
-
-                val response = com.example.ocasion_mobil_v2.data.repository.CrearSalonRepository(
-                    this@SalonDisponibilidadActivity
-                ).crear(request)
-
-                if (
-                    response.isSuccessful &&
-                    response.body() != null
-                ) {
-
-                    val idSalon =
-                        response.body()!!
-                            .idSalon
-
-
-                    Toast.makeText(
-                        this@SalonDisponibilidadActivity,
-                        "Datos iniciales guardados",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-
-                    startActivity(
-
-                        Intent(
-                            this@SalonDisponibilidadActivity,
-                            CatalogoSalonActivity::class.java
-                        ).apply {
-
-                            putExtra(
-                                "idSalon",
-                                idSalon
-                            )
-
-                            putExtra(
-                                "nombreSalon",
-                                nombreSalon
-                            )
-
-                            putExtra(
-                                "capacidadPersonas",
-                                capacidadPersonas
-                            )
-
-                            putExtra(
-                                "precioHora",
-                                precioHora
-                            )
-
-                            putExtra(
-                                "descripcion",
-                                descripcion
-                            )
-
-                            putExtra(
-                                "ciudad",
-                                ciudad
-                            )
-
-                            putExtra(
-                                "codigoPostal",
-                                codigoPostal
-                            )
-
-                            putExtra(
-                                "calle",
-                                calle
-                            )
-
-                            putExtra(
-                                "numero",
-                                numero
-                            )
-
-                            putExtra(
-                                "fraccionamiento",
-                                fraccionamiento
-                            )
-                        }
-                    )
-
-
-                    finish()
-
-                } else {
-
-                    mostrarError(
-                        response.errorBody()?.use { body ->
-                            val json = runCatching { org.json.JSONObject(body.string()) }.getOrNull()
-                            listOf("detalle", "mensaje", "message", "detail", "error").firstNotNullOfOrNull { key ->
-                                json?.optString(key)?.takeIf { it.isNotBlank() && it != "null" }
-                            }
-                        } ?: "No se pudo crear el salón (${response.code()})."
-                    )
-
-
-                    guardando = false
-
-                    btnContinuar.isEnabled =
-                        true
-
-                    btnContinuar.text =
-                        "Guardar disponibilidad y continuar"
-                }
-
-            } catch (e: Exception) {
-
-                mostrarError(
-                    "No se pudo guardar: ${
-                        e.message ?: "sin conexión"
-                    }"
-                )
-
-
-                guardando = false
-
-                btnContinuar.isEnabled =
-                    true
-
-                btnContinuar.text =
-                    "Guardar disponibilidad y continuar"
-            }
-        }
-    }
-
-
-    private fun obtenerHoraDelPrimerBloqueo(
-        inicio: Boolean
-    ): String? {
-
-        if (
-            containerBloqueos
-                .childCount == 0
-        )
-            return null
-
-
-        val tarjeta =
-            containerBloqueos
-                .getChildAt(0)
-                    as? LinearLayout
-                ?: return null
-
-
-        val titulo =
-            tarjeta.getChildAt(0)
-                    as? TextView
-                ?: return null
-
-
-        val partes =
-            titulo.text
-                .toString()
-                .split("•")
-
-
-        if (
-            partes.size < 2
-        )
-            return null
-
-
-        val horas =
-            partes[1]
-                .trim()
-                .split("-")
-
-
-        if (
-            horas.size < 2
-        )
-            return null
-
-
-        return if (inicio)
-            horas[0].trim()
-        else
-            horas[1].trim()
-    }
-
-
-    private fun obtenerObservacionPrimerBloqueo():
-            String? {
-
-        if (
-            containerBloqueos
-                .childCount == 0
-        )
-            return null
-
-
-        val tarjeta =
-            containerBloqueos
-                .getChildAt(0)
-                    as? LinearLayout
-                ?: return null
-
-
-        val observacion =
-            tarjeta.getChildAt(1)
-                    as? TextView
-                ?: return null
-
-
-        return observacion.text
-            .toString()
-            .trim()
-            .ifBlank {
-                null
-            }
-    }
-
-
-    private fun formatearFechaVisible(
-        iso: String
-    ): String {
-
-        val partes =
-            iso.split("-")
-
-
-        return if (
-            partes.size == 3
-        )
-            "${partes[2]}/${partes[1]}/${partes[0]}"
-        else
-            iso
-    }
-}
-/* Lo de antes
-package com.example.ocasion_mobil_v2.ui.propietario
-
-import android.app.TimePickerDialog
-import android.graphics.Typeface
-import android.os.Bundle
-import android.view.View
-import android.widget.CalendarView
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import com.example.ocasion_mobil_v2.R
-import com.google.android.material.button.MaterialButton
-import java.util.Calendar
-import java.util.Locale
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.ZoneId
 
 class SalonDisponibilidadActivity : ComponentActivity() {
+    private val modelo: DisponibilidadSalonViewModel by viewModels()
+    private val formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    private val formatoHora = DateTimeFormatter.ofPattern("HH:mm")
+    private val nombre get() = intent.getStringExtra("nombreSalon").orEmpty()
+    private val idSalon get() = intent.getIntExtra("idSalon", 0).takeIf { it > 0 }
 
-    private lateinit var calendar: CalendarView
-    private lateinit var tvFecha: TextView
-    private lateinit var btnHoraInicio: MaterialButton
-    private lateinit var btnHoraFin: MaterialButton
-    private lateinit var etObservaciones: EditText
-    private lateinit var tvError: TextView
-    private lateinit var containerBloqueos: LinearLayout
+    private var fechaDesde = LocalDate.now()
+    private var apertura = LocalTime.MIDNIGHT
+    private var cierre = LocalTime.of(23, 59)
+    private var fechaBloqueo = LocalDate.now()
+    private var inicioBloqueo = LocalTime.MIDNIGHT
+    private var finBloqueo = LocalTime.of(23, 59)
+    private var horarioCargado = false
 
-    private var fechaSeleccionada = ""
-    private var horaInicio: String? = null
-    private var horaFin: String? = null
-    private var idSalon: String = ""
-    private var nombreSalon: String = ""
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(
-            R.layout.activity_salon_disponibilidad
-        )
-
-        recuperarDatosSalon()
-
-        inicializarVistas()
-        configurarCalendario()
-        configurarBotones()
-
-        BottomNav.configurar(this)
-    }
-
-    private fun inicializarVistas() {
-
-        calendar = findViewById(R.id.calendarDisponibilidad)
-        tvFecha = findViewById(R.id.tvFechaSeleccionada)
-        btnHoraInicio = findViewById(R.id.btnHoraInicio)
-        btnHoraFin = findViewById(R.id.btnHoraFin)
-        etObservaciones = findViewById(R.id.etObservaciones)
-        tvError = findViewById(R.id.tvErrorDisponibilidad)
-        containerBloqueos = findViewById(R.id.containerBloqueos)
-    }
-
-    private fun configurarCalendario() {
-
-        calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
-
-            fechaSeleccionada =
-                String.format(
-                    Locale.getDefault(),
-                    "%02d/%02d/%04d",
-                    dayOfMonth,
-                    month + 1,
-                    year
+        setContentView(R.layout.activity_salon_disponibilidad)
+        if (intent.hasExtra("idSalon") && idSalon == null) {
+            mostrarError("El identificador del salón no es válido.")
+            findViewById<View>(R.id.formularioDisponibilidad).isVisible = false
+            boton(R.id.btnVolverDisponibilidad).setOnClickListener { finish() }
+            return
+        }
+        recuperarFormulario(savedInstanceState)
+        modelo.iniciar(
+            idSalon, savedInstanceState?.getInt("idCreado", 0)?.takeIf { it > 0 },
+            savedInstanceState?.getParcelableArrayList<Bundle>("pendientes").orEmpty().map {
+                DisponibilidadInicialRequest(
+                    it.getString("inicio").orEmpty(), it.getString("fin").orEmpty(),
+                    it.getString("fecha").orEmpty(), it.getString("nota")
                 )
-
-            tvFecha.text =
-                "Fecha: $fechaSeleccionada"
+            }
+        )
+        findViewById<TextView>(R.id.tituloDisponibilidad).text =
+            if (nombre.isBlank()) "Disponibilidad" else "Disponibilidad · $nombre"
+        idSalon?.let { id ->
+            val estado = when (intent.getStringExtra("estadoSalon")) {
+                "PUBLICADO" -> getString(R.string.salon_visible_cliente)
+                "BORRADOR" -> getString(R.string.salon_borrador_oculto)
+                else -> null
+            }
+            findViewById<TextView>(R.id.identificadorDisponibilidad).apply {
+                isVisible = true
+                text = if (estado == null) getString(R.string.salon_identificador, id.toString())
+                    else getString(R.string.salon_identificador_estado, id.toString(), estado)
+            }
         }
-    }
-
-    private fun configurarBotones() {
-
-        findViewById<TextView>(
-            R.id.btnBackDisponibilidad
-        ).setOnClickListener {
-            finish()
+        boton(R.id.btnVolverDisponibilidad).setOnClickListener { finish() }
+        boton(R.id.btnFechaDesde).setOnClickListener {
+            elegirFecha(fechaDesde) { fechaDesde = it }
         }
-
-        btnHoraInicio.setOnClickListener {
-            mostrarTimePicker(true)
+        boton(R.id.btnApertura).setOnClickListener {
+            elegirHora(apertura) { apertura = it }
         }
-
-        btnHoraFin.setOnClickListener {
-            mostrarTimePicker(false)
+        boton(R.id.btnCierre).setOnClickListener {
+            elegirHora(cierre) { cierre = it }
         }
-
-        findViewById<MaterialButton>(
-            R.id.btnBloquearHorario
-        ).setOnClickListener {
-
-            if (validarBloqueo()) {
-                agregarBloqueo()
+        boton(R.id.btnFechaBloqueo).setOnClickListener {
+            elegirFecha(fechaBloqueo, futura = true) { fechaBloqueo = it }
+        }
+        boton(R.id.btnInicioBloqueo).setOnClickListener {
+            elegirHora(inicioBloqueo) { inicioBloqueo = it }
+        }
+        boton(R.id.btnFinBloqueo).setOnClickListener {
+            elegirHora(finBloqueo) { finBloqueo = it }
+        }
+        boton(R.id.btnGuardarHorario).setOnClickListener {
+            val id = idSalon ?: return@setOnClickListener
+            horarioValidado()?.let { modelo.guardarHorario(id, it) }
+        }
+        boton(R.id.btnAgregarBloqueo).setOnClickListener { agregarBloqueo() }
+        val panelAviso = findViewById<View>(R.id.panelConfirmacionLegal)
+        panelAviso.isVisible = idSalon == null
+        val aviso = ConfirmacionLegal(panelAviso, ContextoAviso.SALON)
+        boton(R.id.btnContinuarDisponibilidad).setOnClickListener {
+            if (!aviso.verificar()) return@setOnClickListener
+            horarioValidado()?.let { modelo.crearYContinuar(solicitudAlta(it)) }
+        }
+        boton(R.id.btnRecargarDisponibilidad).setOnClickListener { idSalon?.let(modelo::cargar) }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                modelo.estado.collect(::mostrarEstado)
             }
         }
     }
 
-    private fun mostrarTimePicker(esInicio: Boolean) {
-
-        val ahora = Calendar.getInstance()
-
-        TimePickerDialog(
-            this,
-            { _, hourOfDay, minute ->
-
-                val hora = String.format(
-                    Locale.getDefault(),
-                    "%02d:%02d",
-                    hourOfDay,
-                    minute
-                )
-
-                if (esInicio) {
-                    horaInicio = hora
-                    btnHoraInicio.text = "Inicio: $hora"
-                } else {
-                    horaFin = hora
-                    btnHoraFin.text = "Final: $hora"
-                }
-
-            },
-            ahora.get(Calendar.HOUR_OF_DAY),
-            ahora.get(Calendar.MINUTE),
-            true
-        ).show()
+    private fun mostrarEstado(estado: DisponibilidadSalonViewModel.Estado) {
+        if (idSalon != null && estado.cargado && !horarioCargado) {
+            horarioCargado = true
+            estado.horario?.let {
+                fechaDesde = LocalDate.parse(it.fechaDesde)
+                apertura = LocalTime.parse(it.horaInicio)
+                cierre = LocalTime.parse(it.horaFin)
+            }
+        }
+        pintarCampos()
+        findViewById<View>(R.id.formularioDisponibilidad).isVisible = estado.cargado
+        findViewById<View>(R.id.progresoDisponibilidad).isVisible = estado.ocupado
+        boton(R.id.btnRecargarDisponibilidad).isVisible = !estado.cargado && !estado.ocupado && estado.error != null
+        boton(R.id.btnGuardarHorario).isVisible = idSalon != null
+        boton(R.id.btnContinuarDisponibilidad).apply {
+            isVisible = idSalon == null
+            text = if (estado.idCreado == null) "Guardar y continuar" else "Continuar al catálogo"
+        }
+        val editable = !estado.ocupado
+        listOf(R.id.btnFechaDesde, R.id.btnApertura, R.id.btnCierre).forEach {
+            boton(it).isEnabled = editable && estado.idCreado == null
+        }
+        listOf(R.id.btnFechaBloqueo, R.id.btnInicioBloqueo, R.id.btnFinBloqueo, R.id.notaBloqueo,
+            R.id.btnGuardarHorario, R.id.btnAgregarBloqueo, R.id.btnContinuarDisponibilidad).forEach {
+            findViewById<View>(it).isEnabled = editable
+        }
+        mostrarError(estado.error)
+        pintarBloqueos(estado)
+        estado.aviso?.let {
+            if (it.startsWith("Bloqueo") && it != "Bloqueo eliminado.") nota().text.clear()
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            modelo.consumirAviso()
+        }
+        if (estado.abrirCatalogo) {
+            startActivity(Intent(this, CatalogoSalonActivity::class.java).apply {
+                intent.extras?.let { putExtras(it) }
+                putExtra("idSalon", checkNotNull(estado.idCreado))
+            })
+            finish()
+        }
     }
 
-    private fun validarBloqueo(): Boolean {
+    private fun pintarCampos() {
+        boton(R.id.btnFechaDesde).text = "Disponible desde · ${fechaDesde.format(formatoFecha)}"
+        boton(R.id.btnApertura).text = "Apertura · ${apertura.format(formatoHora)}"
+        boton(R.id.btnCierre).text = "Cierre · ${cierre.format(formatoHora)}"
+        boton(R.id.btnFechaBloqueo).text = "Fecha · ${fechaBloqueo.format(formatoFecha)}"
+        boton(R.id.btnInicioBloqueo).text = "Inicio · ${inicioBloqueo.format(formatoHora)}"
+        boton(R.id.btnFinBloqueo).text = "Fin · ${finBloqueo.format(formatoHora)}"
+    }
 
-        tvError.visibility = View.GONE
-
-        if (fechaSeleccionada.isEmpty()) {
-            tvError.text = "Selecciona una fecha."
-            tvError.visibility = View.VISIBLE
-            return false
+    private fun pintarBloqueos(estado: DisponibilidadSalonViewModel.Estado) {
+        val lista = findViewById<LinearLayout>(R.id.listaBloqueos)
+        lista.removeAllViews()
+        val id = idSalon
+        if (id == null) {
+            estado.pendientes.forEach { bloqueo ->
+                agregarFila(lista, bloqueo.horaInicio, bloqueo.horaFin, bloqueo.observaciones, estado.ocupado) {
+                    modelo.quitarPendiente(bloqueo)
+                }
+            }
+        } else {
+            estado.bloqueos.forEach { bloqueo ->
+                agregarFila(lista, bloqueo.horaInicio, bloqueo.horaFin, bloqueo.observaciones, estado.ocupado) {
+                    AlertDialog.Builder(this)
+                        .setTitle("Eliminar bloqueo")
+                        .setMessage("El intervalo volverá a estar disponible si no hay otro bloqueo.")
+                        .setNegativeButton("Cancelar", null)
+                        .setPositiveButton("Eliminar") { _, _ -> modelo.eliminarBloqueo(id, bloqueo.id) }
+                        .show()
+                }
+            }
         }
-
-        if (horaInicio == null) {
-            tvError.text = "Selecciona la hora de inicio."
-            tvError.visibility = View.VISIBLE
-            return false
+        if (lista.childCount == 0) {
+            lista.addView(TextView(this).apply { text = "Sin bloqueos registrados" })
         }
+    }
 
-        if (horaFin == null) {
-            tvError.text = "Selecciona la hora final."
-            tvError.visibility = View.VISIBLE
-            return false
-        }
-
-        if (horaFin!! <= horaInicio!!) {
-            tvError.text =
-                "La hora final debe ser mayor que la hora de inicio."
-            tvError.visibility = View.VISIBLE
-            return false
-        }
-
-        if (etObservaciones.text.toString().trim().isEmpty()) {
-            tvError.text =
-                "Escribe una observación para el bloqueo."
-            tvError.visibility = View.VISIBLE
-            return false
-        }
-
-        return true
+    private fun agregarFila(
+        lista: LinearLayout, desde: String, hasta: String, observacion: String?,
+        ocupado: Boolean, quitar: () -> Unit
+    ) {
+        val inicio = LocalDateTime.parse(desde)
+        val fin = LocalDateTime.parse(hasta)
+        val intervalo = "${inicio.format(formatoFecha)} · ${inicio.format(formatoHora)} a ${fin.format(formatoHora)}"
+        lista.addView(TextView(this).apply {
+            setPadding(0, (12 * resources.displayMetrics.density).toInt(), 0, 0)
+            text = listOfNotNull(intervalo, observacion?.takeIf { it.isNotBlank() }).joinToString("\n")
+        })
+        lista.addView(Button(this).apply {
+            text = "Quitar bloqueo"
+            contentDescription = "Quitar bloqueo del $intervalo"
+            isEnabled = !ocupado
+            setOnClickListener { quitar() }
+        })
     }
 
     private fun agregarBloqueo() {
-
-        val tarjeta = LinearLayout(this)
-
-        tarjeta.orientation = LinearLayout.VERTICAL
-        tarjeta.setPadding(
-            20,
-            20,
-            20,
-            20
-        )
-
-        tarjeta.setBackgroundResource(
-            R.drawable.bg_card
-        )
-
-        val titulo = TextView(this)
-
-        titulo.text =
-            "📅 $fechaSeleccionada   •   $horaInicio - $horaFin"
-
-        titulo.textSize = 15f
-        titulo.setTextColor(
-            resources.getColor(
-                R.color.rojo_error,
-                theme
-            )
-        )
-
-        titulo.setTypeface(
-            null,
-            Typeface.BOLD
-        )
-
-        val observacion = TextView(this)
-
-        observacion.text =
-            etObservaciones.text.toString().trim()
-
-        observacion.textSize = 13f
-        observacion.setTextColor(
-            resources.getColor(
-                R.color.texto_secundario,
-                theme
-            )
-        )
-
-        observacion.setPadding(
-            0,
-            8,
-            0,
-            0
-        )
-
-        tarjeta.addView(titulo)
-        tarjeta.addView(observacion)
-
-        val parametros =
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-        parametros.setMargins(
-            0,
-            0,
-            0,
-            12
-        )
-
-        tarjeta.layoutParams = parametros
-
-        containerBloqueos.addView(tarjeta)
-
-        Toast.makeText(
-            this,
-            "Horario bloqueado correctamente",
-            Toast.LENGTH_SHORT
-        ).show()
-
-        etObservaciones.text.clear()
-
-        horaInicio = null
-        horaFin = null
-
-        btnHoraInicio.text = "Hora inicio"
-        btnHoraFin.text = "Hora final"
+        if (fechaBloqueo.isBefore(LocalDate.now()) || !finBloqueo.isAfter(inicioBloqueo)) {
+            mostrarError("Elige una fecha vigente y una hora de fin posterior a la de inicio.")
+            return
+        }
+        modelo.agregarBloqueo(idSalon, DisponibilidadInicialRequest(
+            fechaBloqueo.atTime(inicioBloqueo).toString(),
+            fechaBloqueo.atTime(finBloqueo).toString(),
+            fechaBloqueo.toString(),
+            nota().text.toString().trim().ifBlank { null }
+        ))
     }
 
-    private fun recuperarDatosSalon() {
-
-        idSalon =
-            intent.getStringExtra("idSalon")
-                ?: ""
-
-        nombreSalon =
-            intent.getStringExtra("nombreSalon")
-                ?: "Salón"
+    private fun horarioValidado(): HorarioSalonDTO? {
+        if (!cierre.isAfter(apertura)) {
+            mostrarError("La hora de cierre debe ser posterior a la de apertura.")
+            return null
+        }
+        return HorarioSalonDTO(fechaDesde.toString(), apertura.toString(), cierre.toString())
     }
-}*/
+
+    private fun solicitudAlta(horario: HorarioSalonDTO): SalonCreateFase1Request {
+        fun dato(clave: String) = intent.getStringExtra(clave).orEmpty()
+        return SalonCreateFase1Request(
+            nombreSalon = nombre,
+            capacidadPersonas = dato("capacidadPersonas").toIntOrNull() ?: 0,
+            precioHora = dato("precioHora").toDoubleOrNull() ?: 0.0,
+            descripcion = dato("descripcion"),
+            imagenes = intent.getStringArrayListExtra("imagenes").orEmpty(),
+            ubicacion = UbicacionRequest(
+                direccion = "${dato("calle")} ${dato("numero")}, ${dato("fraccionamiento")}",
+                latitud = dato("latitud").toDoubleOrNull() ?: 0.0,
+                longitud = dato("longitud").toDoubleOrNull() ?: 0.0,
+                ciudad = dato("ciudad"),
+                codigoPostal = dato("codigoPostal")
+            ),
+            disponibilidadInicial = horario.comoDisponibilidadInicial()
+        )
+    }
+
+    private fun elegirFecha(fecha: LocalDate, futura: Boolean = false, usar: (LocalDate) -> Unit) {
+        val dialogo = DatePickerDialog(this, { _, anio, mes, dia ->
+            usar(LocalDate.of(anio, mes + 1, dia))
+            pintarCampos()
+        }, fecha.year, fecha.monthValue - 1, fecha.dayOfMonth)
+        if (futura) dialogo.datePicker.minDate =
+            LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        dialogo.show()
+    }
+
+    private fun elegirHora(hora: LocalTime, usar: (LocalTime) -> Unit) {
+        TimePickerDialog(this, { _, horas, minutos ->
+            usar(LocalTime.of(horas, minutos))
+            pintarCampos()
+        }, hora.hour, hora.minute, true).show()
+    }
+
+    private fun mostrarError(error: String?) {
+        findViewById<TextView>(R.id.errorDisponibilidad).apply {
+            text = error
+            isVisible = error != null
+        }
+        if (error != null) Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun recuperarFormulario(datos: Bundle?) {
+        datos ?: return
+        fechaDesde = datos.getString("fechaDesde")?.let(LocalDate::parse) ?: fechaDesde
+        apertura = datos.getString("apertura")?.let(LocalTime::parse) ?: apertura
+        cierre = datos.getString("cierre")?.let(LocalTime::parse) ?: cierre
+        fechaBloqueo = datos.getString("fechaBloqueo")?.let(LocalDate::parse) ?: fechaBloqueo
+        inicioBloqueo = datos.getString("inicioBloqueo")?.let(LocalTime::parse) ?: inicioBloqueo
+        finBloqueo = datos.getString("finBloqueo")?.let(LocalTime::parse) ?: finBloqueo
+        horarioCargado = datos.getBoolean("horarioCargado")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("fechaDesde", fechaDesde.toString())
+        outState.putString("apertura", apertura.toString())
+        outState.putString("cierre", cierre.toString())
+        outState.putString("fechaBloqueo", fechaBloqueo.toString())
+        outState.putString("inicioBloqueo", inicioBloqueo.toString())
+        outState.putString("finBloqueo", finBloqueo.toString())
+        outState.putBoolean("horarioCargado", horarioCargado)
+        val estado = modelo.estado.value
+        outState.putInt("idCreado", estado.idCreado ?: 0)
+        outState.putParcelableArrayList("pendientes", ArrayList(estado.pendientes.map {
+            Bundle().apply {
+                putString("fecha", it.fecha)
+                putString("inicio", it.horaInicio)
+                putString("fin", it.horaFin)
+                putString("nota", it.observaciones)
+            }
+        }))
+    }
+
+    private fun boton(id: Int) = findViewById<Button>(id)
+    private fun nota() = findViewById<EditText>(R.id.notaBloqueo)
+}
+

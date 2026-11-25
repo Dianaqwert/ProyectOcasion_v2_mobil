@@ -24,6 +24,7 @@ class SalonAdapterClient(
         val image: ImageView = view.findViewById(R.id.ivSalon)
         val capacity: TextView = view.findViewById(R.id.tvCapacidad)
         val name: TextView = view.findViewById(R.id.tvNombreRecinto)
+        val verificacion: TextView = view.findViewById(R.id.tvVerificacionSalon)
         val city: TextView = view.findViewById(R.id.tvCiudad)
         val price: TextView = view.findViewById(R.id.tvPrecioHora)
         val service1: TextView = view.findViewById(R.id.tvServicio1)
@@ -37,6 +38,7 @@ class SalonAdapterClient(
     override fun onBindViewHolder(holder: SalonViewHolder, position: Int) {
         val salon = getItem(position)
         holder.name.text = salon.nombre ?: "Salón para eventos"
+        holder.verificacion.mostrarVerificacion(salon.verificado)
         holder.capacity.text = "${salon.capacidad ?: "—"} personas"
         holder.city.text = "📍 ${salon.ciudad ?: "Ubicación por confirmar"}"
         holder.price.text = salon.precioHora?.let { "${currency.format(it)} / hr" } ?: "Precio por consultar"

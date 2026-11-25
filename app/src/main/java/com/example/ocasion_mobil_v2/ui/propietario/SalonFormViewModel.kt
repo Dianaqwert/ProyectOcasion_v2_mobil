@@ -177,7 +177,7 @@ class SalonFormViewModel : ViewModel() {
 
         return when {
 
-            numero == null ->
+            numero == null || !numero.isFinite() ->
                 "Ingresa un precio válido."
 
             numero <= 0 ->

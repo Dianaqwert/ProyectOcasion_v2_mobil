@@ -113,6 +113,13 @@
                 android:textAllCaps="false"
                 app:cornerRadius="12dp" />
 
+            <include
+                android:id="@+id/panelConfirmacionLegal"
+                layout="@layout/tarjeta_confirmacion_legal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+
             <!-- La actividad genera los apartados según TipoDocumento. -->
             <LinearLayout
                 android:id="@+id/containerDocumentos"

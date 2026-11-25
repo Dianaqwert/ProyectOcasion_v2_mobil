@@ -7,6 +7,9 @@ import org.json.JSONObject
 object JwtUtils {
     data class IdentidadUsuario(val id: Int, val correo: String)
 
+    fun obtenerIdCliente(token: String?): Int? =
+        token?.takeIf { obtenerTipoUser(it) == "CLIENTE" }?.let(::obtenerIdentidadUsuario)?.id
+
     fun obtenerTipoUser(token: String): String? {
         val roles = obtenerPayload(token)?.optJSONArray("roles") ?: return null
         return roles.optString(0).takeIf { it.isNotEmpty() }

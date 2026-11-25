@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="legal_centro">Privacidad y términos</string>
+    <string name="legal_privacidad">Aviso de privacidad integral</string>
+    <string name="legal_terminos">Términos de uso</string>
+    <string name="legal_aviso">Aviso legal</string>
+    <string name="legal_aviso_breve">Aviso breve de privacidad</string>
+    <string name="legal_resumen_registro">Consulta las condiciones de Ocasión y cómo se usan los datos de tu cuenta.</string>
+    <string name="legal_resumen_salon">Ocasión usa los datos comerciales del salón, como ubicación, fotos, capacidad, precios y disponibilidad, para administrar su ficha. Al publicarlo, los clientes podrán consultar la información comercial.</string>
+    <string name="legal_resumen_documentos">Ocasión usa tu identificación, los comprobantes de domicilio y del inmueble, el visto bueno y las fotos para verificar el salón. Estos archivos pueden contener tu firma, domicilio e información patrimonial. Solo el personal administrador autorizado puede consultar el expediente para resolver la solicitud.</string>
+    <string name="legal_acepto_registro">Acepto los Términos de uso y confirmo que leí el Aviso de privacidad integral.</string>
+    <string name="legal_acepto_salon">Leí el aviso y acepto el tratamiento de los datos para registrar y publicar mi salón.</string>
+    <string name="legal_acepto_documentos">Leí el aviso y acepto el tratamiento de mis datos y documentos para verificar mi salón.</string>
+    <string name="legal_error_aceptacion">Marca la casilla para continuar.</string>
+    <string name="legal_pagina">Página %1$d de %2$d</string>
+    <string name="legal_anterior">Anterior</string>
+    <string name="legal_siguiente">Siguiente</string>
+    <string name="legal_ampliar">Ampliar</string>
+    <string name="legal_ajustar">Ajustar a pantalla</string>
+    <string name="legal_error_lectura">No pudimos abrir el documento.</string>
+    <string name="legal_reintentar">Reintentar</string>
+    <string name="legal_volver">Volver</string>
+</resources>

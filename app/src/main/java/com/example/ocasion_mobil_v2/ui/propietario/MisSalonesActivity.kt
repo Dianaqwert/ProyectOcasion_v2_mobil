@@ -134,8 +134,8 @@ class MisSalonesActivity : ComponentActivity() {
                                 calle = dto.ubicacion?.direccion ?: "",
                                 numero = "",
                                 fraccionamiento = "",
-                                latitud = dto.ubicacion?.latitud ?: 0.0,
-                                longitud = dto.ubicacion?.longitud ?: 0.0,
+                                latitud = dto.ubicacion?.latitud,
+                                longitud = dto.ubicacion?.longitud,
                                 imagenes = dto.imagenes.orEmpty().filter { it.isNotBlank() },
                                 estado = dto.estado,
                                 estadoRevisionAdmin = dto.documentosValidacionSalonEntity?.estadoRevisionAdmin
@@ -208,13 +208,18 @@ class MisSalonesActivity : ComponentActivity() {
         tvPrice.text = "$${salon.precioHora} / hora"
         tvPriceBadge.text = "$${salon.precioHora} / hora"
         tvDescription.text = salon.descripcion
-        view.findViewById<TextView>(R.id.tvEstadoRevisionSalon).text = when (salon.estadoRevisionAdmin) {
+        val estado = if (salon.estado != "PUBLICADO") {
+            if (salon.estado == "BORRADOR") "Borrador · Oculto a clientes"
+            else salon.estado ?: "Estado no disponible"
+        } else when (salon.estadoRevisionAdmin) {
             "APROBADO" -> "Publicado · Verificado por el administrador"
             "PENDIENTE" -> "Publicado · Verificación pendiente"
             "RECHAZADO" -> "Publicado · Documentos rechazados"
             "SIN_ENVIAR" -> "Publicado · Documentos guardados, falta enviar"
-            else -> if (salon.estado == "PUBLICADO") "Publicado · Sin verificar" else "${salon.estado ?: "Estado no disponible"} · Registro sin completar"
+            else -> "Publicado · Sin verificar"
         }
+        view.findViewById<TextView>(R.id.tvEstadoRevisionSalon).text =
+            getString(R.string.salon_identificador_estado, salon.id, estado)
         view.findViewById<TextView>(R.id.tvObservacionesSalon).apply {
             text = salon.observacionesAdmin?.let { "Observaciones: $it" }
             visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
@@ -282,17 +287,18 @@ class MisSalonesActivity : ComponentActivity() {
         intent.putExtra("calle", salon.calle)
         intent.putExtra("numero", salon.numero)
         intent.putExtra("fraccionamiento", salon.fraccionamiento)
-        intent.putExtra("latitud", salon.latitud.toString())
-        intent.putExtra("longitud", salon.longitud.toString())
-        intent.putStringArrayListExtra("imagenes", ArrayList(salon.imagenes))
+        intent.putExtra("latitud", salon.latitud?.toString())
+        intent.putExtra("longitud", salon.longitud?.toString())
 
         startActivity(intent)
     }
 
     private fun abrirDisponibilidad(salon: Salon) {
+        val id = salon.id.toIntOrNull() ?: return
         val intent = Intent(this, SalonDisponibilidadActivity::class.java)
-        intent.putExtra("idSalon", salon.id)
+        intent.putExtra("idSalon", id)
         intent.putExtra("nombreSalon", salon.nombreSalon)
+        intent.putExtra("estadoSalon", salon.estado)
         startActivity(intent)
     }
 

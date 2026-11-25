@@ -8,8 +8,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.ocasion_mobil_v2.MainActivity
+import com.example.ocasion_mobil_v2.ui.cliente.ClientPrincipalMenu
+import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
+import com.example.ocasion_mobil_v2.util.JwtUtils
 import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.ui.legal.ConfirmacionLegal
+import com.example.ocasion_mobil_v2.ui.legal.ContextoAviso
 import com.example.ocasion_mobil_v2.data.remote.RetrofitClient
 import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
 import com.example.ocasion_mobil_v2.data.remote.model.GoogleRegisterRequest
@@ -61,8 +65,10 @@ class CompleteGoogleRegisterActivity : ComponentActivity() {
     }
 
     private fun setupCompletarButton() {
+        val aviso = ConfirmacionLegal(findViewById(R.id.panelConfirmacionLegal), ContextoAviso.REGISTRO)
         btnCompletar.setOnClickListener {
             hideError()
+            if (!aviso.verificar()) return@setOnClickListener
 
             val apellidoPaterno = etApellidoPaterno.text.toString().trim()
             val apellidoMaterno = etApellidoMaterno.text.toString().trim()
@@ -104,8 +110,14 @@ class CompleteGoogleRegisterActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        sessionManager.guardarToken(body.token)
-                        val intent = Intent(this@CompleteGoogleRegisterActivity, MainActivity::class.java)
+                        val rol = JwtUtils.obtenerTipoUser(body.token)
+                        val destino = when (rol) {
+                            "CLIENTE" -> ClientPrincipalMenu::class.java
+                            "VENDEDOR", "PROPIETARIO" -> OwnerHomeActivity::class.java
+                            else -> { mostrarError("Tipo de cuenta no reconocido."); return@launch }
+                        }
+                        sessionManager.guardarSesion(body.token, rol)
+                        val intent = Intent(this@CompleteGoogleRegisterActivity, destino)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()

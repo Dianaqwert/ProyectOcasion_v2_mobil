@@ -71,8 +71,8 @@
         android:minHeight="48dp"
         android:text="Seleccionar archivo"
         android:textAllCaps="false"
-        android:textColor="@color/verde_primario"
+        android:textColor="@color/boton_texto"
         app:cornerRadius="12dp"
-        app:strokeColor="@color/verde_primario" />
+        app:strokeColor="@color/boton_secundario_borde" />
 
 </LinearLayout>

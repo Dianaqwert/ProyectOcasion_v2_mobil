@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    app:cardBackgroundColor="@color/reserva_superficie_destacada"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/borde_input"
+    app:strokeWidth="1dp"
+    tools:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityHeading="true"
+            android:text="@string/horario_habitual_salon"
+            android:textColor="@color/texto_secundario"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHorasHabitualesSalon"
+            style="@style/ClienteTitulo"
+            android:layout_marginTop="4dp"
+            tools:text="Todos los días de 14:00 a 18:00" />
+
+        <TextView
+            android:id="@+id/tvHorarioDesdeSalon"
+            style="@style/ClienteTexto"
+            android:layout_marginTop="4dp"
+            tools:text="A partir del 3 de marzo de 2004" />
+
+        <TextView
+            style="@style/ClienteTexto"
+            android:layout_marginTop="4dp"
+            android:text="@string/horario_sujeto_a_bloqueos" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

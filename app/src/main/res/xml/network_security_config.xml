@@ -8,7 +8,7 @@
         <domain includeSubdomains="false">172.30.198.223</domain>
 
         <!-- IP del Dominio 2 (Salones, Servicios e Inventario) -->
-        <domain includeSubdomains="false">172.30.241.234</domain>
+        <domain includeSubdomains="false">172.30.219.232</domain>
 
         <!-- IP del Dominio 3 (Reservaciones y Operaciones) -->
         <domain includeSubdomains="false">172.30.155.214</domain>

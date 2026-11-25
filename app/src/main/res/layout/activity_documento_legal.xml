@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizLegal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/reserva_fondo"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/header_footer_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarLegal"
+            style="@style/BotonOcasionSecundario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/legal_volver" />
+
+        <TextView
+            android:id="@+id/tituloDocumentoLegal"
+            style="@style/ClienteTitulo"
+            android:layout_width="0dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:accessibilityHeading="true" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/paginaDocumentoLegal"
+        style="@style/ClienteTexto"
+        android:accessibilityLiveRegion="polite"
+        android:gravity="center"
+        android:paddingHorizontal="12dp" />
+
+    <ProgressBar
+        android:id="@+id/progresoLegal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReintentarLegal"
+        style="@style/BotonOcasionSecundario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/legal_reintentar"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/visorLegalVertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1">
+
+        <HorizontalScrollView
+            android:id="@+id/visorLegalHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <ImageView
+                android:id="@+id/imagenDocumentoLegal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart" />
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAmpliarLegal"
+            style="@style/BotonOcasionSecundario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legal_ampliar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPaginaAnteriorLegal"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:text="@string/legal_anterior"
+                android:textAllCaps="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPaginaSiguienteLegal"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:text="@string/legal_siguiente"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

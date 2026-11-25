@@ -1,14 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp">
-    <TextView style="@style/ReservaTexto" android:text="@string/reserva_bandeja" android:textSize="24sp" android:textStyle="bold" />
+    <TextView style="@style/ReservaTexto" android:text="@string/reserva_bandeja" android:textSize="21sp" android:accessibilityHeading="true" android:textStyle="bold" />
     <TextView style="@style/ReservaTexto" android:id="@+id/tvConteoReservas" android:textSize="14sp" android:textColor="@color/texto_secundario" android:accessibilityLiveRegion="polite" />
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-        <Button android:id="@+id/btnActualizarReservas" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Actualizar" android:minHeight="48dp" />
-        <Button android:id="@+id/btnActivarAlertas" style="@style/Widget.MaterialComponents.Button.TextButton" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Alertas" android:minHeight="48dp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnActualizarReservas" style="@style/BotonOcasionSecundario" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginEnd="4dp" android:text="Actualizar" android:stateListAnimator="@null" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnActivarAlertas" style="@style/BotonOcasionSecundario" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="4dp" android:text="Alertas" android:stateListAnimator="@null" />
     </LinearLayout>
     <TextView style="@style/ReservaTexto" android:id="@+id/tvEstadoAlertas" android:textSize="12sp" android:textColor="@color/texto_secundario" />
     <ProgressBar android:id="@+id/progressReservaciones" android:layout_width="32dp" android:layout_height="32dp" android:layout_gravity="center" android:visibility="gone" />
     <TextView style="@style/ReservaTexto" android:id="@+id/tvErrorReservaciones" android:textColor="@color/rojo_error" android:visibility="gone" android:accessibilityLiveRegion="polite" />
-    <TextView style="@style/ReservaTexto" android:id="@+id/tvReservasVacias" android:text="Estás al día. No tienes solicitudes pendientes." android:gravity="center" android:padding="24dp" android:visibility="gone" />
+    <TextView style="@style/ReservaTexto" android:id="@+id/tvReservasVacias" android:text="Estás al día. No tienes solicitudes pendientes." android:background="@drawable/bg_owner_card" android:gravity="center" android:padding="24dp" android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvReservaciones" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:clipToPadding="false" android:paddingBottom="16dp" />
 </LinearLayout>

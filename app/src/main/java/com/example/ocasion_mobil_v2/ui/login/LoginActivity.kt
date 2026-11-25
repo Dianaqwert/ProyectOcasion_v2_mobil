@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.ocasion_mobil_v2.MainActivity
 import com.example.ocasion_mobil_v2.R
@@ -19,14 +20,18 @@ import com.example.ocasion_mobil_v2.data.remote.RetrofitClient
 import com.example.ocasion_mobil_v2.data.remote.model.ApiErrorResponse
 import com.example.ocasion_mobil_v2.data.remote.model.GoogleLoginRequest
 import com.example.ocasion_mobil_v2.data.remote.model.LoginRequest
+import com.example.ocasion_mobil_v2.data.repository.CacheQrCliente
 import com.example.ocasion_mobil_v2.data.session.SessionManager
 import com.example.ocasion_mobil_v2.ui.cliente.ClientPrincipalMenu
+import com.example.ocasion_mobil_v2.ui.legal.DocumentoLegal
+import com.example.ocasion_mobil_v2.ui.cliente.pagos.MisReservacionesActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 import java.io.IOException
 import com.example.ocasion_mobil_v2.ui.propietario.OwnerHomeActivity
 import com.example.ocasion_mobil_v2.util.JwtUtils
@@ -81,6 +86,7 @@ class LoginActivity : ComponentActivity() {
         setupLoginButton()
         setupGoogleButton()
         setupSecondaryActions()
+        findViewById<Button>(R.id.btnCentroLegal).setOnClickListener { DocumentoLegal.mostrarMenu(this) }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -109,6 +115,30 @@ class LoginActivity : ComponentActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn)
         progressLogin = findViewById(R.id.progressLogin)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!::sessionManager.isInitialized) return
+        val boton = findViewById<Button>(R.id.btnPasesGuardados)
+        boton.isVisible = false
+        val token = sessionManager.obtenerToken()
+        val cuenta = JwtUtils.obtenerIdCliente(token) ?: return
+        lifecycleScope.launch {
+            val hayPases = try {
+                CacheQrCliente(this@LoginActivity, cuenta).leer().isNotEmpty()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                false
+            }
+            boton.isVisible = hayPases && token == sessionManager.obtenerToken()
+        }
+        boton.setOnClickListener {
+            if (token == sessionManager.obtenerToken()) {
+                startActivity(Intent(this, MisReservacionesActivity::class.java))
+            }
+        }
     }
 
     /**
@@ -142,7 +172,7 @@ class LoginActivity : ComponentActivity() {
                 else android.R.drawable.ic_menu_view
             )
 
-            etPassword.setSelection(cursorPosition)
+            etPassword.setSelection(cursorPosition.coerceIn(0, etPassword.length()))
         }
     }
 

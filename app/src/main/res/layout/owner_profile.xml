@@ -1,328 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootPerfilPropietario"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_general">
-
-    <!-- HEADER -->
+    android:background="@color/header_footer_dark"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingStart="18dp"
-        android:paddingEnd="18dp"
-        android:background="@color/header_footer_dark">
+        android:minHeight="68dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="8dp">
 
         <include layout="@layout/logo_barra_propietario" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="MI PERFIL"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:layout_marginStart="12dp"/>
-
-        <TextView
-            android:id="@+id/btnSettings"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:gravity="center"
-            android:text="⚙️"
-            android:textSize="21sp"
-            android:contentDescription="Configuración" />
-
+            android:accessibilityHeading="true"
+            android:text="@string/mi_cuenta"
+            android:textColor="@color/texto_principal"
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </LinearLayout>
-
-
-    <!-- CONTENIDO -->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/reserva_fondo"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
-
-            <!-- PERFIL PRINCIPAL -->
-
-
-            <!-- INFORMACIÓN PERSONAL -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:background="@drawable/bg_profile_header"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <TextView
-                    android:id="@+id/tvProfileAvatar"
-                    android:layout_width="78dp"
-                    android:layout_height="78dp"
-                    android:background="@drawable/bg_profile_avatar"
-                    android:gravity="center"
-                    android:text="👤"
-                    android:textSize="38sp" />
-
-                <TextView
-                    android:id="@+id/tvProfileName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvProfileRole"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="Propietario"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="13sp" />
-
-            </LinearLayout>
+            android:paddingHorizontal="18dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="28dp">
 
             <TextView
-                android:id="@+id/tvEstadoPerfil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:accessibilityLiveRegion="polite"
-                android:textColor="@color/texto_secundario"
-                android:textSize="14sp"
-                android:visibility="gone" />
+                style="@style/ClienteTitulo"
+                android:accessibilityHeading="true"
+                android:text="@string/cuenta_recibir_pagos"
+                android:textSize="28sp" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Información personal"
-                android:textColor="@color/texto_principal"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/ClienteTexto"
+                android:text="@string/cuenta_recibir_pagos_descripcion"
+                android:textSize="15sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:padding="18dp"
-                android:background="@drawable/bg_owner_card"
-                android:elevation="3dp">
+            <LinearLayout style="@style/ClienteSeccion">
 
-                <!-- NOMBRES -->
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/perfil_nombres"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvNames"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardBackgroundColor="@color/reserva_superficie_destacada"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_cuenta_pagos" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        style="@style/ClienteTitulo"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="PayPal" />
+
+                    <TextView
+                        style="@style/ClienteEtiqueta"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@drawable/bg_cuenta_paso"
+                        android:text="@string/cuenta_sin_vincular"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/reserva_superficie_destacada"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/borde_input"
+                    app:strokeWidth="1dp">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="13dp">
 
-                <!-- APELLIDO PATERNO -->
+                        <TextView
+                            style="@style/ClienteTitulo"
+                            android:text="@string/cuenta_demo"
+                            android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/perfil_apellido_paterno"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
-
-                <!-- APELLIDO MATERNO -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/perfil_apellido_materno"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvMotherLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
-
-                <!-- USUARIO -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="Nombre de usuario"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvUsername"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
+                        <TextView
+                            style="@style/ClienteTexto"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/cuenta_demo_descripcion" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- CONTACTO -->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Datos de contacto"
-                android:textColor="@color/texto_principal"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:padding="18dp"
-                android:background="@drawable/bg_owner_card"
-                android:elevation="3dp">
-
-                <!-- CORREO -->
+            <LinearLayout style="@style/ClienteSeccion">
 
                 <TextView
+                    style="@style/ClienteTitulo"
+                    android:accessibilityHeading="true"
+                    android:text="@string/cuenta_como_vincular" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Correo electrónico"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_cuenta_paso"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="@string/cuenta_paso_vincular"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_cuenta_paso"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="@string/cuenta_paso_autorizar"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_cuenta_paso"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="@string/cuenta_paso_confirmar"
+                        android:textColor="@color/texto_principal"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVincularPaypalDemo"
+                    style="@style/BotonOcasionPrincipal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:enabled="false"
+                    android:text="@string/cuenta_accion_vincular"
                     android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
-
-                <!-- TELÉFONO -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="@string/perfil_telefono"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
-
-                <!-- CURP -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="17dp"
-                    android:text="CURP"
-                    android:textColor="@color/texto_secundario"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvCurp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="—"
-                    android:textColor="@color/texto_principal"
-                    android:textSize="15sp" />
-
+                    app:backgroundTint="@color/gris_claro"
+                    app:cornerRadius="16dp" />
             </LinearLayout>
-
-
-            <!-- BOTÓN EDITAR -->
-
-            <Button
-                android:id="@+id/btnEditProfile"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="25dp"
-                android:gravity="center"
-                android:text="@string/perfil_editar"
-                android:textAllCaps="false"
-                android:textColor="@color/blanco"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:background="@drawable/bg_button_owner"
-                android:backgroundTint="@null" />
-
         </LinearLayout>
-
     </ScrollView>
 
-
-    <!-- MENÚ INFERIOR -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="76dp"
-        android:orientation="horizontal"
+        android:background="@color/reserva_fondo"
         android:gravity="center"
-        android:background="@drawable/bg_bottom_menu"
-        android:elevation="10dp">
+        android:orientation="horizontal">
 
         <include
             layout="@layout/bottom_nav_owner"
             android:layout_width="match_parent"
             android:layout_height="72dp" />
     </LinearLayout>
-
 </LinearLayout>

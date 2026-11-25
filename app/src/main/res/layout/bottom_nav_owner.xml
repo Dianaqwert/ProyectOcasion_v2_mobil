@@ -115,7 +115,7 @@
                 android:text="Solicitudes" android:textColor="@color/texto_secundario" android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- PERFIL -->
+        <!-- CUENTA -->
 
         <LinearLayout
             android:id="@+id/btnPerfil"
@@ -123,7 +123,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="?attr/selectableItemBackground">
 
             <TextView
                 android:layout_width="45dp"
@@ -136,7 +137,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Perfil"
+                android:id="@+id/navCuentaEtiqueta"
+                android:text="@string/cuenta_navegacion"
                 android:textColor="@color/texto_secundario"
                 android:textSize="11sp" />
 

@@ -15,6 +15,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.ocasion_mobil_v2.R
+import com.example.ocasion_mobil_v2.ui.legal.ConfirmacionLegal
+import com.example.ocasion_mobil_v2.ui.legal.ContextoAviso
 import com.example.ocasion_mobil_v2.data.repository.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -59,7 +61,9 @@ class DocumentosSalonActivity : ComponentActivity() {
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
             finish()
         }
+        val aviso = ConfirmacionLegal(findViewById(R.id.panelConfirmacionLegal), ContextoAviso.DOCUMENTOS)
         findViewById<MaterialButton>(R.id.btnEnviarDocumentos).setOnClickListener {
+            if (!aviso.verificar()) return@setOnClickListener
             val publicado = model.state.value.salon?.estado == "PUBLICADO"
             MaterialAlertDialogBuilder(this)
                 .setTitle(if (publicado) "Enviar expediente al administrador" else "Publicar y solicitar verificación")
@@ -107,6 +111,7 @@ class DocumentosSalonActivity : ComponentActivity() {
             "%d archivos · %.1f MB / 99 MB", state.archivos.values.sumOf { it.size }, state.bytes / 1048576.0)
         findViewById<MaterialButton>(R.id.btnActualizarDocumentos).isEnabled = !state.ocupado
         findViewById<MaterialButton>(R.id.btnMisSalonesDocumentos).isEnabled = !state.ocupado
+        findViewById<View>(R.id.panelConfirmacionLegal).isVisible = !state.bloqueado
         findViewById<MaterialButton>(R.id.btnEnviarDocumentos).apply {
             isVisible = !state.bloqueado
             isEnabled = !state.ocupado && state.salon != null &&

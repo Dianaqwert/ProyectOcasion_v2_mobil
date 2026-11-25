@@ -58,7 +58,15 @@ object ReglasPropietario {
         )
 
     fun puedePdf(estado: String): Boolean =
-        aceptada(estado)
+        aceptada(estado) || estado in setOf("SOLICITUD_NUEVA", "ESPERANDO_PAGO", "ANTICIPO_PAGADO")
+
+    fun puedeCotizar(reserva: Reservacion): Boolean =
+        reserva.estado in setOf("SOLICITUD_NUEVA", "ESPERANDO_PAGO") &&
+            (reserva.totalPagado?.toBigDecimalOrNull()?.signum() ?: 0) == 0 &&
+            reserva.pagos.none {
+                it.estado.equals("COMPLETADO", ignoreCase = true) &&
+                    it.monto?.toBigDecimalOrNull()?.signum() != 0
+            }
 
     fun etiqueta(estado: String): String =
         when (estado) {
@@ -70,6 +78,7 @@ object ReglasPropietario {
             "ESPERANDO_PAGO",
             "ACEPTADA_CLIENTE" -> "Esperando pago"
 
+            "ANTICIPO_PAGADO" -> "Anticipo pagado"
             "CONFIRMADA" -> "Confirmada"
 
             "RECHAZADO",
